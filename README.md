@@ -6,14 +6,13 @@ Arch Linux First Boot
 pacman -S --noconfirm pacman-contrib curl git
 git clone https://github.com/Krowify/krow-linux-applications
 cd Arch
-sh 0-setup.sh
 sh 1-base.sh
 sh 2-software-pacman.sh
 su username
 sh 3-software-aur.sh
 su
 sh 4-secure-system.sh
-sh 9-post-setup.sh
+sh 5-post-setup.sh
 ```
 # System Description
 
