@@ -12,7 +12,7 @@ Run as **root**, right after a base Arch install:
 ```sh
 pacman -S --noconfirm pacman-contrib curl git
 git clone https://github.com/Krowify/krow-linux-applications
-cd krow-setup
+cd arch-setup
 
 sh 1-base.sh
 sh 2-software-pacman.sh
