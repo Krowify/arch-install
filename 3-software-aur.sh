@@ -6,55 +6,71 @@
 #   /_/ \_\_| \__|_||_|_|  |_\__,_|\__|_\__|
 #  Arch Linux Post Install Setup and Config
 #-------------------------------------------------------------------------
-
+set -euo pipefail
+ 
+#-------------------------------------------------------------------------
+#   Arch Linux Post Install Setup and Config
+#-------------------------------------------------------------------------
+# Stage 3: AUR software -- must be run as a regular, non-root user
+#-------------------------------------------------------------------------
+ 
 echo
 echo "INSTALLING AUR SOFTWARE"
 echo
-
-echo "Please enter username:"
-read username
-
-cd "${HOME}"
-
-echo "CLONING: YAY"
-git clone "https://aur.archlinux.org/yay.git"
-
-
+ 
+if [[ ${EUID} -eq 0 ]]; then
+    echo "This script must be run as a normal (non-root) user -- makepkg"
+    echo "refuses to build packages as root."
+    echo "Run: su <your-username>   then re-run this script."
+    exit 1
+fi
+ 
+# --- Install yay (AUR helper) if it isn't already present
+if ! command -v yay >/dev/null 2>&1; then
+    YAY_DIR="${HOME}/yay"
+    if [[ -d "${YAY_DIR}" ]]; then
+        echo "Existing ${YAY_DIR} found, updating instead of re-cloning"
+        git -C "${YAY_DIR}" pull
+    else
+        echo "CLONING: yay"
+        git clone "https://aur.archlinux.org/yay.git" "${YAY_DIR}"
+    fi
+    (cd "${YAY_DIR}" && makepkg -si --noconfirm)
+else
+    echo "yay is already installed, skipping build"
+fi
+ 
 PKGS=(
-
-    # UTILITIES -----------------------------------------------------------
-
-    'timeshift'                 # Backup and Restore
-
-    # COMMUNICATIONS ------------------------------------------------------
-
-    'brave-bin'                 # Brave
-
-    # THEMES --------------------------------------------------------------
-
-    'sddm-theme-elegant-archlinux-git' # Sddm Login Theme
-    'autojump'                      # Zsh plugin
-
-    # APPS ----------------------------------------------------------------
-
-    'discord'                   # Chat for gamers
-    'vencord-installer'         # Installs vencord
-    'goxlr-utility-ui'          # Installs goxlr-utility
-
-
-
+    # UTILITIES -------------------------------------------------------
+    'timeshift'                          # Backup and restore
+    'autojump'                           # Zsh plugin
+ 
+    # BROWSERS / COMMUNICATIONS ------------------------------------------
+    'brave-bin'                          # Brave browser
+    'discord'                            # Chat for gamers
+    'vencord-installer'                  # Discord client mod installer
+ 
+    # EDITORS ---------------------------------------------------------------
+    'visual-studio-code-bin'             # VS Code (not in official repos)
+ 
+    # THEMES -----------------------------------------------------------------
+    'sddm-theme-elegant-archlinux-git'   # SDDM login theme
+ 
+    # HARDWARE -----------------------------------------------------------------
+    'goxlr-utility-ui'                   # GoXLR utility
 )
-
-cd ${HOME}/yay
-makepkg -si
-
-# Change default shell
-chsh -s $(which zsh)
-
+ 
 for PKG in "${PKGS[@]}"; do
-    yay -S --noconfirm $PKG
+    echo "INSTALLING: ${PKG}"
+    yay -S --noconfirm --needed "${PKG}"
 done
-
+ 
+# --- Change default shell to zsh
+echo
+echo "Changing default shell to zsh"
+chsh -s "$(command -v zsh)"
+ 
 echo
 echo "Done!"
 echo
+ 
