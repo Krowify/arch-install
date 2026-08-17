@@ -43,6 +43,9 @@ PKGS=(
     'autojump'                           # Zsh plugin
     'pnmixer'                            # System tray volume control (AUR-only,
                                           # moved here from stage 1)
+    'hardinfo2-git'                      # Hardware info app (replacement for
+                                          # 'hardinfo', removed from the official
+                                          # repos -- moved here from stage 2)
  
     # BROWSERS / COMMUNICATIONS ------------------------------------------
     'brave-bin'                          # Brave browser

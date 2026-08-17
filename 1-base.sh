@@ -40,9 +40,18 @@ PKGS=(
     # --- Setup Desktop
     # (was 'kde-standard' -- that's a Debian/Kubuntu package name and
     # doesn't exist in Arch's repos. 'plasma-meta' is the correct Arch
-    # equivalent, and it pulls in sddm automatically via its sddm-kcm
-    # dependency, so stage 5 has something to enable.)
+    # equivalent.)
     'plasma-meta'             # KDE Plasma desktop
+ 
+    # --- Display / Login Manager
+    # NOTE: 'plasma-meta' does NOT pull sddm in automatically anymore.
+    # Its own login-manager dependency is now 'plasma-login-manager'
+    # (service name plasmalogin.service), and 'sddm-kcm' -- the package
+    # that depends on sddm -- is only an OPTIONAL dependency of
+    # plasma-meta, so it's never installed by --needed alone. Since
+    # stage 3 installs an SDDM theme and stage 5 enables sddm.service,
+    # sddm has to be installed explicitly here.
+    'sddm'                    # Display manager (login screen)
  
     # --- Networking Setup
     'dialog'                  # Lets shell scripts trigger dialog boxes

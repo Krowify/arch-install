@@ -34,7 +34,11 @@ PKGS=(
     'file-roller'                # Archive utility
     'gtop'                       # System monitoring via terminal
     'gufw'                       # Firewall manager
-    'hardinfo'                   # Hardware info app
+    # NOTE: 'hardinfo' used to be listed here but it was pulled from the
+    # official repos -- a plain `pacman -S hardinfo` fails with "target
+    # not found". Its replacement, 'hardinfo2', isn't reliably in the
+    # stable 'extra' repo yet at the time of writing (it's been sitting
+    # in extra-testing), so it's installed via AUR in stage 3 instead.
     'htop'                       # Process viewer
     'ntp'                        # Network Time Protocol
     'p7zip'                      # 7z compression program
