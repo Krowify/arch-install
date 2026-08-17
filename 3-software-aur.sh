@@ -41,6 +41,8 @@ PKGS=(
     # UTILITIES -------------------------------------------------------
     'timeshift'                          # Backup and restore
     'autojump'                           # Zsh plugin
+    'pnmixer'                            # System tray volume control (AUR-only,
+                                          # moved here from stage 1)
  
     # BROWSERS / COMMUNICATIONS ------------------------------------------
     'brave-bin'                          # Brave browser
@@ -70,4 +72,3 @@ chsh -s "$(command -v zsh)"
 echo
 echo "Done!"
 echo
- 

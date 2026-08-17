@@ -20,16 +20,33 @@ echo "-------------------------------------------------"
 echo "Secure Linux"
 echo "-------------------------------------------------"
  
+# --- openssh: fail2ban's [sshd] jail below is meaningless without an
+# actual sshd running to generate auth logs, and nothing else in these
+# scripts installs it.
+echo "Installing openssh"
+pacman -S --noconfirm --needed openssh
+systemctl enable --now sshd.service
+ 
 # --- Firewall rules
-# Set defaults and rules BEFORE enabling, and run sequentially (not
-# backgrounded) so ordering is guaranteed and the script doesn't exit
-# before ufw finishes applying them. --force skips the interactive
-# y/n prompt that would otherwise hang a non-interactive/backgrounded run.
+# Default-deny everything inbound, then open only what's needed. SSH is
+# allowed via `limit` rather than `allow`, which rate-limits repeat
+# connection attempts from the same IP (roughly 6 within 30s trigger a
+# temporary deny) -- this blunts brute-force attempts at the firewall
+# level, on top of the bans fail2ban applies further down. Set defaults
+# and rules BEFORE enabling, and run sequentially (not backgrounded) so
+# ordering is guaranteed and the script doesn't exit before ufw finishes
+# applying them. --force skips the interactive y/n prompt that would
+# otherwise hang a non-interactive/backgrounded run.
 echo "Configuring ufw"
 ufw default deny incoming
 ufw default allow outgoing
-ufw allow 80/tcp
-ufw allow 443/tcp
+ufw logging on
+ufw limit 22/tcp comment 'SSH (rate-limited)'
+# This is a desktop firewall, so everything else inbound stays closed by
+# default. If you're running a local web server and need it reachable
+# from other machines on your network, uncomment as needed:
+#   ufw allow 80/tcp
+#   ufw allow 443/tcp
 ufw --force enable
 systemctl enable --now ufw
  
@@ -82,4 +99,3 @@ systemctl enable --now fail2ban
 echo
 echo "Done!"
 echo
- 

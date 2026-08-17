@@ -52,7 +52,26 @@ bash "${SCRIPT_DIR}/2-software-pacman.sh"
 echo
 echo ">>> Stage 3: AUR software (running as ${AUR_USER})"
 if [[ ${EUID} -eq 0 ]]; then
-    su - "${AUR_USER}" -c "bash '${SCRIPT_DIR}/3-software-aur.sh'"
+    # If you followed the README, this repo was cloned as root, which
+    # almost always means SCRIPT_DIR is under /root -- mode 700, so a
+    # non-root user can't even traverse into it to read the script.
+    # Stage a throwaway copy inside the AUR user's own home directory
+    # instead, owned by them, so the `su -` below always works regardless
+    # of where the repo actually lives.
+    AUR_USER_HOME="$(getent passwd "${AUR_USER}" | cut -d: -f6)"
+    if [[ -z "${AUR_USER_HOME}" || ! -d "${AUR_USER_HOME}" ]]; then
+        echo "Could not resolve a home directory for '${AUR_USER}'. Aborting."
+        exit 1
+    fi
+    AUR_BUILD_DIR="${AUR_USER_HOME}/.linux-installation-stage3"
+
+    rm -rf "${AUR_BUILD_DIR}"
+    cp -r "${SCRIPT_DIR}" "${AUR_BUILD_DIR}"
+    chown -R "${AUR_USER}:" "${AUR_BUILD_DIR}"
+
+    su - "${AUR_USER}" -c "bash '${AUR_BUILD_DIR}/3-software-aur.sh'"
+
+    rm -rf "${AUR_BUILD_DIR}"
 else
     bash "${SCRIPT_DIR}/3-software-aur.sh"
 fi

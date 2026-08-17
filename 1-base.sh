@@ -38,7 +38,11 @@ PKGS=(
     'mesa'                    # Open source OpenGL implementation
  
     # --- Setup Desktop
-    'kde-standard'            # KDE Plasma desktop
+    # (was 'kde-standard' -- that's a Debian/Kubuntu package name and
+    # doesn't exist in Arch's repos. 'plasma-meta' is the correct Arch
+    # equivalent, and it pulls in sddm automatically via its sddm-kcm
+    # dependency, so stage 5 has something to enable.)
+    'plasma-meta'             # KDE Plasma desktop
  
     # --- Networking Setup
     'dialog'                  # Lets shell scripts trigger dialog boxes
@@ -56,14 +60,19 @@ PKGS=(
     'alsa-utils'              # ALSA components
     'alsa-plugins'            # ALSA plugins
     'pipewire'                # Pipewire audio server
-    'pnmixer'                 # System tray volume control
+    # NOTE: 'pnmixer' used to be listed here but it's AUR-only -- a plain
+    # `pacman -S pnmixer` always fails with "target not found". It's
+    # installed in stage 3 (AUR, via yay) instead.
  
     # --- Bluetooth
     'bluez'                   # Bluetooth protocol stack daemons
     'bluez-utils'             # Bluetooth development/debug utilities
     'bluez-libs'              # Bluetooth libraries
-    'bluez-firmware'          # Firmware for common Bluetooth chips
     'blueberry'               # Bluetooth configuration tool
+    # NOTE: 'bluez-firmware' used to be listed here but it was pulled from
+    # the official repos years ago and no longer exists there. If your
+    # Bluetooth chip needs firmware, check the AUR (e.g. broadcom-bt-firmware)
+    # or see if it's already covered by the 'linux-firmware' package.
 )
  
 echo "NOTE: a GPU driver is NOT installed automatically by this script,"
@@ -83,4 +92,3 @@ done
 echo
 echo "Done!"
 echo
- 
