@@ -77,7 +77,6 @@ PKGS=(
     'bluez'                   # Bluetooth protocol stack daemons
     'bluez-utils'             # Bluetooth development/debug utilities
     'bluez-libs'              # Bluetooth libraries
-    'blueberry'               # Bluetooth configuration tool
     # NOTE: 'bluez-firmware' used to be listed here but it was pulled from
     # the official repos years ago and no longer exists there. If your
     # Bluetooth chip needs firmware, check the AUR (e.g. broadcom-bt-firmware)
