@@ -59,7 +59,7 @@ PKGS=(
     'sddm-theme-elegant-archlinux-git'   # SDDM login theme
  
     # HARDWARE -----------------------------------------------------------------
-    'goxlr-utility-ui'                   # GoXLR utility
+    
 )
  
 for PKG in "${PKGS[@]}"; do
