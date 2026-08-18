@@ -64,7 +64,7 @@ PKGS=(
     'sddm-theme-elegant-archlinux-git'   # SDDM login theme
  
     # HARDWARE -----------------------------------------------------------------
-    'proton-mail'                        # Proton Mail Application
+           # Proton Mail Application
     'obsidean'                           # Obsidean Note Taking
 )
  
