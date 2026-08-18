@@ -69,8 +69,27 @@ if [[ ${EUID} -eq 0 ]]; then
     cp -r "${SCRIPT_DIR}" "${AUR_BUILD_DIR}"
     chown -R "${AUR_USER}:" "${AUR_BUILD_DIR}"
 
+    # `su -c` below runs non-interactively and doesn't reliably keep a
+    # controlling terminal attached, so if makepkg's internal `sudo pacman
+    # -U` (when it installs a just-built AUR package) needs to prompt for a
+    # password, it fails immediately with "a terminal is required to read
+    # the password" -- even though the rest of this flow is interactive.
+    # Grant NOPASSWD for pacman only, just for this user, just for stage 3,
+    # so that install step never needs to prompt at all.
+    AUR_SUDOERS_DROPIN="/etc/sudoers.d/99-linux-installation-aur-build"
+    echo "${AUR_USER} ALL=(ALL) NOPASSWD: /usr/bin/pacman" > "${AUR_SUDOERS_DROPIN}"
+    chmod 0440 "${AUR_SUDOERS_DROPIN}"
+    if ! visudo -cf "${AUR_SUDOERS_DROPIN}"; then
+        echo "Generated sudoers drop-in failed validation, aborting."
+        rm -f "${AUR_SUDOERS_DROPIN}"
+        exit 1
+    fi
+    trap 'rm -f "${AUR_SUDOERS_DROPIN}"' EXIT
+
     su - "${AUR_USER}" -c "bash '${AUR_BUILD_DIR}/3-user-software.sh'"
 
+    rm -f "${AUR_SUDOERS_DROPIN}"
+    trap - EXIT
     rm -rf "${AUR_BUILD_DIR}"
 else
     bash "${SCRIPT_DIR}/3-user-software.sh"
