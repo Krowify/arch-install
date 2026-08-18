@@ -81,7 +81,7 @@ PKGS=(
  
     # HARDWARE -----------------------------------------------------------------
            # Proton Mail Application
-    'obsidean'                           # Obsidean Note Taking
+    'obsidian'                           # Obsidean Note Taking
 )
  
 for PKG in "${PKGS[@]}"; do
