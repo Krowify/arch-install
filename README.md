@@ -1,8 +1,9 @@
 # linux-installation
 
 This repo installs and configures a fully-functional Arch Linux setup:
-a desktop environment, support packages (network, bluetooth, audio,
-etc.), a firewall/hardening pass, and a set of preferred applications.
+a Hyprland (Wayland) desktop, support packages (network, bluetooth,
+audio, etc.), a firewall/hardening pass, and a set of preferred
+applications.
 
 ## Arch Linux First Boot
 
@@ -34,8 +35,8 @@ intentional so nothing installs or creates accounts silently.
 | Stage | Script                  | Runs as                     | Purpose                                                |
 |-------|--------------------------|------------------------------|----------------------------------------------------------|
 | 0     | `0-install.sh`           | root or sudo user           | Master runner -- executes all stages below in order       |
-| 1     | `1-base.sh`              | root                         | Xorg, KDE Plasma, networking, audio, bluetooth            |
-| 2     | `2-system-software.sh`   | root                         | Everyday software from the official repos                 |
+| 1     | `1-base.sh`              | root                         | Wayland, Hyprland compositor, networking, audio, bluetooth |
+| 2     | `2-system-software.sh`   | root                         | Everyday software + Hyprland desktop utilities (bar, launcher, etc.) from the official repos |
 | 3     | `3-user-software.sh`      | non-root (handled by 0-install.sh) | AUR packages via `yay` (VS Code, Discord, themes, etc.)|
 | 4     | `4-firewall.sh`     | root                         | Firewall, sysctl hardening, fail2ban                       |
 | 5     | `5-post-setup.sh`        | root                         | File watcher limit, display manager, bluetooth autostart   |
@@ -62,9 +63,15 @@ sh 5-post-setup.sh
 
 ## System Description
 
-This runs KDE Plasma and installs known drivers and applications for a
-quick, consistent Linux setup. It also configures the firewall and
-other services expected to be running at startup.
+This runs Hyprland, a tiling Wayland compositor, and installs known
+drivers and applications for a quick, consistent Linux setup. It also
+configures the firewall and other services expected to be running at
+startup.
+
+SDDM is used as the login manager. Once stage 1 finishes, the
+`hyprland` package's own `.desktop` entries make Hyprland selectable
+from SDDM's session dropdown with nothing further to configure -- pick
+"Hyprland (uwsm-managed)" if it's offered, otherwise plain "Hyprland".
 
 ## Troubleshooting
 
@@ -79,8 +86,17 @@ other services expected to be running at startup.
   instead of skipping past it. Check the package name is still
   current for your mirrors, then re-run; already-installed packages
   are skipped via `--needed`.
-- **GPU driver** -- stage 1 doesn't assume AMD. Install the driver
-  package matching your hardware separately (the script prints a
-  reminder, or see the Arch Wiki page for your GPU).
+- **GPU driver** -- stage 1 doesn't install one. AMD and Intel work
+  out of the box through mesa; Nvidia needs the proprietary driver
+  (`nvidia-open` or `nvidia`, plus `nvidia-utils` and `egl-wayland`)
+  and `nvidia_drm.modeset=1` on the kernel command line. The script
+  prints a reminder -- see the Arch Wiki's Hyprland and NVIDIA pages
+  for details.
+- **Hyprland session doesn't appear in SDDM, or crashes back to the
+  login screen** -- launching Hyprland from a display manager isn't
+  officially supported upstream, though SDDM works for most people.
+  Check `journalctl -u sddm -b` and confirm
+  `/usr/share/wayland-sessions/hyprland.desktop` exists; if not,
+  reinstall the `hyprland` package.
 
 Arch Linux Installation Guide: https://wiki.archlinux.org/title/Installation_guide

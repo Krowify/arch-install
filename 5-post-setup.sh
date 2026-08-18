@@ -31,6 +31,17 @@ echo "fs.inotify.max_user_watches=524288" | "${SUDO[@]}" tee /etc/sysctl.d/40-ma
 echo
 echo "Enabling login display manager"
 "${SUDO[@]}" systemctl enable --now sddm.service
+echo "NOTE: at the SDDM login screen, pick 'Hyprland (uwsm-managed)' from"
+echo "the session dropdown if it's offered -- that's the currently"
+echo "recommended way to launch it. A plain 'Hyprland' entry is also"
+echo "available if you'd rather not use uwsm."
+echo
+echo "NOTE: pipewire/wireplumber run as user (not system) services and are"
+echo "generally auto-started on login via socket activation. If audio isn't"
+echo "working after your first login, check with:"
+echo "  systemctl --user status pipewire wireplumber pipewire-pulse"
+echo "and enable them yourself if needed:"
+echo "  systemctl --user enable --now pipewire wireplumber pipewire-pulse"
  
 # ------------------------------------------------------------------------
 echo

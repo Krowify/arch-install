@@ -47,7 +47,7 @@ bash "${SCRIPT_DIR}/1-base.sh"
 
 echo
 echo ">>> Stage 2: Software (pacman)"
-bash "${SCRIPT_DIR}/2-software-pacman.sh"
+bash "${SCRIPT_DIR}/2-system-software.sh"
 
 echo
 echo ">>> Stage 3: AUR software (running as ${AUR_USER})"
@@ -69,19 +69,19 @@ if [[ ${EUID} -eq 0 ]]; then
     cp -r "${SCRIPT_DIR}" "${AUR_BUILD_DIR}"
     chown -R "${AUR_USER}:" "${AUR_BUILD_DIR}"
 
-    su - "${AUR_USER}" -c "bash '${AUR_BUILD_DIR}/3-software-aur.sh'"
+    su - "${AUR_USER}" -c "bash '${AUR_BUILD_DIR}/3-user-software.sh'"
 
     rm -rf "${AUR_BUILD_DIR}"
 else
-    bash "${SCRIPT_DIR}/3-software-aur.sh"
+    bash "${SCRIPT_DIR}/3-user-software.sh"
 fi
 
 echo
 echo ">>> Stage 4: Secure system"
 if [[ ${EUID} -eq 0 ]]; then
-    bash "${SCRIPT_DIR}/4-secure-system.sh"
+    bash "${SCRIPT_DIR}/4-firewall.sh"
 else
-    sudo bash "${SCRIPT_DIR}/4-secure-system.sh"
+    sudo bash "${SCRIPT_DIR}/4-firewall.sh"
 fi
 
 echo

@@ -69,16 +69,36 @@ PKGS=(
  
     # MEDIA -----------------------------------------------------------------
     'celluloid'                  # Video player
-    'feh'                        # Image viewer
+    'feh'                        # Image viewer (X11-native, runs fine via
+                                  # the xorg-xwayland installed in stage 1)
  
     # PRODUCTIVITY --------------------------------------------------------------
     'libreoffice-still'          # LibreOffice
     'torbrowser-launcher'        # Tor Browser
  
-    # THEMES -----------------------------------------------------------------------
-    'breeze-gtk'                 # Breeze GTK theme
-    'breeze-icons'               # Breeze GTK cursors
-    'plasma-workspace'           # Ensures the above are usable
+    # WAYLAND / HYPRLAND DESKTOP ---------------------------------------------
+    # (was THEMES: 'breeze-gtk' / 'breeze-icons' / 'plasma-workspace'. Those
+    # needed plasma-workspace's KDE config modules to actually apply, which
+    # no longer makes sense without Plasma. Replaced with a DE-agnostic
+    # icon theme plus the bar/launcher/notification/tray stack Hyprland
+    # doesn't provide on its own -- KDE Plasma used to supply all of this.)
+    'waybar'                      # Status bar
+    'wofi'                        # Application launcher (Wayland-native)
+    'mako'                        # Notification daemon (Wayland-native)
+    'grim'                        # Screenshot utility
+    'slurp'                       # Region/window selector, used with grim
+    'wl-clipboard'                # Wayland clipboard CLI (wl-copy/wl-paste)
+    'brightnessctl'               # Screen brightness control
+    'pamixer'                     # CLI volume control (pipewire-pulse aware)
+    'pavucontrol'                 # GUI volume mixer, invoked directly rather
+                                   # than via a tray icon
+    'kitty'                       # Terminal emulator, replaces 'xterm'
+    'blueman'                     # Bluetooth GUI manager + tray applet --
+                                   # Plasma no longer supplies one
+    'papirus-icon-theme'          # Icon theme (works standalone, no KDE
+                                   # config modules required)
+    'ttf-nerd-fonts-symbols'      # Icon glyphs most waybar/wofi configs
+                                   # assume are available
 )
  
 echo "NOTE: 'code' (VS Code) has been removed from this list -- it is not"

@@ -41,8 +41,10 @@ PKGS=(
     # UTILITIES -------------------------------------------------------
     'timeshift'                          # Backup and restore
     'autojump'                           # Zsh plugin
-    'pnmixer'                            # System tray volume control (AUR-only,
-                                          # moved here from stage 1)
+    # NOTE: 'pnmixer' used to be listed here as a tray volume control, but
+    # it's a legacy GtkStatusIcon app -- one of the tray-icon types most
+    # likely to not show up at all under a Wayland tray. Dropped in favor
+    # of 'pamixer' (CLI) and 'pavucontrol' (GUI), both installed in stage 2.
     'hardinfo2-git'                      # Hardware info app (replacement for
                                           # 'hardinfo', removed from the official
                                           # repos -- moved here from stage 2)
@@ -56,6 +58,9 @@ PKGS=(
     'visual-studio-code-bin'             # VS Code (not in official repos)
  
     # THEMES -----------------------------------------------------------------
+    # This only themes the SDDM login screen itself, independent of the
+    # Hyprland session you log into afterward -- it doesn't need Plasma and
+    # nothing above changes how it works.
     'sddm-theme-elegant-archlinux-git'   # SDDM login theme
  
     # HARDWARE -----------------------------------------------------------------
