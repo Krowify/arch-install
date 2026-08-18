@@ -30,7 +30,7 @@ if ! command -v yay >/dev/null 2>&1; then
         git -C "${YAY_DIR}" pull
     else
         echo "CLONING: yay"
-        git clone "https://aur.archlinux.org/yay.git" "${YAY_DIR}"
+        git clone "https://aur.archlinux.org/yay-bin.git" "${YAY_DIR}"
     fi
     (cd "${YAY_DIR}" && makepkg -si --noconfirm)
 else
