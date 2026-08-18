@@ -59,7 +59,8 @@ PKGS=(
     'sddm-theme-elegant-archlinux-git'   # SDDM login theme
  
     # HARDWARE -----------------------------------------------------------------
-    
+    'proton-mail'                        # Proton Mail Application
+    'obsidean'                           # Obsidean Note Taking
 )
  
 for PKG in "${PKGS[@]}"; do
