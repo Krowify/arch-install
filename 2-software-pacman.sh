@@ -32,7 +32,6 @@ PKGS=(
     'cronie'                     # cron jobs
     'curl'                       # Remote content retrieval
     'file-roller'                # Archive utility
-    'gtop'                       # System monitoring via terminal
     'gufw'                       # Firewall manager
     # NOTE: 'hardinfo' used to be listed here but it was pulled from the
     # official repos -- a plain `pacman -S hardinfo` fails with "target
@@ -73,8 +72,6 @@ PKGS=(
     'feh'                        # Image viewer
  
     # PRODUCTIVITY --------------------------------------------------------------
-    'hunspell'                   # Spellcheck libraries
-    'hunspell-en'                # English spellcheck library
     'libreoffice-still'          # LibreOffice
     'torbrowser-launcher'        # Tor Browser
  
