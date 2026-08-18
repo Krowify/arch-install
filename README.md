@@ -35,9 +35,9 @@ intentional so nothing installs or creates accounts silently.
 |-------|--------------------------|------------------------------|----------------------------------------------------------|
 | 0     | `0-install.sh`           | root or sudo user           | Master runner -- executes all stages below in order       |
 | 1     | `1-base.sh`              | root                         | Xorg, KDE Plasma, networking, audio, bluetooth            |
-| 2     | `2-software-pacman.sh`   | root                         | Everyday software from the official repos                 |
-| 3     | `3-software-aur.sh`      | non-root (handled by 0-install.sh) | AUR packages via `yay` (VS Code, Discord, themes, etc.)|
-| 4     | `4-secure-system.sh`     | root                         | Firewall, sysctl hardening, fail2ban                       |
+| 2     | `2-system-software.sh`   | root                         | Everyday software from the official repos                 |
+| 3     | `3-user-software.sh`      | non-root (handled by 0-install.sh) | AUR packages via `yay` (VS Code, Discord, themes, etc.)|
+| 4     | `4-firewall.sh`     | root                         | Firewall, sysctl hardening, fail2ban                       |
 | 5     | `5-post-setup.sh`        | root                         | File watcher limit, display manager, bluetooth autostart   |
 
 All scripts use `set -euo pipefail`, so they stop on the first error
@@ -50,13 +50,13 @@ If you'd rather step through each stage yourself instead of using
 
 ```sh
 sh 1-base.sh
-sh 2-software-pacman.sh
+sh 2-system-software.sh
 
 su <your-username>
-sh 3-software-aur.sh
+sh 3-user-software.sh
 
 su
-sh 4-secure-system.sh
+sh 4-firewall.sh
 sh 5-post-setup.sh
 ```
 
