@@ -70,10 +70,12 @@ PKGS=(
     'visual-studio-code-bin'             # VS Code (not in official repos)
 
     # WAYLAND / HYPRLAND DESKTOP ------------------------------------------
-    'eww-wayland'                        # Widget system (Wayland-only build --
-                                          # plain 'eww' also pulls in the X11
-                                          # backend, which this Wayland-only
-                                          # setup doesn't need)
+    # NOTE: 'eww-wayland' used to be a separate split package for a
+    # Wayland-only build (skipping the X11 backend), but it's been removed
+    # from the AUR -- yay reports "target not found" for it now. Its
+    # functionality was folded back into the main 'eww' pkgbase, so that's
+    # what's installed here.
+    'eww'                                 # Widget system
     'wlogout'                            # Wayland-native logout/power menu --
                                           # AUR-only, not in the official repos
 
