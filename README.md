@@ -11,20 +11,21 @@ applications.
 | Display Manager | SDDM (Plasma Login Manager) |
 | Compositor | Hyprland |
 | Status bar | Waybar |
-| Dock | Plank |
-| App launcher | Wofi |
+| Dock | nwg-dock-hyprland |
+| Music | Spotify (via spotify-launcher) |
+| App launcher | Vicinae |
 | Terminal | Alacritty + ZSH |
 | Logout menu | Wlogout |
 | Widgets | Eww |
 | Settings GUI | hyprmod |
-| Theme | Catppuccin Mocha (GTK/SDDM) + custom accent palette (Hyprland, Waybar, Wofi, Mako, Wlogout, Eww, Alacritty) -- see [Credits](#credits) |
+| Theme | Catppuccin Mocha (GTK/SDDM) + custom accent palette (Hyprland, Waybar, Wlogout, Eww, Alacritty), dynamically re-themed by Matugen -- see [Credits](#credits) and [Color theming](#color-theming-matugen) |
 | Icon theme | Papirus |
 | Fonts | Noto Fonts + Nerd Fonts |
-| Wallpaper | Swaybg (default) + hyprpaper (installed, not autostarted) |
+| Wallpaper | Waypaper (GUI picker) + swww (renderer) |
 | Cursor theme | Bibata |
 | File manager | Thunar |
-| Clipboard | wl-clipboard + cliphist |
-| Notifications | Mako |
+| Clipboard | wl-clipboard + cliphist (history), Vicinae (picker UI) |
+| Notifications | SwayNC |
 | Network | NetworkManager + nm-applet |
 | Audio | PipeWire + WirePlumber + pamixer |
 | Power | Brightnessctl |
@@ -112,7 +113,7 @@ from SDDM's session dropdown with nothing further to configure -- pick
 ## Dotfiles (stage 5)
 
 Package installed alone don't produce a working desktop -- Hyprland,
-waybar, mako, etc. all need a config to autostart and behave. Stage 5
+waybar, swaync, etc. all need a config to autostart and behave. Stage 5
 deploys `dotfiles/` (source templates in this repo) into `~/.config`,
 and activates the installed themes:
 
@@ -133,20 +134,24 @@ Default keybinds (`$mod` = Super):
 | Keybind | Action |
 |---------|--------|
 | `Super+Return` | Terminal (Alacritty) |
-| `Super+D` | App launcher (Wofi) |
+| `Super+D` | App launcher (Vicinae) |
 | `Super+Q` | Close focused window |
 | `Super+E` | File manager (Thunar) |
-| `Super+V` | Clipboard history (cliphist + Wofi) |
+| `Super+V` | Clipboard history (Vicinae) |
 | `Super+L` | Lock screen (Hyprlock) |
 | `Super+Escape` | Logout menu (Wlogout) |
 | `Super+W` | Toggle Eww widget panel |
+| `Super+N` | Toggle notification center (SwayNC) |
+| `Super+Shift+W` | Open wallpaper picker (waypaper) |
+| `Alt+Shift+H` | Toggle the dock (nwg-dock-hyprland) |
 | `Alt+Tab` | Cycle windows |
 | `Print` | Screenshot region to clipboard |
 
-`swaybg` defaults to a solid Catppuccin Mocha color (no wallpaper image
-ships in this repo) -- swap the `exec-once = swaybg` line in
-`~/.config/hypr/hyprland.conf` for `swaybg -i /path/to/image -m fill`
-once you have one.
+No wallpaper image ships in this repo -- pick one with `waypaper`
+(`Super+Shift+W`), which sets it via `swww` and re-themes the desktop via
+Matugen. See [Color theming](#color-theming-matugen) below. Until you pick
+one, Hyprland/Waybar/SwayNC/Alacritty stay on the static fallback palette
+baked into their dotfiles.
 
 ## Multi-monitor layout (optional)
 
@@ -178,8 +183,59 @@ make it stick across restarts. Currently supports one layout shape: a
 vertical monitor on the left, a normal monitor as the main/bottom one, and
 an upside-down monitor above it.
 
+## Color theming (Matugen)
+
+Picking a wallpaper through `waypaper` doesn't just set the background --
+`waypaper`'s `post_command` (`dotfiles/waypaper/config.ini`) runs
+`matugen image "$wallpaper"`, which generates a Material You color scheme
+from that image and rewrites the color files for Hyprland, Waybar, SwayNC,
+and Alacritty's background/foreground/cursor from it:
+
+| App | Generated file | Picked up via |
+|-----|-----------------|----------------|
+| Hyprland | `~/.config/hypr/colors.conf` | `hyprctl reload` (Matugen's post_hook) |
+| Waybar | `~/.config/waybar/colors.css` | `killall -SIGUSR2 waybar` (Matugen's post_hook) |
+| SwayNC | `~/.config/swaync/colors.css` | `swaync-client -rs` (Matugen's post_hook) |
+| Alacritty | `~/.config/alacritty/colors.toml` | live-reloads on file change by itself |
+
+Each of those files ships with a static fallback (the same Catppuccin
+Mocha + custom accent palette used everywhere else in this repo -- see
+[Credits](#credits)) so things look right before you've ever picked a
+wallpaper. Matugen overwrites them in place once you do.
+
+Alacritty's ANSI 16-color palette (`[colors.normal]`/`[colors.bright]` in
+`alacritty.toml` itself) is deliberately **not** Matugen-templated --
+Material You doesn't define semantic roles for "ANSI green"/"ANSI cyan"
+etc., and remapping them per-wallpaper would make `ls`/`diff`/etc. output
+unpredictable. Only background/foreground/cursor (`colors.toml`) move with
+the wallpaper.
+
+The template sources live in `dotfiles/matugen/templates/`, wired up in
+`dotfiles/matugen/config.toml`. To theme another app, add a
+`[templates.name]` block there and a matching template file -- see the
+[Matugen wiki](https://github.com/InioX/matugen/wiki) for the full list of
+generated color roles.
+
+Note: none of this Matugen wiring has been verified against a live
+install (unlike most of the rest of this repo, which has been fixed up
+against real error messages over time) -- if a template fails or a color
+role name doesn't exist, run `matugen image <path> --dry-run` to see what
+it actually generates and adjust the role names in
+`dotfiles/matugen/templates/*` and `dotfiles/matugen/config.toml`
+accordingly.
+
 ## Troubleshooting
 
+- **Vicinae/SwayNC/waypaper/swww don't behave as documented** -- these
+  four (plus the whole Matugen pipeline) were wired up from documentation
+  and community examples, not verified against a live install, unlike the
+  rest of this repo's dotfiles (which have all been fixed up against real
+  error messages over a lot of back-and-forth). `vicinae toggle`,
+  `swaync-client -t -sw`, and the `vicinae://launch/clipboard/history`
+  deeplink in particular are the least certain bits -- if a keybind does
+  nothing or errors, run the command directly in a terminal to see what
+  it actually says, and check that app's own `--help`/docs for the
+  current invocation.
 - **Stage 3 or 5 exits immediately** (running it manually) -- you're
   running it as root. Switch to a regular user first
   (`su <your-username>`) and re-run it, or just use `0-install.sh`,
@@ -216,13 +272,6 @@ an upside-down monitor above it.
   (`sudo systemctl restart sddm` -- this kills your current graphical
   session, so only do it from a TTY or before logging in) if you re-ran
   stage 5 after SDDM was already running.
-- **Plank isn't behaving like a normal dock** (wrong position,
-  overlapping windows, disappearing) -- Plank is an X11-only app with
-  no native Wayland support. Under Hyprland it runs via Xwayland,
-  where auto-hide and window-avoidance don't work the way they do
-  under X11/other DEs. This is a known limitation, not a broken
-  install; `nwg-dock-hyprland` (AUR) is the Wayland-native
-  alternative if it bothers you.
 - **GPU driver** -- stage 1 asks which GPU you have (pre-filling its
   guess from `lspci` if it can tell). AMD and Intel need nothing beyond
   the `mesa` already installed. Nvidia gets `nvidia-open` (swap for
@@ -243,6 +292,12 @@ Arch Linux Installation Guide: https://wiki.archlinux.org/title/Installation_gui
 
 ## Credits
 
-- The accent color palette used across Hyprland, Waybar, Wofi, Mako,
-  Wlogout, Eww, and Alacritty is ported from
-  [notusknot/dotfiles-nix](https://github.com/notusknot/dotfiles-nix).
+- The accent color palette used across Hyprland, Waybar, Wlogout, Eww,
+  and Alacritty is ported from
+  [notusknot/dotfiles-nix](https://github.com/notusknot/dotfiles-nix)
+  (it's also the static fallback/default the Matugen templates in
+  `dotfiles/matugen/` are based on -- see
+  [Color theming](#color-theming-matugen)).
+- The nwg-dock-hyprland style (`dotfiles/nwg-dock-hyprland/style.css`) and
+  its launch flags/layer rules in `hyprland.conf` are from
+  [AnkurAlpha/nwg-dock-hyprland-configs-by-AnkurAlpha](https://github.com/AnkurAlpha/nwg-dock-hyprland-configs-by-AnkurAlpha).

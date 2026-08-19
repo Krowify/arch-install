@@ -1,3 +1,5 @@
+@import url("colors.css");
+
 * {
     font-family: "JetBrainsMono Nerd Font", "Noto Sans", sans-serif;
     font-size: 13px;
@@ -6,21 +8,21 @@
 }
 
 window#waybar {
-    background-color: rgba(41, 42, 55, 0.9); /* mantle */
-    color: #d9e0ee; /* text */
+    background-color: @mantle;
+    color: @text;
 }
 
 #workspaces button {
     padding: 0 8px;
-    color: #6e738d; /* overlay0 */
+    color: @overlay0;
 }
 
 #workspaces button.active {
-    color: #b072d1; /* mauve */
+    color: @mauve;
 }
 
 #workspaces button:hover {
-    background-color: #44465c; /* base */
+    background-color: @base;
 }
 
 #clock,
@@ -33,18 +35,18 @@ window#waybar {
 #custom-power {
     padding: 0 10px;
     margin: 4px 2px;
-    background-color: #44465c; /* base */
+    background-color: @base;
     border-radius: 8px;
 }
 
 #battery.warning {
-    color: #efb993; /* yellow */
+    color: @yellow;
 }
 
 #battery.critical {
-    color: #ec6a88; /* red */
+    color: @red;
 }
 
 #custom-power {
-    color: #ec6a88;
+    color: @red;
 }

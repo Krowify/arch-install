@@ -1,0 +1,67 @@
+/* Deployed by 5-dotfiles.sh. Best-effort port of the accent palette used
+ * across the rest of this repo's dotfiles (see README credits) -- swaync's
+ * exact CSS class names weren't verified against a live instance, so some
+ * of these selectors may need adjusting once you're actually running it.
+ */
+@import "colors.css";
+
+* {
+    font-family: "JetBrainsMono Nerd Font", "Noto Sans", sans-serif;
+    font-size: 12px;
+}
+
+.control-center {
+    background-color: @mantle;
+    border: 2px solid @mauve;
+    border-radius: 12px;
+}
+
+.notification-row {
+    outline: none;
+}
+
+.notification {
+    background-color: @mantle;
+    border: 2px solid @mauve;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 6px 12px;
+}
+
+.notification-content,
+.notification .body,
+.notification .summary {
+    color: @text;
+}
+
+.notification .summary {
+    font-weight: bold;
+}
+
+.notification.critical {
+    border-color: @red;
+}
+
+.notification.low {
+    border-color: @blue;
+}
+
+.close-button {
+    background-color: @base;
+    color: @text;
+    border-radius: 8px;
+}
+
+.close-button:hover {
+    background-color: @red;
+}
+
+.widget-title {
+    color: @text;
+}
+
+.widget-title > button {
+    background-color: @base;
+    color: @text;
+    border-radius: 8px;
+}

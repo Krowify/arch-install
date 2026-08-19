@@ -1,0 +1,36 @@
+# Deployed by 5-dotfiles.sh. Run manually with `matugen image /path/to/wallpaper`,
+# or automatically whenever you pick a new one -- waypaper's config.ini
+# (dotfiles/waypaper/config.ini) is set to call this on every wallpaper
+# change. See the README's color theming section.
+#
+# Best-effort config, not verified against a live matugen install -- if a
+# template fails or a color role name doesn't exist in your matugen
+# version, check `matugen image <path> --dry-run` output and adjust the
+# role names below/in templates/*.
+
+[config]
+mode = "dark"
+
+# post_hook makes each app actually pick up the regenerated file --
+# writing colors.conf/css alone doesn't make a running app re-read it.
+# Alacritty isn't listed here since it live-reloads its config on file
+# change by itself.
+
+[templates.hyprland]
+input_path = "~/.config/matugen/templates/hyprland-colors.conf"
+output_path = "~/.config/hypr/colors.conf"
+post_hook = "hyprctl reload"
+
+[templates.waybar]
+input_path = "~/.config/matugen/templates/waybar-colors.css"
+output_path = "~/.config/waybar/colors.css"
+post_hook = "killall -SIGUSR2 waybar"
+
+[templates.swaync]
+input_path = "~/.config/matugen/templates/swaync-colors.css"
+output_path = "~/.config/swaync/colors.css"
+post_hook = "swaync-client -rs"
+
+[templates.alacritty]
+input_path = "~/.config/matugen/templates/alacritty-colors.toml"
+output_path = "~/.config/alacritty/colors.toml"

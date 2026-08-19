@@ -82,6 +82,23 @@ PKGS=(
                                           # Hyprland -- live-previews changes,
                                           # writes to its own config rather
                                           # than touching hyprland.conf
+    'vicinae'                            # Application launcher/extensible
+                                          # command palette (Raycast-like) --
+                                          # replaces wofi
+    'swww'                                # Wallpaper daemon with smooth
+                                          # transitions -- the backend
+                                          # 'waypaper' below actually renders
+                                          # through
+    'waypaper'                           # GUI wallpaper picker, frontend for
+                                          # swww -- replaces swaybg/hyprpaper;
+                                          # configured to trigger Matugen on
+                                          # every wallpaper change (see
+                                          # dotfiles/waypaper/config.ini)
+    'matugen-bin'                        # Generates a Material You color
+                                          # scheme from the current wallpaper
+                                          # and re-themes Hyprland/Waybar/
+                                          # SwayNC/Alacritty from it -- see
+                                          # the README's color theming section
 
     # THEMES -----------------------------------------------------------------
     # This only themes the SDDM login screen itself, independent of the

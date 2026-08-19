@@ -1,3 +1,6 @@
+[general]
+import = ["~/.config/alacritty/colors.toml"]
+
 [window]
 padding = { x = 10, y = 10 }
 opacity = 0.95
@@ -18,15 +21,9 @@ style = "Bold"
 family = "JetBrainsMono Nerd Font"
 style = "Italic"
 
-# Ported from notusknot/dotfiles-nix (see README credits)
-[colors.primary]
-background = "#292a37"
-foreground = "#d9e0ee"
-
-[colors.cursor]
-text = "#292a37"
-cursor = "#efb993"
-
+# Background/foreground/cursor moved to colors.toml (Matugen-templated --
+# see the README's color theming section). Ported from notusknot/dotfiles-nix
+# (see README credits)
 [colors.normal]
 black = "#303241"
 red = "#ec6a88"

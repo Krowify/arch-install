@@ -14,6 +14,8 @@
 alias ll='ls -lah'
 alias grep='grep --color=auto'
 
-export EDITOR=vim
+# -b makes kate block until the document is closed, which tools that
+# shell out to $EDITOR (git commit, crontab -e, visudo, ...) require
+export EDITOR="kate -b"
 export TERMINAL=alacritty
 # <<< linux-installation dotfiles (stage 5) <<<

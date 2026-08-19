@@ -1,0 +1,11 @@
+/* Deployed by 5-dotfiles.sh. Static fallback palette (Catppuccin Mocha +
+ * custom accents, see README credits) -- overwritten in-place by Matugen
+ * once you pick a wallpaper via waypaper (see the README's color theming
+ * section). Imported by style.css.
+ */
+@define-color mantle rgba(41, 42, 55, 0.933);
+@define-color text #d9e0ee;
+@define-color mauve #b072d1;
+@define-color blue #3fc6de;
+@define-color base #44465c;
+@define-color red #ec6a88;

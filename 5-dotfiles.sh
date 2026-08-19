@@ -87,7 +87,7 @@ deploy_dir() {
     echo "Deployed ~/.config/${name}"
 }
 
-for dir in hypr waybar wofi mako alacritty wlogout eww; do
+for dir in hypr waybar alacritty wlogout eww nwg-dock-hyprland swaync matugen waypaper; do
     deploy_dir "${dir}"
 done
 
@@ -151,8 +151,10 @@ echo
 echo "Done!"
 echo "Log out and back into the 'Hyprland (uwsm-managed)' session (or"
 echo "restart Hyprland with 'hyprctl reload' from inside one) to pick up"
-echo "the new config. Swap the solid swaybg color for a real wallpaper by"
-echo "editing the 'exec-once = swaybg' line in ~/.config/hypr/hyprland.conf."
+echo "the new config. Pick a wallpaper with 'waypaper' (or Super+Shift+W) --"
+echo "until you do, Hyprland/Waybar/SwayNC/Alacritty stay on the static"
+echo "fallback palette. See the README's color theming section for how the"
+echo "Matugen re-theming pipeline fits together."
 echo "Got more than one monitor? Once you're logged into Hyprland, run"
 echo "'./hypr-monitor-layout.sh' from this repo to lay them out interactively."
 echo

@@ -45,7 +45,9 @@ PKGS=(
     'unrar'                      # RAR compression program
     'unzip'                      # Zip compression program
     'wget'                       # Remote content retrieval
-    'vim'                        # Terminal editor
+    'kate'                       # GUI text editor (KDE) -- pulls in some KDE
+                                  # Frameworks/Qt libs as dependencies, but
+                                  # doesn't need Plasma itself
     'zenity'                     # Graphical dialog boxes from shell scripts
     'zsh'                        # Interactive shell
     'zsh-autosuggestions'        # Zsh plugin
@@ -82,8 +84,8 @@ PKGS=(
     # icon theme plus the bar/launcher/notification/tray stack Hyprland
     # doesn't provide on its own -- KDE Plasma used to supply all of this.)
     'waybar'                      # Status bar
-    'wofi'                        # Application launcher (Wayland-native)
-    'mako'                        # Notification daemon (Wayland-native)
+    'swaync'                      # Notification daemon + control center
+                                   # (Wayland-native) -- replaces mako
     'grim'                        # Screenshot utility
     'slurp'                       # Region/window selector, used with grim
     'wl-clipboard'                # Wayland clipboard CLI (wl-copy/wl-paste)
@@ -99,7 +101,7 @@ PKGS=(
                                    # Plasma no longer supplies one
     'papirus-icon-theme'          # Icon theme (works standalone, no KDE
                                    # config modules required)
-    'ttf-nerd-fonts-symbols'      # Icon glyphs most waybar/wofi configs
+    'ttf-nerd-fonts-symbols'      # Icon glyphs most waybar/launcher configs
                                    # assume are available
     'ttf-jetbrains-mono-nerd'     # Full JetBrains Mono Nerd Font, for a
                                    # patched monospace font in the terminal
@@ -116,15 +118,18 @@ PKGS=(
                                    # removable-media mounting inside Thunar
 
     # DOCK ----------------------------------------------------------------
-    # NOTE: Plank is an X11 dock -- it has no native Wayland support. Under
-    # Hyprland it only runs through Xwayland (already installed in stage 1),
-    # and its auto-hide/strut reservation against other windows is
-    # unreliable there since Wayland compositors don't grant X11 clients
-    # the same layer-shell placement Wayland-native bars (waybar) get. It's
-    # included because it's the requested dock, but expect rough edges --
-    # nwg-dock-hyprland (AUR) is the Wayland-native alternative if you hit
-    # them.
-    'plank'                       # Dock
+    'nwg-dock-hyprland'           # Dock -- GTK3, layer-shell based, built
+                                   # specifically for Hyprland (native
+                                   # Wayland, no Xwayland dependency, unlike
+                                   # the X11-only docks like Plank)
+
+    # MUSIC -----------------------------------------------------------------
+    'spotify-launcher'            # Installs/updates the official Spotify
+                                   # client into your own home directory and
+                                   # launches it -- the ArchWiki-recommended
+                                   # way to run Spotify, since it lets
+                                   # Spotify self-update instead of relying
+                                   # on a repackaged pacman/AUR build
 )
  
 echo "NOTE: 'code' (VS Code) has been removed from this list -- it is not"
@@ -136,7 +141,21 @@ for PKG in "${PKGS[@]}"; do
     echo "INSTALLING: ${PKG}"
     "${PACMAN[@]}" -S --noconfirm --needed "${PKG}"
 done
- 
+
+# ------------------------------------------------------------------------
+# ncurses (not --needed, deliberately, unlike the loop above): the
+# 'alacritty' TERM/terminfo entry ships in ncurses, not the alacritty
+# package -- it's only alacritty's *optional* dependency, so pacman never
+# guarantees it's present at a version that actually has it. ncurses is
+# almost always already installed as a base dependency (of bash/readline),
+# just possibly at an older version predating that terminfo addition --
+# --needed would skip it in that case and leave the problem in place.
+# Missing it causes ncurses apps (vim, nvim, htop, ...) to fail with
+# "unable to find terminal" inside Alacritty.
+echo
+echo "Ensuring ncurses is current (provides Alacritty's terminfo entry)"
+"${PACMAN[@]}" -S --noconfirm ncurses
+
 echo
 echo "Done!"
 echo
