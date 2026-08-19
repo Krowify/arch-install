@@ -22,12 +22,14 @@ applications.
 | Wallpaper | Swaybg |
 | Cursor theme | Bibata |
 | File manager | Thunar |
-| Clipboard | wl-clipboard |
+| Clipboard | wl-clipboard + cliphist |
 | Notifications | Mako |
 | Network | NetworkManager + nm-applet |
 | Audio | PipeWire + WirePlumber + pamixer |
 | Power | Brightnessctl |
 | Package manager | pacman + yay + paru |
+| VPN | ProtonVPN |
+| Privacy browser | Tor Browser |
 
 ## Arch Linux First Boot
 
@@ -40,21 +42,23 @@ cd linux-installation
 bash 0-install.sh
 ```
 
-`0-install.sh` runs all five stages with a single command. AUR builds
-(stage 3) can't run as root -- `makepkg` refuses -- so the script
-handles that switch for you:
+`0-install.sh` runs all six stages with a single command. AUR builds
+(stage 3) can't run as root -- `makepkg` refuses -- and dotfiles (stage
+6) need to land in a real user's `$HOME`, not root's, so the script
+handles both switches for you:
 
 - If you're running it as **root**, it asks for a username to use for
-  the AUR stage, offers to create the account if it doesn't exist yet,
-  then automatically drops into that user (`su -`) for stage 3 and
-  switches back to root afterward.
+  stages 3 and 6, offers to create the account if it doesn't exist yet,
+  then automatically drops into that user (`su -`) for each of those
+  stages and switches back to root in between (for stages 4 and 5).
 - If you're already running it as a **regular user with sudo**, it
-  just uses your current account for stage 3 and calls `sudo` where
-  needed for the rest.
+  just uses your current account for stages 3 and 6 and calls `sudo`
+  where needed for the rest.
 
 Expect a few interactive prompts along the way (root/sudo password,
-account creation if applicable, `makepkg` confirmations) -- that's
-intentional so nothing installs or creates accounts silently.
+account creation if applicable, `makepkg` confirmations, whether to
+enable the SSH server in stage 4) -- that's intentional so nothing
+installs, creates accounts, or opens a network port silently.
 
 | Stage | Script                  | Runs as                     | Purpose                                                |
 |-------|--------------------------|------------------------------|----------------------------------------------------------|
@@ -63,7 +67,8 @@ intentional so nothing installs or creates accounts silently.
 | 2     | `2-system-software.sh`   | root                         | Everyday software + Hyprland desktop utilities (bar, launcher, etc.) from the official repos |
 | 3     | `3-user-software.sh`      | non-root (handled by 0-install.sh) | AUR packages via `yay` (VS Code, Discord, themes, etc.)|
 | 4     | `4-firewall.sh`     | root                         | Firewall, sysctl hardening, fail2ban                       |
-| 5     | `5-post-setup.sh`        | root                         | File watcher limit, display manager, bluetooth autostart   |
+| 5     | `5-post-setup.sh`        | root                         | File watcher limit, display manager, bluetooth autostart, Plymouth/GRUB wiring |
+| 6     | `6-dotfiles.sh`          | non-root (handled by 0-install.sh) | Deploys Hyprland/waybar/etc. config, activates the SDDM/GTK/icon/cursor themes |
 
 All scripts use `set -euo pipefail`, so they stop on the first error
 instead of silently continuing with a partially-configured system.
@@ -83,6 +88,9 @@ sh 3-user-software.sh
 su
 sh 4-firewall.sh
 sh 5-post-setup.sh
+
+su <your-username>
+sh 6-dotfiles.sh
 ```
 
 ## System Description
@@ -97,9 +105,48 @@ SDDM is used as the login manager. Once stage 1 finishes, the
 from SDDM's session dropdown with nothing further to configure -- pick
 "Hyprland (uwsm-managed)" if it's offered, otherwise plain "Hyprland".
 
+## Dotfiles (stage 6)
+
+Package installs alone don't produce a working desktop -- Hyprland,
+waybar, mako, etc. all need config to autostart and behave. Stage 6
+deploys `dotfiles/` (source templates in this repo) into `~/.config`,
+and activates the installed themes:
+
+- Detects the actual installed folder name for the Catppuccin GTK
+  theme, Papirus icon theme, Bibata cursor theme, and the SDDM theme
+  under `/usr/share/...` (rather than hardcoding a name that might not
+  match what got installed), and wires them into
+  `~/.config/gtk-3.0|gtk-4.0/settings.ini`, `~/.icons/default`, and
+  `/etc/sddm.conf.d/10-theme.conf`.
+- Any existing file/directory it would overwrite gets moved to
+  `<name>.bak` first instead of silently clobbered.
+- Appends zsh plugin sourcing (`zsh-autosuggestions`,
+  `zsh-syntax-highlighting`, `autojump`) to `~/.zshrc`, guarded by a
+  marker comment so re-running the stage doesn't duplicate it.
+
+Default keybinds (`$mod` = Super):
+
+| Keybind | Action |
+|---------|--------|
+| `Super+Return` | Terminal (Alacritty) |
+| `Super+D` | App launcher (Wofi) |
+| `Super+Q` | Close focused window |
+| `Super+E` | File manager (Thunar) |
+| `Super+V` | Clipboard history (cliphist + Wofi) |
+| `Super+L` | Lock screen (Hyprlock) |
+| `Super+Escape` | Logout menu (Wlogout) |
+| `Super+W` | Toggle Eww widget panel |
+| `Alt+Tab` | Cycle windows |
+| `Print` | Screenshot region to clipboard |
+
+`swaybg` defaults to a solid Catppuccin Mocha color (no wallpaper image
+ships in this repo) -- swap the `exec-once = swaybg` line in
+`~/.config/hypr/hyprland.conf` for `swaybg -i /path/to/image -m fill`
+once you have one.
+
 ## Troubleshooting
 
-- **Stage 3 exits immediately** (running it manually) -- you're
+- **Stage 3 or 6 exits immediately** (running it manually) -- you're
   running it as root. Switch to a regular user first
   (`su <your-username>`) and re-run it, or just use `0-install.sh`,
   which handles this automatically.
@@ -111,12 +158,27 @@ from SDDM's session dropdown with nothing further to configure -- pick
   current for your mirrors, then re-run; already-installed packages
   are skipped via `--needed`.
 - **Plymouth splash doesn't show, or GRUB config wasn't touched** --
-  stage 1 only wires up the `splash` kernel parameter and the
-  mkinitcpio hook automatically for GRUB, since that's what this repo
-  assumes as the bootloader. If you booted with something else
-  (systemd-boot, rEFInd, etc.), add `splash` (and optionally `quiet`)
-  to its kernel parameters yourself -- see the Arch Wiki's Plymouth
-  page.
+  stage 5 (not stage 1 -- it runs last, after every package install, so
+  it always sees the final kernel/package set) wires up the `splash`
+  kernel parameter and the mkinitcpio hook automatically for GRUB, since
+  that's what this repo assumes as the bootloader. If you booted with
+  something else (systemd-boot, rEFInd, etc.), add `splash` (and
+  optionally `quiet`) to its kernel parameters yourself -- see the Arch
+  Wiki's Plymouth page.
+- **SSH isn't reachable after install** -- that's by design. Stage 4
+  asks whether to enable it and defaults to no if you just hit enter;
+  it installs the `openssh` package either way but only starts/enables
+  `sshd.service` and opens port 22 in ufw if you opt in. Enable it later
+  with `sudo systemctl enable --now sshd.service` and
+  `sudo ufw limit 22/tcp comment 'SSH (rate-limited)'`.
+- **SDDM/GTK/icon/cursor theme didn't apply after stage 6** -- stage 6
+  detects the installed theme folder under `/usr/share/...` and prints
+  what it found (or `<not found>`) before applying anything. If a
+  theme shows as not found, its stage 2/3 package install likely
+  failed or was skipped -- re-run that stage, then re-run
+  `6-dotfiles.sh`. For SDDM specifically, restart it to see the change:
+  `sudo systemctl restart sddm` (this kills your current graphical
+  session, so only do it from a TTY or before logging in).
 - **Plank isn't behaving like a normal dock** (wrong position,
   overlapping windows, disappearing) -- Plank is an X11-only app with
   no native Wayland support. Under Hyprland it runs via Xwayland,
