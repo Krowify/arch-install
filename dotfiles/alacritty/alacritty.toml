@@ -18,34 +18,34 @@ style = "Bold"
 family = "JetBrainsMono Nerd Font"
 style = "Italic"
 
-# Catppuccin Mocha
+# Ported from notusknot/dotfiles-nix (see README credits)
 [colors.primary]
-background = "#1e1e2e"
-foreground = "#cdd6f4"
+background = "#292a37"
+foreground = "#d9e0ee"
 
 [colors.cursor]
-text = "#1e1e2e"
-cursor = "#f5e0dc"
+text = "#292a37"
+cursor = "#efb993"
 
 [colors.normal]
-black = "#45475a"
-red = "#f38ba8"
-green = "#a6e3a1"
-yellow = "#f9e2af"
-blue = "#89b4fa"
-magenta = "#f5c2e7"
-cyan = "#94e2d5"
-white = "#bac2de"
+black = "#303241"
+red = "#ec6a88"
+green = "#3fdaa4"
+yellow = "#efb993"
+blue = "#3fc6de"
+magenta = "#b771dc"
+cyan = "#6be6e6"
+white = "#d9e0ee"
 
 [colors.bright]
-black = "#585b70"
-red = "#f38ba8"
-green = "#a6e3a1"
-yellow = "#f9e2af"
-blue = "#89b4fa"
-magenta = "#f5c2e7"
-cyan = "#94e2d5"
-white = "#a6adc8"
+black = "#393a4d"
+red = "#e95678"
+green = "#29d398"
+yellow = "#efb993"
+blue = "#26bbd9"
+magenta = "#b072d1"
+cyan = "#59e3e3"
+white = "#d9e0ee"
 
 [shell]
 program = "/usr/bin/zsh"

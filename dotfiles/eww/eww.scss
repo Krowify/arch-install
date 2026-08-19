@@ -1,6 +1,12 @@
+// Palette ported from notusknot/dotfiles-nix (see README credits)
+$mantle: #292a37;
+$mauve: #b072d1;
+$text: #d9e0ee;
+$light-gray: #9699b7;
+
 .panel {
-    background-color: rgba(30, 30, 46, 0.9); // base
-    border: 2px solid #cba6f7; // mauve
+    background-color: rgba(41, 42, 55, 0.9); // mantle
+    border: 2px solid $mauve;
     border-radius: 12px;
     padding: 10px;
 }
@@ -8,11 +14,11 @@
 .clock {
     font-family: "JetBrainsMono Nerd Font";
     font-size: 22px;
-    color: #cdd6f4; // text
+    color: $text;
 }
 
 .uptime {
     font-family: "JetBrainsMono Nerd Font";
     font-size: 12px;
-    color: #a6adc8; // subtext0
+    color: $light-gray;
 }

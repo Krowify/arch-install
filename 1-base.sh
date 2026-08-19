@@ -129,21 +129,70 @@ PKGS=(
     # no longer provides one automatically.
 )
  
-echo "NOTE: a GPU driver is NOT installed automatically by this script."
-echo "Wayland/Hyprland render through mesa using the kernel's own DRM/KMS"
-echo "drivers, so AMD and Intel need nothing further -- mesa above already"
-echo "covers them. Nvidia is the exception:"
-echo "  AMD:    (mesa, already installed above, is enough)"
-echo "  Intel:  (mesa, already installed above, is enough)"
-echo "  Nvidia: sudo pacman -S nvidia-open nvidia-utils egl-wayland"
-echo "          (use 'nvidia' instead of 'nvidia-open' on older/unsupported"
-echo "          cards), then add 'nvidia_drm.modeset=1' to your kernel"
-echo "          parameters -- see the Arch Wiki's Hyprland and NVIDIA pages."
-echo
- 
 for PKG in "${PKGS[@]}"; do
     echo "INSTALLING: ${PKG}"
     "${PACMAN[@]}" -S --noconfirm --needed "${PKG}"
+done
+
+# ------------------------------------------------------------------------
+# GPU driver -- AMD and Intel render through mesa (already installed
+# above) with no extra driver needed. Nvidia needs its own proprietary
+# driver installed and, later, a kernel parameter set (that part happens
+# in stage 5, once mkinitcpio/GRUB have seen every installed kernel).
+echo
+echo "GPU driver setup"
+echo "Wayland/Hyprland render through mesa using the kernel's own DRM/KMS"
+echo "drivers -- AMD and Intel need nothing further. Nvidia is the"
+echo "exception: it needs its own proprietary driver."
+echo
+
+DETECTED_GPU=""
+if command -v lspci >/dev/null 2>&1; then
+    if lspci | grep -qi 'nvidia'; then
+        DETECTED_GPU="nvidia"
+    elif lspci | grep -qiE 'intel.*(vga|graphics|display)'; then
+        DETECTED_GPU="intel"
+    elif lspci | grep -qiE '(vga|display).*amd|amd.*(vga|display)|advanced micro devices.*display'; then
+        DETECTED_GPU="amd"
+    fi
+fi
+if [[ -n "${DETECTED_GPU}" ]]; then
+    echo "Detected GPU (via lspci): ${DETECTED_GPU}"
+fi
+
+while true; do
+    read -rp "Which GPU are you using? [intel/nvidia/amd] ${DETECTED_GPU:+(detected: ${DETECTED_GPU}) }: " GPU_CHOICE
+    GPU_CHOICE="${GPU_CHOICE,,}"
+    [[ -z "${GPU_CHOICE}" && -n "${DETECTED_GPU}" ]] && GPU_CHOICE="${DETECTED_GPU}"
+    case "${GPU_CHOICE}" in
+        intel|amd)
+            echo "mesa (already installed above) is all ${GPU_CHOICE} needs -- nothing further to install."
+            break
+            ;;
+        nvidia)
+            echo "Installing Nvidia drivers..."
+            NVIDIA_PKGS=(
+                'nvidia-open'   # Open-kernel Nvidia driver module (Turing/2018+
+                                 # cards). Use 'nvidia' instead if yours is older.
+                'nvidia-utils'  # Userspace driver libraries (OpenGL/Vulkan)
+                'egl-wayland'   # EGL layer Wayland compositors need to use the
+                                 # Nvidia driver
+            )
+            for PKG in "${NVIDIA_PKGS[@]}"; do
+                echo "INSTALLING: ${PKG}"
+                "${PACMAN[@]}" -S --noconfirm --needed "${PKG}"
+            done
+            echo "NOTE: if your card is older than Turing (pre-GTX 16xx/RTX 20xx)"
+            echo "and fails to boot into Hyprland, swap 'nvidia-open' for 'nvidia':"
+            echo "  sudo pacman -S --needed nvidia nvidia-utils egl-wayland"
+            echo "'nvidia_drm.modeset=1' gets added to your kernel parameters"
+            echo "automatically in stage 5."
+            break
+            ;;
+        *)
+            echo "Please answer 'intel', 'nvidia', or 'amd'."
+            ;;
+    esac
 done
 
 echo "NOTE: Plymouth is installed but not yet wired into mkinitcpio/GRUB --"

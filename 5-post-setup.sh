@@ -67,12 +67,12 @@ else
     fi
 fi
 
+GRUB_PARAMS_TO_ADD=()
 if command -v grub-mkconfig >/dev/null 2>&1 && [[ -f /etc/default/grub ]]; then
     if grep -q 'splash' /etc/default/grub; then
         echo "GRUB already has 'splash' on the kernel command line, skipping"
     else
-        "${SUDO[@]}" sed -i 's/^\(GRUB_CMDLINE_LINUX_DEFAULT="[^"]*\)"/\1 splash"/' /etc/default/grub
-        "${SUDO[@]}" grub-mkconfig -o /boot/grub/grub.cfg
+        GRUB_PARAMS_TO_ADD+=('splash')
     fi
 else
     echo "NOTE: GRUB not detected (no grub-mkconfig / /etc/default/grub) --"
@@ -80,6 +80,33 @@ else
     echo "command line. If you're on a different bootloader (systemd-boot,"
     echo "rEFInd, etc.), add 'splash' (and optionally 'quiet') to its kernel"
     echo "parameters yourself -- see the Arch Wiki's Plymouth page."
+fi
+
+# ------------------------------------------------------------------------
+# Nvidia kernel parameter -- only if stage 1's GPU prompt actually
+# installed the Nvidia driver (checked here, rather than passed in from
+# stage 1, since each numbered stage runs as its own process).
+echo
+echo "Checking for an installed Nvidia driver"
+if pacman -Qq nvidia-open &>/dev/null || pacman -Qq nvidia &>/dev/null; then
+    echo "Nvidia driver detected"
+    if command -v grub-mkconfig >/dev/null 2>&1 && [[ -f /etc/default/grub ]]; then
+        if grep -q 'nvidia_drm.modeset=1' /etc/default/grub; then
+            echo "GRUB already has 'nvidia_drm.modeset=1', skipping"
+        else
+            GRUB_PARAMS_TO_ADD+=('nvidia_drm.modeset=1')
+        fi
+    else
+        echo "NOTE: GRUB not detected -- add 'nvidia_drm.modeset=1' to your"
+        echo "bootloader's kernel parameters yourself."
+    fi
+else
+    echo "No Nvidia driver installed, nothing to do"
+fi
+
+if [[ ${#GRUB_PARAMS_TO_ADD[@]} -gt 0 ]]; then
+    "${SUDO[@]}" sed -i "s/^\(GRUB_CMDLINE_LINUX_DEFAULT=\"[^\"]*\)\"/\1 ${GRUB_PARAMS_TO_ADD[*]}\"/" /etc/default/grub
+    "${SUDO[@]}" grub-mkconfig -o /boot/grub/grub.cfg
 fi
 
 # ------------------------------------------------------------------------

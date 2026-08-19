@@ -8,7 +8,7 @@ applications.
 | Category | Component |
 |----------|-----------|
 | Bootloader / splash | GRUB + Plymouth |
-| Login screen | SDDM |
+| Display Manager | SDDM (Plasma Login Manager) |
 | Compositor | Hyprland |
 | Status bar | Waybar |
 | Dock | Plank |
@@ -16,7 +16,7 @@ applications.
 | Terminal | Alacritty + ZSH |
 | Logout menu | Wlogout |
 | Widgets | Eww |
-| Theme | Catppuccin (GTK, Mocha) |
+| Theme | Catppuccin Mocha (GTK/SDDM) + custom accent palette (Hyprland, Waybar, Wofi, Mako, Wlogout, Eww, Alacritty) -- see [Credits](#credits) |
 | Icon theme | Papirus |
 | Fonts | Noto Fonts + Nerd Fonts |
 | Wallpaper | Swaybg |
@@ -27,6 +27,7 @@ applications.
 | Network | NetworkManager + nm-applet |
 | Audio | PipeWire + WirePlumber + pamixer |
 | Power | Brightnessctl |
+| GPU driver | mesa (AMD/Intel) or Nvidia proprietary -- picked interactively in stage 1 |
 | Package manager | pacman + yay + paru |
 | VPN | ProtonVPN |
 | Privacy browser | Tor Browser |
@@ -63,11 +64,11 @@ installs, creates accounts, or opens a network port silently.
 | Stage | Script                  | Runs as                     | Purpose                                                |
 |-------|--------------------------|------------------------------|----------------------------------------------------------|
 | 0     | `0-install.sh`           | root or sudo user           | Master runner -- executes all stages below in order       |
-| 1     | `1-base.sh`              | root                         | Wayland, Hyprland compositor, networking, audio, bluetooth |
+| 1     | `1-base.sh`              | root                         | Wayland, Hyprland compositor, networking, audio, bluetooth, GPU driver (asks Intel/Nvidia/AMD) |
 | 2     | `2-system-software.sh`   | root                         | Everyday software + Hyprland desktop utilities (bar, launcher, etc.) from the official repos |
 | 3     | `3-user-software.sh`      | non-root (handled by 0-install.sh) | AUR packages via `yay` (VS Code, Discord, themes, etc.)|
 | 4     | `4-firewall.sh`     | root                         | Firewall, sysctl hardening, fail2ban                       |
-| 5     | `5-post-setup.sh`        | root                         | File watcher limit, display manager, bluetooth autostart, Plymouth/GRUB wiring |
+| 5     | `5-post-setup.sh`        | root                         | File watcher limit, display manager, bluetooth autostart, Plymouth/GRUB wiring, Nvidia kernel parameter (if applicable) |
 | 6     | `6-dotfiles.sh`          | non-root (handled by 0-install.sh) | Deploys Hyprland/waybar/etc. config, activates the SDDM/GTK/icon/cursor themes |
 
 All scripts use `set -euo pipefail`, so they stop on the first error
@@ -186,12 +187,15 @@ once you have one.
   under X11/other DEs. This is a known limitation, not a broken
   install; `nwg-dock-hyprland` (AUR) is the Wayland-native
   alternative if it bothers you.
-- **GPU driver** -- stage 1 doesn't install one. AMD and Intel work
-  out of the box through mesa; Nvidia needs the proprietary driver
-  (`nvidia-open` or `nvidia`, plus `nvidia-utils` and `egl-wayland`)
-  and `nvidia_drm.modeset=1` on the kernel command line. The script
-  prints a reminder -- see the Arch Wiki's Hyprland and NVIDIA pages
-  for details.
+- **GPU driver** -- stage 1 asks which GPU you have (pre-filling its
+  guess from `lspci` if it can tell). AMD and Intel need nothing beyond
+  the `mesa` already installed. Nvidia gets `nvidia-open` (swap for
+  `nvidia` yourself if you're on a pre-Turing card and it fails to boot
+  into Hyprland), `nvidia-utils`, and `egl-wayland` installed there and
+  then; stage 5 detects the installed driver and adds
+  `nvidia_drm.modeset=1` to the GRUB kernel command line automatically
+  -- see the Arch Wiki's Hyprland and NVIDIA pages for anything beyond
+  that.
 - **Hyprland session doesn't appear in SDDM, or crashes back to the
   login screen** -- launching Hyprland from a display manager isn't
   officially supported upstream, though SDDM works for most people.
@@ -200,3 +204,9 @@ once you have one.
   reinstall the `hyprland` package.
 
 Arch Linux Installation Guide: https://wiki.archlinux.org/title/Installation_guide
+
+## Credits
+
+- The accent color palette used across Hyprland, Waybar, Wofi, Mako,
+  Wlogout, Eww, and Alacritty is ported from
+  [notusknot/dotfiles-nix](https://github.com/notusknot/dotfiles-nix).

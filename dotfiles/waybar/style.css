@@ -6,21 +6,21 @@
 }
 
 window#waybar {
-    background-color: rgba(30, 30, 46, 0.9); /* base */
-    color: #cdd6f4; /* text */
+    background-color: rgba(41, 42, 55, 0.9); /* mantle */
+    color: #d9e0ee; /* text */
 }
 
 #workspaces button {
     padding: 0 8px;
-    color: #6c7086; /* overlay0 */
+    color: #6e738d; /* overlay0 */
 }
 
 #workspaces button.active {
-    color: #cba6f7; /* mauve */
+    color: #b072d1; /* mauve */
 }
 
 #workspaces button:hover {
-    background-color: #313244; /* surface0 */
+    background-color: #44465c; /* base */
 }
 
 #clock,
@@ -33,18 +33,18 @@ window#waybar {
 #custom-power {
     padding: 0 10px;
     margin: 4px 2px;
-    background-color: #313244; /* surface0 */
+    background-color: #44465c; /* base */
     border-radius: 8px;
 }
 
 #battery.warning {
-    color: #f9e2af; /* yellow */
+    color: #efb993; /* yellow */
 }
 
 #battery.critical {
-    color: #f38ba8; /* red */
+    color: #ec6a88; /* red */
 }
 
 #custom-power {
-    color: #f38ba8;
+    color: #ec6a88;
 }
