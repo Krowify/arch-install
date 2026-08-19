@@ -1,0 +1,38 @@
+{
+  "hyprland/workspaces": {
+    "format": "{icon} {windows}",
+    "on-click": "activate",
+    "persistent-workspaces": {
+      "*": 5
+    },
+    "window-rewrite-default": "󰊠",
+    // Trimmed to apps this repo actually installs (Athena's original list
+    // covered kitty/onlyoffice/Firefox/KDE Connect/qBittorrent/yazi/vlc/
+    // Qt dev tools etc. that aren't part of this install -- see README
+    // credits). Harmless to add more entries here for anything you
+    // install yourself later; an unmatched window class just falls back
+    // to window-rewrite-default above.
+    "window-rewrite": {
+      "alacritty": "󰆍",
+      "code": "󰨞",
+      "obsidian": "󰹕",
+      "kate": "󱓧",
+      "discord": "",
+      "spotify": "",
+      "brave-browser": "",
+      "thunar": "",
+      "blueman-manager": "",
+      "pavucontrol": "󱕂",
+      "nm-connection-editor": "󰐻"
+    },
+    "format-icons": {
+      "active": "󰮯",
+      "special": "󱁂",
+      "default": "󰊠",
+      "urgent": "󰧵",
+      "empty": ""
+    },
+    "show-special": true,
+    "all-outputs": true
+  }
+}

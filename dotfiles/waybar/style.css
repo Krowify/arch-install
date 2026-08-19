@@ -1,52 +1,19 @@
-@import url("colors.css");
+@import "tokens/colors.css";
+@import "tokens/state.css";
+@import "tokens/workspace.css";
+@import "tokens/widget.css";
+@import "tokens/batt-clock.css";
+@import "tokens/slider.css";
 
 * {
-    font-family: "JetBrainsMono Nerd Font", "Noto Sans", sans-serif;
-    font-size: 13px;
-    border: none;
-    border-radius: 0;
+  margin: 0;
+  padding: 0;
+  min-height: 0px;
+  border: none;
+  border-radius: 0;
+  font-family: "JetBrainsMono Nerd Font";
 }
 
 window#waybar {
-    background-color: @mantle;
-    color: @text;
-}
-
-#workspaces button {
-    padding: 0 8px;
-    color: @overlay0;
-}
-
-#workspaces button.active {
-    color: @mauve;
-}
-
-#workspaces button:hover {
-    background-color: @base;
-}
-
-#clock,
-#tray,
-#pulseaudio,
-#network,
-#bluetooth,
-#backlight,
-#battery,
-#custom-power {
-    padding: 0 10px;
-    margin: 4px 2px;
-    background-color: @base;
-    border-radius: 8px;
-}
-
-#battery.warning {
-    color: @yellow;
-}
-
-#battery.critical {
-    color: @red;
-}
-
-#custom-power {
-    color: @red;
+  background: transparent;
 }

@@ -1,0 +1,43 @@
+{
+  // App shortcuts, adapted to what this repo actually installs (Athena's
+  // originals were kitty/onlyoffice/Firefox -- see README credits).
+  "custom/distro": {
+    "format": "",
+    "tooltip": false
+  },
+  "custom/terminal": {
+    "format": "󰆍",
+    "on-click": "alacritty",
+    "tooltip": false
+  },
+  "custom/code": {
+    "format": "󰨞",
+    "on-click": "code",
+    "tooltip": false
+  },
+  "custom/obsidian": {
+    "format": "󰹕",
+    "on-click": "obsidian",
+    "tooltip": false
+  },
+  "custom/office": {
+    "format": "󰏆",
+    "on-click": "libreoffice",
+    "tooltip": false
+  },
+  "custom/files": {
+    "format": "",
+    "on-click": "thunar",
+    "tooltip": false
+  },
+  "custom/spotify": {
+    "format": "",
+    "on-click": "spotify-launcher",
+    "tooltip": false
+  },
+  "custom/browser": {
+    "format": "",
+    "on-click": "brave",
+    "tooltip": false
+  }
+}

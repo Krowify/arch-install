@@ -23,7 +23,7 @@ post_hook = "hyprctl reload"
 
 [templates.waybar]
 input_path = "~/.config/matugen/templates/waybar-colors.css"
-output_path = "~/.config/waybar/colors.css"
+output_path = "~/.config/waybar/tokens/colors.css"
 post_hook = "killall -SIGUSR2 waybar"
 
 [templates.swaync]
