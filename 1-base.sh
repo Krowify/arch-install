@@ -69,7 +69,15 @@ PKGS=(
     'hyprlock'                    # Screen locker
     'swaybg'                      # Wallpaper daemon (wlroots-protocol based,
                                    # works under Hyprland the same as it does
-                                   # under Sway)
+                                   # under Sway) -- this is what hyprland.conf
+                                   # actually autostarts by default; hyprpaper
+                                   # below is installed alongside it as a
+                                   # Hyprland-native alternative (IPC control,
+                                   # per-monitor wallpapers) if you'd rather
+                                   # switch to that instead
+    'hyprpaper'                    # Wallpaper daemon, Hyprland's own -- not
+                                   # wired into hyprland.conf's autostart by
+                                   # default (see swaybg above)
  
     # --- Display / Login Manager
     # The 'hyprland' package ships wayland-sessions .desktop entries

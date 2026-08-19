@@ -16,10 +16,11 @@ applications.
 | Terminal | Alacritty + ZSH |
 | Logout menu | Wlogout |
 | Widgets | Eww |
+| Settings GUI | hyprmod |
 | Theme | Catppuccin Mocha (GTK/SDDM) + custom accent palette (Hyprland, Waybar, Wofi, Mako, Wlogout, Eww, Alacritty) -- see [Credits](#credits) |
 | Icon theme | Papirus |
 | Fonts | Noto Fonts + Nerd Fonts |
-| Wallpaper | Swaybg |
+| Wallpaper | Swaybg (default) + hyprpaper (installed, not autostarted) |
 | Cursor theme | Bibata |
 | File manager | Thunar |
 | Clipboard | wl-clipboard + cliphist |

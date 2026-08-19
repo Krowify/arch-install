@@ -78,6 +78,10 @@ PKGS=(
     'eww'                                 # Widget system
     'wlogout'                            # Wayland-native logout/power menu --
                                           # AUR-only, not in the official repos
+    'hyprmod'                            # GTK4/libadwaita settings GUI for
+                                          # Hyprland -- live-previews changes,
+                                          # writes to its own config rather
+                                          # than touching hyprland.conf
 
     # THEMES -----------------------------------------------------------------
     # This only themes the SDDM login screen itself, independent of the

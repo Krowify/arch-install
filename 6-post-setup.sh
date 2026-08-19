@@ -39,7 +39,16 @@ echo "  systemctl --user enable --now pipewire wireplumber pipewire-pulse"
 # ------------------------------------------------------------------------
 echo
 echo "Enabling bluetooth daemon and setting it to auto-start"
-"${SUDO[@]}" sed -i 's|#AutoEnable=false|AutoEnable=true|g' /etc/bluetooth/main.conf
+if [[ -f /etc/bluetooth/main.conf ]]; then
+    "${SUDO[@]}" sed -i 's|#AutoEnable=false|AutoEnable=true|g' /etc/bluetooth/main.conf
+else
+    # bluez normally ships this file -- if it's missing (partial/odd
+    # install), don't let that abort the rest of this stage (Plymouth/
+    # GRUB, Nvidia) under set -e. bluetooth.service still starts fine
+    # with default settings; it just won't auto-power-on adapters.
+    echo "WARNING: /etc/bluetooth/main.conf not found -- skipping the" >&2
+    echo "AutoEnable tweak. Enabling bluetooth.service anyway." >&2
+fi
 "${SUDO[@]}" systemctl enable --now bluetooth.service
 
 # ------------------------------------------------------------------------
