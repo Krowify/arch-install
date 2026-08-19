@@ -47,5 +47,5 @@ magenta = "#b072d1"
 cyan = "#59e3e3"
 white = "#d9e0ee"
 
-[shell]
+[terminal.shell]
 program = "/usr/bin/zsh"

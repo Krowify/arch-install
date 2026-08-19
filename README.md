@@ -155,11 +155,18 @@ upside down -- without hand-computing pixel offsets. It's not wired into
 `0-install.sh` or any numbered stage on purpose: it drives `hyprctl`, which
 only works from inside an already-running Hyprland session, so there's no
 point in the install pipeline where it could run. Use it once you've
-finished the install and logged in:
+finished the install and logged in, from inside a terminal running under
+Hyprland (e.g. Alacritty), from wherever you cloned/extracted this repo:
 
 ```sh
+cd linux-installation
+chmod +x hypr-monitor-layout.sh
 ./hypr-monitor-layout.sh
 ```
+
+(`chmod +x` is only needed once -- git already tracks the file as
+executable, but a zip download can lose that bit. If you'd rather skip it,
+`bash hypr-monitor-layout.sh` works without it.)
 
 It reads your connected monitors from `hyprctl monitors`, asks which one
 plays which role, applies the layout immediately via `hyprctl keyword
