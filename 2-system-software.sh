@@ -16,7 +16,13 @@ fi
  
 PKGS=(
     # SYSTEM ----------------------------------------------------------
-    'linux-lts'                # Long term support kernel
+    # NOTE: no kernel package here on purpose. The base Arch install this
+    # repo runs on top of (per the README) already installed one, and
+    # 'linux-lts' used to be added on top of it unconditionally -- that
+    # just gives you two kernels (and two GRUB entries, two initramfs
+    # rebuilds on every kernel-related change) with no real benefit for a
+    # single-kernel desktop setup. If you specifically want an LTS kernel
+    # as a fallback, add 'linux-lts' back here.
     'base-devel'                # Needed to build AUR packages in stage 3
  
     # TERMINAL UTILITIES ------------------------------------------------
@@ -81,6 +87,9 @@ PKGS=(
     'grim'                        # Screenshot utility
     'slurp'                       # Region/window selector, used with grim
     'wl-clipboard'                # Wayland clipboard CLI (wl-copy/wl-paste)
+    'cliphist'                    # Clipboard history manager, layered on top
+                                   # of wl-clipboard -- 'wl-clipboard' alone
+                                   # has no history/browsing UI
     'brightnessctl'               # Screen brightness control
     'pamixer'                     # CLI volume control (pipewire-pulse aware)
     'pavucontrol'                 # GUI volume mixer, invoked directly rather

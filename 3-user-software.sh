@@ -89,8 +89,8 @@ PKGS=(
                                           # Latte/Frappe/Macchiato variants)
     'bibata-cursor-theme-bin'            # Cursor theme, prebuilt
 
-    # HARDWARE -----------------------------------------------------------------
-           # Proton Mail Application
+    # PRODUCTIVITY -----------------------------------------------------------
+    'proton-mail-bin'                    # Proton Mail desktop app, prebuilt
     'obsidian'                           # Obsidean Note Taking
 )
  

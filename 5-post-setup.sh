@@ -41,7 +41,47 @@ echo
 echo "Enabling bluetooth daemon and setting it to auto-start"
 "${SUDO[@]}" sed -i 's|#AutoEnable=false|AutoEnable=true|g' /etc/bluetooth/main.conf
 "${SUDO[@]}" systemctl enable --now bluetooth.service
- 
+
+# ------------------------------------------------------------------------
+# Plymouth boot splash wiring (mkinitcpio hook + GRUB kernel param). This
+# runs here, as the last root-level stage, rather than in stage 1, so it
+# always sees the final set of installed kernels/packages instead of
+# depending on install ordering within stages 1-2.
+echo
+echo "Configuring Plymouth boot splash"
+if grep -q '\bplymouth\b' /etc/mkinitcpio.conf 2>/dev/null; then
+    echo "plymouth hook already present in /etc/mkinitcpio.conf, skipping"
+else
+    # Plymouth needs to hook in before any hook that might print to the
+    # console (e.g. 'block'/'filesystems'/'fsck'), and after 'udev' so
+    # device nodes exist -- 'base udev ... ' is what a stock, freshly
+    # installed mkinitcpio.conf starts with.
+    "${SUDO[@]}" sed -i 's/^HOOKS=(base udev/HOOKS=(base udev plymouth/' /etc/mkinitcpio.conf
+    if grep -q '\bplymouth\b' /etc/mkinitcpio.conf; then
+        "${SUDO[@]}" mkinitcpio -P
+    else
+        echo "WARNING: could not find 'HOOKS=(base udev ...' in" >&2
+        echo "/etc/mkinitcpio.conf to patch -- it's been customized from the" >&2
+        echo "stock layout. Add 'plymouth' to the HOOKS array yourself (right" >&2
+        echo "after 'udev') and run 'mkinitcpio -P'." >&2
+    fi
+fi
+
+if command -v grub-mkconfig >/dev/null 2>&1 && [[ -f /etc/default/grub ]]; then
+    if grep -q 'splash' /etc/default/grub; then
+        echo "GRUB already has 'splash' on the kernel command line, skipping"
+    else
+        "${SUDO[@]}" sed -i 's/^\(GRUB_CMDLINE_LINUX_DEFAULT="[^"]*\)"/\1 splash"/' /etc/default/grub
+        "${SUDO[@]}" grub-mkconfig -o /boot/grub/grub.cfg
+    fi
+else
+    echo "NOTE: GRUB not detected (no grub-mkconfig / /etc/default/grub) --"
+    echo "Plymouth is installed but nothing added 'splash' to the kernel"
+    echo "command line. If you're on a different bootloader (systemd-boot,"
+    echo "rEFInd, etc.), add 'splash' (and optionally 'quiet') to its kernel"
+    echo "parameters yourself -- see the Arch Wiki's Plymouth page."
+fi
+
 # ------------------------------------------------------------------------
 echo "
 ###############################################################################

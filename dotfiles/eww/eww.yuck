@@ -1,0 +1,21 @@
+; Minimal example widget -- waybar is the main bar, this is a small
+; standalone panel to demonstrate eww is working. Toggle with SUPER+W.
+
+(defpoll time :interval "1s" "date '+%H:%M:%S'")
+(defpoll uptime :interval "60s" "uptime -p")
+
+(defwindow widget-panel
+    :monitor 0
+    :geometry (geometry :x "20px"
+                         :y "20px"
+                         :width "220px"
+                         :height "100px"
+                         :anchor "bottom right")
+    :stacking "fg"
+    :exclusive false
+    (panel))
+
+(defwidget panel []
+    (box :class "panel" :orientation "v" :space-evenly false :spacing 6
+        (label :class "clock" :text time)
+        (label :class "uptime" :text uptime)))

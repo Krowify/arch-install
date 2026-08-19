@@ -37,6 +37,11 @@ PKGS=(
     # separate to install for it.
 
     # --- Boot splash (Plymouth, requires GRUB as the bootloader)
+    # NOTE: the actual mkinitcpio-hook/GRUB-kernel-param wiring for this is
+    # done in stage 5, not here -- running it as the last root-level stage,
+    # after all package installs are done, means 'mkinitcpio -P' and
+    # 'grub-mkconfig' always see the final, fully-installed set of kernels
+    # and packages, regardless of what stage 1/2 end up installing.
     'plymouth'                 # Graphical boot splash daemon
 
     # --- Setup Desktop
@@ -84,7 +89,11 @@ PKGS=(
                                # this needs a tray host to actually be
                                # visible; waybar's tray module (stage 2)
                                # covers that
-    'dhclient'                # DHCP client
+    # NOTE: no standalone 'dhclient' here on purpose. NetworkManager uses
+    # its own internal DHCP client by default (internal/dhcpcd, configurable
+    # via /etc/NetworkManager/NetworkManager.conf's [main] dhcp= setting) --
+    # it doesn't shell out to dhclient unless explicitly told to, so it was
+    # dead weight.
     'libsecret'               # Library for storing passwords
     'fail2ban'                # Ban IPs after repeated failed logins
     'ufw'                     # Uncomplicated firewall
@@ -137,47 +146,9 @@ for PKG in "${PKGS[@]}"; do
     "${PACMAN[@]}" -S --noconfirm --needed "${PKG}"
 done
 
-if [[ ${EUID} -eq 0 ]]; then
-    SUDO=()
-else
-    SUDO=(sudo)
-fi
-
-echo
-echo "Configuring Plymouth boot splash"
-if grep -q '\bplymouth\b' /etc/mkinitcpio.conf 2>/dev/null; then
-    echo "plymouth hook already present in /etc/mkinitcpio.conf, skipping"
-else
-    # Plymouth needs to hook in before any hook that might print to the
-    # console (e.g. 'block'/'filesystems'/'fsck'), and after 'udev' so
-    # device nodes exist -- 'base udev ... ' is what a stock, freshly
-    # installed mkinitcpio.conf starts with.
-    "${SUDO[@]}" sed -i 's/^HOOKS=(base udev/HOOKS=(base udev plymouth/' /etc/mkinitcpio.conf
-    if grep -q '\bplymouth\b' /etc/mkinitcpio.conf; then
-        "${SUDO[@]}" mkinitcpio -P
-    else
-        echo "WARNING: could not find 'HOOKS=(base udev ...' in" >&2
-        echo "/etc/mkinitcpio.conf to patch -- it's been customized from the" >&2
-        echo "stock layout. Add 'plymouth' to the HOOKS array yourself (right" >&2
-        echo "after 'udev') and run 'mkinitcpio -P'." >&2
-    fi
-fi
-
-if command -v grub-mkconfig >/dev/null 2>&1 && [[ -f /etc/default/grub ]]; then
-    if grep -q 'splash' /etc/default/grub; then
-        echo "GRUB already has 'splash' on the kernel command line, skipping"
-    else
-        "${SUDO[@]}" sed -i 's/^\(GRUB_CMDLINE_LINUX_DEFAULT="[^"]*\)"/\1 splash"/' /etc/default/grub
-        "${SUDO[@]}" grub-mkconfig -o /boot/grub/grub.cfg
-    fi
-else
-    echo "NOTE: GRUB not detected (no grub-mkconfig / /etc/default/grub) --"
-    echo "Plymouth is installed but nothing added 'splash' to the kernel"
-    echo "command line. If you're on a different bootloader (systemd-boot,"
-    echo "rEFInd, etc.), add 'splash' (and optionally 'quiet') to its kernel"
-    echo "parameters yourself -- see the Arch Wiki's Plymouth page."
-fi
-
+echo "NOTE: Plymouth is installed but not yet wired into mkinitcpio/GRUB --"
+echo "that happens in stage 5, after the second kernel (stage 2) is in"
+echo "place."
 echo
 echo "Done!"
 echo

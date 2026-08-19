@@ -1,0 +1,28 @@
+* {
+    background-image: none;
+    font-family: "JetBrainsMono Nerd Font", "Noto Sans", sans-serif;
+}
+
+window {
+    background-color: rgba(30, 30, 46, 0.85); /* base */
+}
+
+button {
+    color: #cdd6f4; /* text */
+    background-color: #313244; /* surface0 */
+    border-style: solid;
+    border-width: 2px;
+    border-color: #45475a; /* surface1 */
+    border-radius: 12px;
+    margin: 10px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 25%;
+}
+
+button:focus,
+button:active,
+button:hover {
+    background-color: #45475a; /* surface1 */
+    border-color: #cba6f7; /* mauve */
+}
