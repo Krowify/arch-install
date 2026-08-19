@@ -18,7 +18,7 @@ applications.
 | Logout menu | Wlogout |
 | Widgets | Eww |
 | Settings GUI | hyprmod |
-| Theme | Catppuccin Mocha (GTK/SDDM) + custom accent palette (Hyprland, Waybar, Wlogout, Eww, Alacritty), dynamically re-themed by Matugen -- see [Credits](#credits) and [Color theming](#color-theming-matugen) |
+| Theme | Catppuccin Mocha (GTK/SDDM) + custom accent palette (Hyprland, Wlogout, Eww, Alacritty) + Athena's Material You palette (Waybar), all dynamically re-themed by Matugen -- see [Credits](#credits) and [Color theming](#color-theming-matugen) |
 | Icon theme | Papirus |
 | Fonts | Noto Fonts + Nerd Fonts |
 | Wallpaper | Waypaper (GUI picker) + swww (renderer) |
@@ -194,7 +194,7 @@ and Alacritty's background/foreground/cursor from it:
 | App | Generated file | Picked up via |
 |-----|-----------------|----------------|
 | Hyprland | `~/.config/hypr/colors.conf` | `hyprctl reload` (Matugen's post_hook) |
-| Waybar | `~/.config/waybar/colors.css` | `killall -SIGUSR2 waybar` (Matugen's post_hook) |
+| Waybar | `~/.config/waybar/tokens/colors.css` | `killall -SIGUSR2 waybar` (Matugen's post_hook) |
 | SwayNC | `~/.config/swaync/colors.css` | `swaync-client -rs` (Matugen's post_hook) |
 | Alacritty | `~/.config/alacritty/colors.toml` | live-reloads on file change by itself |
 
@@ -236,6 +236,21 @@ accordingly.
   nothing or errors, run the command directly in a terminal to see what
   it actually says, and check that app's own `--help`/docs for the
   current invocation.
+- **Waybar's temperature module shows nothing/wrong, or the CPU
+  temperature looks off** -- `dotfiles/waybar/modules/system.jsonc` hard
+  codes `"thermal-zone": 8`, copied from Athena's author's own machine
+  (see [Credits](#credits)). Run `for z in /sys/class/thermal/thermal_zone*;
+  do echo "$z: $(cat $z/type)"; done` and find the zone whose type looks
+  like your CPU package (e.g. `x86_pkg_temp`, `k10temp`), then use that
+  number instead.
+- **Waybar's clock is in the wrong timezone** -- it uses your system
+  timezone by default now (the upstream config hardcoded Jakarta). Add a
+  `"timezone": "..."` key to `dotfiles/waybar/modules/clock.jsonc` if you
+  want the bar to show something other than your system clock.
+- **Waybar's power-profile icon/tooltip does nothing** -- it needs
+  `power-profiles-daemon.service` running; stage 6 enables it
+  automatically, but if you added the package after the fact, run
+  `sudo systemctl enable --now power-profiles-daemon.service` yourself.
 - **Stage 3 or 5 exits immediately** (running it manually) -- you're
   running it as root. Switch to a regular user first
   (`su <your-username>`) and re-run it, or just use `0-install.sh`,
@@ -292,12 +307,21 @@ Arch Linux Installation Guide: https://wiki.archlinux.org/title/Installation_gui
 
 ## Credits
 
-- The accent color palette used across Hyprland, Waybar, Wlogout, Eww,
-  and Alacritty is ported from
+- The accent color palette used across Hyprland, Wlogout, Eww, and
+  Alacritty is ported from
   [notusknot/dotfiles-nix](https://github.com/notusknot/dotfiles-nix)
-  (it's also the static fallback/default the Matugen templates in
-  `dotfiles/matugen/` are based on -- see
+  (it's also the static fallback/default the Matugen templates for those
+  apps in `dotfiles/matugen/` are based on -- see
   [Color theming](#color-theming-matugen)).
 - The nwg-dock-hyprland style (`dotfiles/nwg-dock-hyprland/style.css`) and
   its launch flags/layer rules in `hyprland.conf` are from
   [AnkurAlpha/nwg-dock-hyprland-configs-by-AnkurAlpha](https://github.com/AnkurAlpha/nwg-dock-hyprland-configs-by-AnkurAlpha).
+- Waybar's whole config (`dotfiles/waybar/`: `config.jsonc`, the
+  `modules/` and `tokens/` directories, and their default Material You
+  color scheme) is ported from Muhammad Haikal Hakim's
+  [haikal-hakim/athena](https://github.com/haikal-hakim/athena) (MIT
+  licensed), trimmed and adjusted to the apps/icon theme this repo
+  actually installs -- see the comments in
+  `dotfiles/waybar/modules/distro.jsonc`,
+  `dotfiles/waybar/modules/workspace.jsonc`, and
+  `dotfiles/waybar/modules/tray-notif.jsonc` for what changed.

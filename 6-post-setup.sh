@@ -52,6 +52,11 @@ fi
 "${SUDO[@]}" systemctl enable --now bluetooth.service
 
 # ------------------------------------------------------------------------
+echo
+echo "Enabling power-profiles-daemon (backs the waybar power-profile module)"
+"${SUDO[@]}" systemctl enable --now power-profiles-daemon.service
+
+# ------------------------------------------------------------------------
 # Plymouth boot splash wiring (mkinitcpio hook + GRUB kernel param). This
 # runs here, as the last root-level stage, rather than in stage 1, so it
 # always sees the final set of installed kernels/packages instead of

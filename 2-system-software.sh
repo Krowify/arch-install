@@ -93,6 +93,10 @@ PKGS=(
                                    # of wl-clipboard -- 'wl-clipboard' alone
                                    # has no history/browsing UI
     'brightnessctl'               # Screen brightness control
+    'power-profiles-daemon'       # Power profile (performance/balanced/
+                                   # power-saver) switching -- backs the
+                                   # power-profiles-daemon waybar module.
+                                   # Service enabled in stage 6
     'pamixer'                     # CLI volume control (pipewire-pulse aware)
     'pavucontrol'                 # GUI volume mixer, invoked directly rather
                                    # than via a tray icon
