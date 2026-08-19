@@ -119,8 +119,25 @@ if [[ ${EUID} -eq 0 ]]; then
     cp -r "${SCRIPT_DIR}" "${DOTFILES_BUILD_DIR}"
     chown -R "${AUR_USER}:" "${DOTFILES_BUILD_DIR}"
 
+    # Same "su -c doesn't reliably keep a controlling terminal attached"
+    # problem as stage 3 above -- 5-dotfiles.sh's SDDM theme activation
+    # shells out to `sudo mkdir` and `sudo tee`, which fail immediately
+    # ("a terminal is required to read the password") without a NOPASSWD
+    # grant for exactly those two calls.
+    DOTFILES_SUDOERS_DROPIN="/etc/sudoers.d/99-linux-installation-dotfiles"
+    echo "${AUR_USER} ALL=(ALL) NOPASSWD: /usr/bin/mkdir -p /etc/sddm.conf.d, /usr/bin/tee /etc/sddm.conf.d/10-theme.conf" > "${DOTFILES_SUDOERS_DROPIN}"
+    chmod 0440 "${DOTFILES_SUDOERS_DROPIN}"
+    if ! visudo -cf "${DOTFILES_SUDOERS_DROPIN}"; then
+        echo "Generated sudoers drop-in failed validation, aborting."
+        rm -f "${DOTFILES_SUDOERS_DROPIN}"
+        exit 1
+    fi
+    trap 'rm -f "${DOTFILES_SUDOERS_DROPIN}"' EXIT
+
     su - "${AUR_USER}" -c "bash '${DOTFILES_BUILD_DIR}/5-dotfiles.sh'"
 
+    rm -f "${DOTFILES_SUDOERS_DROPIN}"
+    trap - EXIT
     rm -rf "${DOTFILES_BUILD_DIR}"
 else
     bash "${SCRIPT_DIR}/5-dotfiles.sh"
