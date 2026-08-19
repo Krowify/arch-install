@@ -147,6 +147,29 @@ ships in this repo) -- swap the `exec-once = swaybg` line in
 `~/.config/hypr/hyprland.conf` for `swaybg -i /path/to/image -m fill`
 once you have one.
 
+## Multi-monitor layout (optional)
+
+`hypr-monitor-layout.sh` is a standalone helper for arranging multiple
+monitors -- e.g. a portrait monitor beside a normal one, or one mounted
+upside down -- without hand-computing pixel offsets. It's not wired into
+`0-install.sh` or any numbered stage on purpose: it drives `hyprctl`, which
+only works from inside an already-running Hyprland session, so there's no
+point in the install pipeline where it could run. Use it once you've
+finished the install and logged in:
+
+```sh
+./hypr-monitor-layout.sh
+```
+
+It reads your connected monitors from `hyprctl monitors`, asks which one
+plays which role, applies the layout immediately via `hyprctl keyword
+monitor`, and saves it to `~/.config/hypr/monitors.conf`. Add
+`source = ~/.config/hypr/monitors.conf` to `~/.config/hypr/hyprland.conf`
+(and remove/comment out the `monitor = , preferred, auto, auto` line) to
+make it stick across restarts. Currently supports one layout shape: a
+vertical monitor on the left, a normal monitor as the main/bottom one, and
+an upside-down monitor above it.
+
 ## Troubleshooting
 
 - **Stage 3 or 5 exits immediately** (running it manually) -- you're

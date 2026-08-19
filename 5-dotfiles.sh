@@ -153,4 +153,6 @@ echo "Log out and back into the 'Hyprland (uwsm-managed)' session (or"
 echo "restart Hyprland with 'hyprctl reload' from inside one) to pick up"
 echo "the new config. Swap the solid swaybg color for a real wallpaper by"
 echo "editing the 'exec-once = swaybg' line in ~/.config/hypr/hyprland.conf."
+echo "Got more than one monitor? Once you're logged into Hyprland, run"
+echo "'./hypr-monitor-layout.sh' from this repo to lay them out interactively."
 echo
