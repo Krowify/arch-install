@@ -38,7 +38,7 @@ PKGS=(
 
     # --- Boot splash (Plymouth, requires GRUB as the bootloader)
     # NOTE: the actual mkinitcpio-hook/GRUB-kernel-param wiring for this is
-    # done in stage 5, not here -- running it as the last root-level stage,
+    # done in stage 6, not here -- running it as the last root-level stage,
     # after all package installs are done, means 'mkinitcpio -P' and
     # 'grub-mkconfig' always see the final, fully-installed set of kernels
     # and packages, regardless of what stage 1/2 end up installing.
@@ -138,7 +138,7 @@ done
 # GPU driver -- AMD and Intel render through mesa (already installed
 # above) with no extra driver needed. Nvidia needs its own proprietary
 # driver installed and, later, a kernel parameter set (that part happens
-# in stage 5, once mkinitcpio/GRUB have seen every installed kernel).
+# in stage 6, once mkinitcpio/GRUB have seen every installed kernel).
 echo
 echo "GPU driver setup"
 echo "Wayland/Hyprland render through mesa using the kernel's own DRM/KMS"
@@ -186,7 +186,7 @@ while true; do
             echo "and fails to boot into Hyprland, swap 'nvidia-open' for 'nvidia':"
             echo "  sudo pacman -S --needed nvidia nvidia-utils egl-wayland"
             echo "'nvidia_drm.modeset=1' gets added to your kernel parameters"
-            echo "automatically in stage 5."
+            echo "automatically in stage 6."
             break
             ;;
         *)
@@ -196,7 +196,7 @@ while true; do
 done
 
 echo "NOTE: Plymouth is installed but not yet wired into mkinitcpio/GRUB --"
-echo "that happens in stage 5, after the second kernel (stage 2) is in"
+echo "that happens in stage 6, after the second kernel (stage 2) is in"
 echo "place."
 echo
 echo "Done!"
