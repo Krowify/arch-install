@@ -82,9 +82,16 @@ PKGS=(
                                           # Hyprland -- live-previews changes,
                                           # writes to its own config rather
                                           # than touching hyprland.conf
-    'vicinae'                            # Application launcher/extensible
+    'vicinae-bin'                        # Application launcher/extensible
                                           # command palette (Raycast-like) --
-                                          # replaces wofi
+                                          # replaces wofi. Prebuilt: it's a
+                                          # heavy C++/Qt project, and building
+                                          # the plain 'vicinae' package from
+                                          # source via makepkg fails easily
+                                          # (missing build deps, compiler
+                                          # version, etc.) -- same reasoning
+                                          # as paru-bin/brave-bin/matugen-bin
+                                          # above
     'swww'                                # Wallpaper daemon with smooth
                                           # transitions -- the backend
                                           # 'waypaper' below actually renders
