@@ -45,15 +45,15 @@ bash 0-install.sh
 
 `0-install.sh` runs all six stages with a single command. AUR builds
 (stage 3) can't run as root -- `makepkg` refuses -- and dotfiles (stage
-6) need to land in a real user's `$HOME`, not root's, so the script
+5) need to land in a real user's `$HOME`, not root's, so the script
 handles both switches for you:
 
 - If you're running it as **root**, it asks for a username to use for
-  stages 3 and 6, offers to create the account if it doesn't exist yet,
+  stages 3 and 5, offers to create the account if it doesn't exist yet,
   then automatically drops into that user (`su -`) for each of those
-  stages and switches back to root in between (for stages 4 and 5).
+  stages and switches back to root in between (for stages 4 and 6).
 - If you're already running it as a **regular user with sudo**, it
-  just uses your current account for stages 3 and 6 and calls `sudo`
+  just uses your current account for stages 3 and 5 and calls `sudo`
   where needed for the rest.
 
 Expect a few interactive prompts along the way (root/sudo password,
@@ -68,8 +68,8 @@ installs, creates accounts, or opens a network port silently.
 | 2     | `2-system-software.sh`   | root                         | Everyday software + Hyprland desktop utilities (bar, launcher, etc.) from the official repos |
 | 3     | `3-user-software.sh`      | non-root (handled by 0-install.sh) | AUR packages via `yay` (VS Code, Discord, themes, etc.)|
 | 4     | `4-firewall.sh`     | root                         | Firewall, sysctl hardening, fail2ban                       |
-| 5     | `5-post-setup.sh`        | root                         | File watcher limit, display manager, bluetooth autostart, Plymouth/GRUB wiring, Nvidia kernel parameter (if applicable) |
-| 6     | `6-dotfiles.sh`          | non-root (handled by 0-install.sh) | Deploys Hyprland/waybar/etc. config, activates the SDDM/GTK/icon/cursor themes |
+| 5     | `5-dotfiles.sh`          | non-root (handled by 0-install.sh) | Deploys Hyprland/waybar/etc. config, activates the SDDM/GTK/icon/cursor themes |
+| 6     | `6-post-setup.sh`        | root                         | File watcher limit, display manager, bluetooth autostart, Plymouth/GRUB wiring, Nvidia kernel parameter (if applicable) |
 
 All scripts use `set -euo pipefail`, so they stop on the first error
 instead of silently continuing with a partially-configured system.
@@ -88,10 +88,12 @@ sh 3-user-software.sh
 
 su
 sh 4-firewall.sh
-sh 5-post-setup.sh
 
 su <your-username>
-sh 6-dotfiles.sh
+sh 5-dotfiles.sh
+
+su
+sh 6-post-setup.sh
 ```
 
 ## System Description
@@ -106,10 +108,10 @@ SDDM is used as the login manager. Once stage 1 finishes, the
 from SDDM's session dropdown with nothing further to configure -- pick
 "Hyprland (uwsm-managed)" if it's offered, otherwise plain "Hyprland".
 
-## Dotfiles (stage 6)
+## Dotfiles (stage 5)
 
 Package installed alone don't produce a working desktop -- Hyprland,
-waybar, mako, etc. all need a config to autostart and behave. Stage 6
+waybar, mako, etc. all need a config to autostart and behave. Stage 5
 deploys `dotfiles/` (source templates in this repo) into `~/.config`,
 and activates the installed themes:
 
@@ -147,7 +149,7 @@ once you have one.
 
 ## Troubleshooting
 
-- **Stage 3 or 6 exits immediately** (running it manually) -- you're
+- **Stage 3 or 5 exits immediately** (running it manually) -- you're
   running it as root. Switch to a regular user first
   (`su <your-username>`) and re-run it, or just use `0-install.sh`,
   which handles this automatically.
@@ -159,7 +161,7 @@ once you have one.
   current for your mirrors, then re-run; already-installed packages
   are skipped via `--needed`.
 - **Plymouth splash doesn't show, or GRUB config wasn't touched** --
-  stage 5 (not stage 1 -- it runs last, after every package install, so
+  stage 6 (not stage 1 -- it runs last, after every package install, so
   it always sees the final kernel/package set) wires up the `splash`
   kernel parameter and the mkinitcpio hook automatically for GRUB, since
   that's what this repo assumes as the bootloader. If you booted with
@@ -172,14 +174,17 @@ once you have one.
   `sshd.service` and opens port 22 in ufw if you opt in. Enable it later
   with `sudo systemctl enable --now sshd.service` and
   `sudo ufw limit 22/tcp comment 'SSH (rate-limited)'`.
-- **SDDM/GTK/icon/cursor theme didn't apply after stage 6** -- stage 6
+- **SDDM/GTK/icon/cursor theme didn't apply after stage 5** -- stage 5
   detects the installed theme folder under `/usr/share/...` and prints
   what it found (or `<not found>`) before applying anything. If a
   theme shows as not found, its stage 2/3 package install likely
   failed or was skipped -- re-run that stage, then re-run
-  `6-dotfiles.sh`. For SDDM specifically, restart it to see the change:
-  `sudo systemctl restart sddm` (this kills your current graphical
-  session, so only do it from a TTY or before logging in).
+  `5-dotfiles.sh`. Stage 5 now runs before stage 6 enables `sddm.service`,
+  so on a normal `0-install.sh` run the login screen already picks up the
+  theme on its first start; you'd only need to restart it by hand
+  (`sudo systemctl restart sddm` -- this kills your current graphical
+  session, so only do it from a TTY or before logging in) if you re-ran
+  stage 5 after SDDM was already running.
 - **Plank isn't behaving like a normal dock** (wrong position,
   overlapping windows, disappearing) -- Plank is an X11-only app with
   no native Wayland support. Under Hyprland it runs via Xwayland,
@@ -192,7 +197,7 @@ once you have one.
   the `mesa` already installed. Nvidia gets `nvidia-open` (swap for
   `nvidia` yourself if you're on a pre-Turing card and it fails to boot
   into Hyprland), `nvidia-utils`, and `egl-wayland` installed there and
-  then; stage 5 detects the installed driver and adds
+  then; stage 6 detects the installed driver and adds
   `nvidia_drm.modeset=1` to the GRUB kernel command line automatically
   -- see the Arch Wiki's Hyprland and NVIDIA pages for anything beyond
   that.

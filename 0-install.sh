@@ -4,7 +4,7 @@ set -euo pipefail
 #-------------------------------------------------------------------------
 #   Arch Linux Post Install Setup and Config
 #-------------------------------------------------------------------------
-# Master runner: executes stages 1-5 with a single command.
+# Master runner: executes stages 1-6 with a single command.
 #
 # Stage 3 (AUR builds) must run as a non-root user -- makepkg refuses to
 # build packages as root. This script handles that switch internally via
@@ -104,8 +104,31 @@ else
 fi
 
 echo
-echo ">>> Stage 5: Post setup"
-bash "${SCRIPT_DIR}/5-post-setup.sh"
+echo ">>> Stage 5: Deploy dotfiles (running as ${AUR_USER})"
+if [[ ${EUID} -eq 0 ]]; then
+    # Same /root permission problem as stage 3 above -- stage a throwaway
+    # copy inside the AUR user's own home directory so `su -` can read it.
+    AUR_USER_HOME="$(getent passwd "${AUR_USER}" | cut -d: -f6)"
+    if [[ -z "${AUR_USER_HOME}" || ! -d "${AUR_USER_HOME}" ]]; then
+        echo "Could not resolve a home directory for '${AUR_USER}'. Aborting."
+        exit 1
+    fi
+    DOTFILES_BUILD_DIR="${AUR_USER_HOME}/.linux-installation-stage5"
+
+    rm -rf "${DOTFILES_BUILD_DIR}"
+    cp -r "${SCRIPT_DIR}" "${DOTFILES_BUILD_DIR}"
+    chown -R "${AUR_USER}:" "${DOTFILES_BUILD_DIR}"
+
+    su - "${AUR_USER}" -c "bash '${DOTFILES_BUILD_DIR}/5-dotfiles.sh'"
+
+    rm -rf "${DOTFILES_BUILD_DIR}"
+else
+    bash "${SCRIPT_DIR}/5-dotfiles.sh"
+fi
+
+echo
+echo ">>> Stage 6: Post setup"
+bash "${SCRIPT_DIR}/6-post-setup.sh"
 
 echo
 echo "=== All stages complete ==="
