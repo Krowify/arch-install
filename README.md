@@ -5,6 +5,30 @@ a Hyprland (Wayland) desktop, support packages (network, bluetooth,
 audio, etc.), a firewall/hardening pass, and a set of preferred
 applications.
 
+| Category | Component |
+|----------|-----------|
+| Bootloader / splash | GRUB + Plymouth |
+| Login screen | SDDM |
+| Compositor | Hyprland |
+| Status bar | Waybar |
+| Dock | Plank |
+| App launcher | Wofi |
+| Terminal | Alacritty + ZSH |
+| Logout menu | Wlogout |
+| Widgets | Eww |
+| Theme | Catppuccin (GTK, Mocha) |
+| Icon theme | Papirus |
+| Fonts | Noto Fonts + Nerd Fonts |
+| Wallpaper | Swaybg |
+| Cursor theme | Bibata |
+| File manager | Thunar |
+| Clipboard | wl-clipboard |
+| Notifications | Mako |
+| Network | NetworkManager + nm-applet |
+| Audio | PipeWire + WirePlumber + pamixer |
+| Power | Brightnessctl |
+| Package manager | pacman + yay + paru |
+
 ## Arch Linux First Boot
 
 Run as **root**, right after a base Arch install:
@@ -86,6 +110,20 @@ from SDDM's session dropdown with nothing further to configure -- pick
   instead of skipping past it. Check the package name is still
   current for your mirrors, then re-run; already-installed packages
   are skipped via `--needed`.
+- **Plymouth splash doesn't show, or GRUB config wasn't touched** --
+  stage 1 only wires up the `splash` kernel parameter and the
+  mkinitcpio hook automatically for GRUB, since that's what this repo
+  assumes as the bootloader. If you booted with something else
+  (systemd-boot, rEFInd, etc.), add `splash` (and optionally `quiet`)
+  to its kernel parameters yourself -- see the Arch Wiki's Plymouth
+  page.
+- **Plank isn't behaving like a normal dock** (wrong position,
+  overlapping windows, disappearing) -- Plank is an X11-only app with
+  no native Wayland support. Under Hyprland it runs via Xwayland,
+  where auto-hide and window-avoidance don't work the way they do
+  under X11/other DEs. This is a known limitation, not a broken
+  install; `nwg-dock-hyprland` (AUR) is the Wayland-native
+  alternative if it bothers you.
 - **GPU driver** -- stage 1 doesn't install one. AMD and Intel work
   out of the box through mesa; Nvidia needs the proprietary driver
   (`nvidia-open` or `nvidia`, plus `nvidia-utils` and `egl-wayland`)

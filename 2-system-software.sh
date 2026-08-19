@@ -85,13 +85,38 @@ PKGS=(
     'pamixer'                     # CLI volume control (pipewire-pulse aware)
     'pavucontrol'                 # GUI volume mixer, invoked directly rather
                                    # than via a tray icon
-    'kitty'                       # Terminal emulator, replaces 'xterm'
+    'alacritty'                   # Terminal emulator, replaces 'kitty'/'xterm'
+    'wlogout'                     # Wayland-native logout/power menu
     'blueman'                     # Bluetooth GUI manager + tray applet --
                                    # Plasma no longer supplies one
     'papirus-icon-theme'          # Icon theme (works standalone, no KDE
                                    # config modules required)
     'ttf-nerd-fonts-symbols'      # Icon glyphs most waybar/wofi configs
                                    # assume are available
+    'ttf-jetbrains-mono-nerd'     # Full JetBrains Mono Nerd Font, for a
+                                   # patched monospace font in the terminal
+    'noto-fonts'                  # Google Noto fonts -- broad Unicode
+                                   # coverage as the general UI/fallback font
+    'noto-fonts-emoji'            # Color emoji glyphs (Noto's own, not the
+                                   # nerd-fonts symbol set above)
+
+    # FILE MANAGER ------------------------------------------------------
+    'thunar'                      # GUI file manager
+    'thunar-archive-plugin'       # Right-click archive/extract via
+                                   # file-roller (already installed above)
+    'gvfs'                        # Trash, network shares (smb/sftp/mtp) and
+                                   # removable-media mounting inside Thunar
+
+    # DOCK ----------------------------------------------------------------
+    # NOTE: Plank is an X11 dock -- it has no native Wayland support. Under
+    # Hyprland it only runs through Xwayland (already installed in stage 1),
+    # and its auto-hide/strut reservation against other windows is
+    # unreliable there since Wayland compositors don't grant X11 clients
+    # the same layer-shell placement Wayland-native bars (waybar) get. It's
+    # included because it's the requested dock, but expect rough edges --
+    # nwg-dock-hyprland (AUR) is the Wayland-native alternative if you hit
+    # them.
+    'plank'                       # Dock
 )
  
 echo "NOTE: 'code' (VS Code) has been removed from this list -- it is not"

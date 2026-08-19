@@ -57,21 +57,34 @@ PKGS=(
     'hardinfo2-git'                      # Hardware info app (replacement for
                                           # 'hardinfo', removed from the official
                                           # repos -- moved here from stage 2)
- 
+    'paru-bin'                           # Second AUR helper/pacman wrapper,
+                                          # alongside yay above -- prebuilt so
+                                          # it doesn't need a Rust toolchain
+
     # BROWSERS / COMMUNICATIONS ------------------------------------------
     'brave-bin'                          # Brave browser
     'discord'                            # Chat for gamers
     'vencord-installer'                  # Discord client mod installer
- 
+
     # EDITORS ---------------------------------------------------------------
     'visual-studio-code-bin'             # VS Code (not in official repos)
- 
+
+    # WAYLAND / HYPRLAND DESKTOP ------------------------------------------
+    'eww-wayland'                        # Widget system (Wayland-only build --
+                                          # plain 'eww' also pulls in the X11
+                                          # backend, which this Wayland-only
+                                          # setup doesn't need)
+
     # THEMES -----------------------------------------------------------------
     # This only themes the SDDM login screen itself, independent of the
     # Hyprland session you log into afterward -- it doesn't need Plasma and
     # nothing above changes how it works.
     'sddm-theme-elegant-archlinux-git'   # SDDM login theme
- 
+    'catppuccin-gtk-theme-mocha'         # GTK app theme (Catppuccin, Mocha
+                                          # flavor -- see the AUR for the
+                                          # Latte/Frappe/Macchiato variants)
+    'bibata-cursor-theme-bin'            # Cursor theme, prebuilt
+
     # HARDWARE -----------------------------------------------------------------
            # Proton Mail Application
     'obsidian'                           # Obsidean Note Taking

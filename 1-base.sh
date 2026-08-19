@@ -30,7 +30,15 @@ PKGS=(
                                # Hyprland renders through this directly via
                                # DRM/KMS, no separate xf86-video-* driver
                                # needed for AMD/Intel the way Xorg required
- 
+    # NOTE: no standalone 'wlroots' package here on purpose. Hyprland used
+    # to be built on system wlroots, but as of 0.42 it ships its own
+    # rendering backend ('aquamarine') instead and pulls it in automatically
+    # as a dependency of the 'hyprland' package below -- there's nothing
+    # separate to install for it.
+
+    # --- Boot splash (Plymouth, requires GRUB as the bootloader)
+    'plymouth'                 # Graphical boot splash daemon
+
     # --- Setup Desktop
     # (was 'plasma-meta' / KDE Plasma running on Xorg. Replaced with
     # Hyprland, a standalone Wayland compositor, plus the support packages
@@ -54,7 +62,9 @@ PKGS=(
     'hypridle'                    # Idle daemon (screen-off / lock / suspend
                                    # on timeout)
     'hyprlock'                    # Screen locker
-    'hyprpaper'                   # Wallpaper daemon
+    'swaybg'                      # Wallpaper daemon (wlroots-protocol based,
+                                   # works under Hyprland the same as it does
+                                   # under Sway)
  
     # --- Display / Login Manager
     # The 'hyprland' package ships wayland-sessions .desktop entries
@@ -126,7 +136,48 @@ for PKG in "${PKGS[@]}"; do
     echo "INSTALLING: ${PKG}"
     "${PACMAN[@]}" -S --noconfirm --needed "${PKG}"
 done
- 
+
+if [[ ${EUID} -eq 0 ]]; then
+    SUDO=()
+else
+    SUDO=(sudo)
+fi
+
+echo
+echo "Configuring Plymouth boot splash"
+if grep -q '\bplymouth\b' /etc/mkinitcpio.conf 2>/dev/null; then
+    echo "plymouth hook already present in /etc/mkinitcpio.conf, skipping"
+else
+    # Plymouth needs to hook in before any hook that might print to the
+    # console (e.g. 'block'/'filesystems'/'fsck'), and after 'udev' so
+    # device nodes exist -- 'base udev ... ' is what a stock, freshly
+    # installed mkinitcpio.conf starts with.
+    "${SUDO[@]}" sed -i 's/^HOOKS=(base udev/HOOKS=(base udev plymouth/' /etc/mkinitcpio.conf
+    if grep -q '\bplymouth\b' /etc/mkinitcpio.conf; then
+        "${SUDO[@]}" mkinitcpio -P
+    else
+        echo "WARNING: could not find 'HOOKS=(base udev ...' in" >&2
+        echo "/etc/mkinitcpio.conf to patch -- it's been customized from the" >&2
+        echo "stock layout. Add 'plymouth' to the HOOKS array yourself (right" >&2
+        echo "after 'udev') and run 'mkinitcpio -P'." >&2
+    fi
+fi
+
+if command -v grub-mkconfig >/dev/null 2>&1 && [[ -f /etc/default/grub ]]; then
+    if grep -q 'splash' /etc/default/grub; then
+        echo "GRUB already has 'splash' on the kernel command line, skipping"
+    else
+        "${SUDO[@]}" sed -i 's/^\(GRUB_CMDLINE_LINUX_DEFAULT="[^"]*\)"/\1 splash"/' /etc/default/grub
+        "${SUDO[@]}" grub-mkconfig -o /boot/grub/grub.cfg
+    fi
+else
+    echo "NOTE: GRUB not detected (no grub-mkconfig / /etc/default/grub) --"
+    echo "Plymouth is installed but nothing added 'splash' to the kernel"
+    echo "command line. If you're on a different bootloader (systemd-boot,"
+    echo "rEFInd, etc.), add 'splash' (and optionally 'quiet') to its kernel"
+    echo "parameters yourself -- see the Arch Wiki's Plymouth page."
+fi
+
 echo
 echo "Done!"
 echo
