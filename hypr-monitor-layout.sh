@@ -7,7 +7,8 @@ set -euo pipefail
 #   - a monitor above the main one, rotated 180 (upside down)
 #
 # Reads currently connected monitors from `hyprctl monitors`, lets you pick
-# which physical monitor is which role, applies the layout live via
+# which physical monitor is which role, resets those three to their native
+# untransformed mode (see NOTE below for why), applies the layout live via
 # `hyprctl keyword monitor`, and saves it to ~/.config/hypr/monitors.conf
 # so it survives a restart (source it from hyprland.conf -- see the note
 # printed at the end).
@@ -18,31 +19,41 @@ if ! command -v hyprctl >/dev/null 2>&1; then
     exit 1
 fi
 
-names=()
-widths=()
-heights=()
-rates=()
+declare -a mon_names=()
+declare -A mon_w=() mon_h=() mon_rate=()
 
-idx=-1
-while IFS= read -r line; do
-    if [[ "${line}" =~ ^Monitor\ ([^[:space:]]+)\ \(ID\ [0-9]+\): ]]; then
-        names+=("${BASH_REMATCH[1]}")
-        idx=$((idx + 1))
-    elif [[ "${line}" =~ ^[[:space:]]*([0-9]+)x([0-9]+)@([0-9.]+)\ at\ (-?[0-9]+)x(-?[0-9]+) ]] && [[ ${idx} -ge 0 ]]; then
-        widths[${idx}]="${BASH_REMATCH[1]}"
-        heights[${idx}]="${BASH_REMATCH[2]}"
-        rates[${idx}]="${BASH_REMATCH[3]}"
-    fi
-done < <(hyprctl monitors)
+# Populates mon_names/mon_w/mon_h/mon_rate from the CURRENT `hyprctl
+# monitors` output. Only takes the first resolution line seen per monitor
+# block, and tolerates either "144.00000 at" or "144.00Hz at" formatting
+# for the refresh rate (this has changed across Hyprland versions).
+read_monitors() {
+    mon_names=()
+    mon_w=(); mon_h=(); mon_rate=()
+    local name=""
+    while IFS= read -r line; do
+        if [[ "${line}" =~ ^Monitor\ ([^[:space:]]+)\ \(ID\ [0-9]+\): ]]; then
+            name="${BASH_REMATCH[1]}"
+            mon_names+=("${name}")
+        elif [[ -n "${name}" && "${line}" =~ ^[[:space:]]*([0-9]+)x([0-9]+)@([0-9.]+)(Hz)?\ at\ (-?[0-9]+)x(-?[0-9]+) ]]; then
+            mon_w[${name}]="${BASH_REMATCH[1]}"
+            mon_h[${name}]="${BASH_REMATCH[2]}"
+            mon_rate[${name}]="${BASH_REMATCH[3]}"
+            name=""
+        fi
+    done < <(hyprctl monitors)
+}
 
-if [[ ${#names[@]} -lt 3 ]]; then
-    echo "ERROR: only found ${#names[@]} monitor(s) via hyprctl -- need 3." >&2
+read_monitors
+
+if [[ ${#mon_names[@]} -lt 3 ]]; then
+    echo "ERROR: only found ${#mon_names[@]} monitor(s) via hyprctl -- need 3." >&2
     exit 1
 fi
 
 echo "Detected monitors:"
-for i in "${!names[@]}"; do
-    printf "  [%d] %-10s %sx%s@%s\n" "${i}" "${names[${i}]}" "${widths[${i}]}" "${heights[${i}]}" "${rates[${i}]}"
+for i in "${!mon_names[@]}"; do
+    n="${mon_names[${i}]}"
+    printf "  [%d] %-10s %sx%s@%s\n" "${i}" "${n}" "${mon_w[${n}]:-?}" "${mon_h[${n}]:-?}" "${mon_rate[${n}]:-?}"
 done
 echo
 
@@ -51,7 +62,7 @@ read -rp "Which number is the MAIN monitor (bottom)? " B_IDX
 read -rp "Which number is the UPSIDE-DOWN monitor (top)? " T_IDX
 
 for n in "${V_IDX}" "${B_IDX}" "${T_IDX}"; do
-    if ! [[ "${n}" =~ ^[0-9]+$ ]] || [[ "${n}" -ge ${#names[@]} ]]; then
+    if ! [[ "${n}" =~ ^[0-9]+$ ]] || [[ "${n}" -ge ${#mon_names[@]} ]]; then
         echo "ERROR: '${n}' is not a valid monitor number." >&2
         exit 1
     fi
@@ -69,12 +80,45 @@ read -rp "Choice [1/2]: " ROT_CHOICE
 VERT_TRANSFORM=1
 [[ "${ROT_CHOICE:-1}" == "2" ]] && VERT_TRANSFORM=3
 
-V_NAME="${names[${V_IDX}]}"; V_W="${widths[${V_IDX}]}"; V_H="${heights[${V_IDX}]}"; V_RATE="${rates[${V_IDX}]}"
-B_NAME="${names[${B_IDX}]}"; B_W="${widths[${B_IDX}]}"; B_H="${heights[${B_IDX}]}"; B_RATE="${rates[${B_IDX}]}"
-T_NAME="${names[${T_IDX}]}"; T_W="${widths[${T_IDX}]}"; T_H="${heights[${T_IDX}]}"; T_RATE="${rates[${T_IDX}]}"
+V_NAME="${mon_names[${V_IDX}]}"
+B_NAME="${mon_names[${B_IDX}]}"
+T_NAME="${mon_names[${T_IDX}]}"
+
+# NOTE: `hyprctl monitors` reports whatever mode is CURRENTLY active, not
+# necessarily the panel's native one -- if a transform is already applied
+# (from a previous run of this script, or Hyprland's own auto-negotiation),
+# the width/height it reports are already rotated. Computing a new
+# transform on top of already-swapped dimensions rotates the picture a
+# second time, and since the panel doesn't actually have a native mode at
+# those swapped dimensions, Hyprland has to clamp/crop it -- this is the
+# "half the monitor is unusable" failure mode. Force all three back to
+# their native, untransformed mode first so the measurement below is
+# always reliable, regardless of what state they were in before.
+echo
+echo "Resetting selected monitors to their native mode before measuring..."
+hyprctl keyword monitor "${V_NAME},preferred,auto,1" >/dev/null
+hyprctl keyword monitor "${B_NAME},preferred,auto,1" >/dev/null
+hyprctl keyword monitor "${T_NAME},preferred,auto,1" >/dev/null
+sleep 1
+read_monitors
+
+V_W="${mon_w[${V_NAME}]:-}"; V_H="${mon_h[${V_NAME}]:-}"; V_RATE="${mon_rate[${V_NAME}]:-}"
+B_W="${mon_w[${B_NAME}]:-}"; B_H="${mon_h[${B_NAME}]:-}"; B_RATE="${mon_rate[${B_NAME}]:-}"
+T_W="${mon_w[${T_NAME}]:-}"; T_H="${mon_h[${T_NAME}]:-}"; T_RATE="${mon_rate[${T_NAME}]:-}"
+
+for pair in "V_W:${V_W}" "V_H:${V_H}" "B_W:${B_W}" "B_H:${B_H}" "T_W:${T_W}" "T_H:${T_H}"; do
+    if [[ -z "${pair#*:}" ]]; then
+        echo "ERROR: couldn't read a native resolution for one of the selected" >&2
+        echo "monitors after resetting it (${pair%%:*} is empty). Run 'hyprctl" >&2
+        echo "monitors' and check they're still connected/awake, then retry." >&2
+        exit 1
+    fi
+done
 
 # A 90/270 transform swaps the on-screen width/height; 180 (upside down)
-# and 0 (normal) don't.
+# and 0 (normal) don't. These are native (pre-transform) dimensions --
+# Hyprland's own resolution field in monitor= always wants the native
+# mode, with transform applied on top, not the already-rotated size.
 V_EFF_W=${V_H}
 
 TOP_X=${V_EFF_W}
@@ -120,7 +164,6 @@ echo "'monitor = , preferred, auto, auto' one, so they don't conflict):"
 echo
 echo "  source = ~/.config/hypr/monitors.conf"
 echo
-echo "NOTE: if you re-run this script later, do it right after 'hyprctl reload'"
-echo "or a fresh Hyprland start -- once a transform is applied, hyprctl monitors"
-echo "reports the already-rotated resolution, which would throw off the numbers"
-echo "here on a second pass."
+echo "It's safe to re-run this script any time -- it always resets the"
+echo "monitors you pick back to their native mode before measuring them,"
+echo "so a previously-applied rotation won't throw off the numbers."
