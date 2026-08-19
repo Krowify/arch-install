@@ -86,7 +86,6 @@ PKGS=(
     'pavucontrol'                 # GUI volume mixer, invoked directly rather
                                    # than via a tray icon
     'alacritty'                   # Terminal emulator, replaces 'kitty'/'xterm'
-    'wlogout'                     # Wayland-native logout/power menu
     'blueman'                     # Bluetooth GUI manager + tray applet --
                                    # Plasma no longer supplies one
     'papirus-icon-theme'          # Icon theme (works standalone, no KDE

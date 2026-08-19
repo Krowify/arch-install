@@ -74,6 +74,8 @@ PKGS=(
                                           # plain 'eww' also pulls in the X11
                                           # backend, which this Wayland-only
                                           # setup doesn't need)
+    'wlogout'                            # Wayland-native logout/power menu --
+                                          # AUR-only, not in the official repos
 
     # THEMES -----------------------------------------------------------------
     # This only themes the SDDM login screen itself, independent of the
