@@ -107,8 +107,8 @@ from SDDM's session dropdown with nothing further to configure -- pick
 
 ## Dotfiles (stage 6)
 
-Package installs alone don't produce a working desktop -- Hyprland,
-waybar, mako, etc. all need config to autostart and behave. Stage 6
+Package installed alone don't produce a working desktop -- Hyprland,
+waybar, mako, etc. all need a config to autostart and behave. Stage 6
 deploys `dotfiles/` (source templates in this repo) into `~/.config`,
 and activates the installed themes:
 
