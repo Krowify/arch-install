@@ -99,9 +99,6 @@ PKGS=(
     # Hyprland session you log into afterward -- it doesn't need Plasma and
     # nothing above changes how it works.
     'sddm-theme-elegant-archlinux-git'   # SDDM login theme
-    'catppuccin-gtk-theme-mocha'         # GTK app theme (Catppuccin, Mocha
-                                          # flavor -- see the AUR for the
-                                          # Latte/Frappe/Macchiato variants)
     'bibata-cursor-theme-bin'            # Cursor theme, prebuilt
 
     # PRODUCTIVITY -----------------------------------------------------------

@@ -2,13 +2,14 @@
 set -uo pipefail
 #-------------------------------------------------------------------------
 # Deployed by 5-dotfiles.sh into ~/.config/hyde-themes/ (alongside a
-# directory per theme -- currently catppuccin-mocha/ and tokyo-night/).
-# This is the single place that knows how to actually *apply* a theme:
-# copy its per-app color files into place, reload the running apps, and
-# resolve/install the GTK theme + icon theme it needs. 5-dotfiles.sh calls
-# `theme.sh set catppuccin-mocha` once at the end of a fresh install; from
-# then on, run it yourself (or use `theme.sh menu`, bound to Super+Shift+T)
-# to switch. See the README's theme switching section.
+# directory per theme -- currently tokyo-night/, decay-green/, and
+# graphite-mono/). This is the single place that knows how to actually
+# *apply* a theme: copy its per-app color files into place, reload the
+# running apps, and resolve/install the GTK theme + icon theme it needs.
+# 5-dotfiles.sh calls `theme.sh set tokyo-night` (the default) once at the
+# end of a fresh install; from then on, run it yourself (or use
+# `theme.sh menu`, bound to Super+Shift+T) to switch. See the README's
+# theme switching section.
 #
 # Not `set -e`: reload commands (hyprctl/killall/swaync-client/eww/awww) are
 # expected to fail harmlessly if that app isn't running yet -- e.g. right

@@ -1,0 +1,19 @@
+/* Deployed by theme.sh into ~/.config/rofi/colors.rasi. Imported by
+ * config.rasi. Decay Green palette -- this repo's own construction, not
+ * a verified port (see theme.conf in this same directory). Not touched
+ * by Matugen; see hypr-colors.conf for why.
+ */
+* {
+    bg:             rgb(20, 24, 15);
+    bg-element:     rgba(255, 255, 255, 0.00);
+    bg-selected:    rgb(111, 174, 149);
+    bg-dock:        rgb(143, 188, 108);
+    bg-btn:         rgba(41, 51, 29, 0.85);
+    bg-btn-active:  rgba(215, 221, 201, 0.95);
+    fg:             #d7ddc9;
+    fg-muted:       #ffffff;
+    fg-btn:         #b7c2a1;
+    fg-btn-active:  rgba(20, 24, 15, 0.95);
+    border-win:     rgba(111, 174, 149, 1.0);
+    fg-prompt:      rgb(143, 188, 108);
+}

@@ -138,7 +138,7 @@ fi
 # once you're in Hyprland) any time to switch to another theme -- see the
 # README's theme switching section.
 echo
-"${HOME}/.config/hyde-themes/theme.sh" set catppuccin-mocha
+"${HOME}/.config/hyde-themes/theme.sh" set tokyo-night
 
 echo
 echo "Done!"

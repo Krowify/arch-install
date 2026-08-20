@@ -1,0 +1,43 @@
+/* Deployed by theme.sh into ~/.config/swaync/tokens/variables.css.
+ * Graphite Mono palette -- structural values (radii/timing) kept
+ * identical to this repo's other themes, only colors changed (grayscale,
+ * see theme.conf in this same directory).
+ */
+* {
+  --bg-panel: rgba(26, 26, 26, 0.55);
+  --bg-widget: rgba(35, 35, 35, 0.75);
+
+  --bg-tile: rgba(26, 26, 26, 0.70);
+  --bg-tile-hover: rgba(45, 45, 45, 0.88);
+
+  --bg-critical: rgba(50, 30, 30, 0.82);
+  --bg-critical-hover: rgba(74, 44, 44, 0.92);
+
+  --border-critical: rgba(196, 122, 122, 0.55);
+  --shadow-critical: rgba(196, 122, 122, 0.35);
+
+  --btn-on: rgba(207, 207, 207, 1);
+  --btn-off: rgba(255, 255, 255, 0.5);
+
+  --accent: #cfcfcf;
+  --accent-dim: rgba(207, 207, 207, 0.18);
+  --accent-hover: rgba(207, 207, 207, 0.4);
+  --hover-dim: rgba(61, 61, 61, 1);
+
+  --border-subtle: rgba(163, 163, 163, 0.12);
+  --border-glass: rgba(207, 207, 207, 0.16);
+
+  --text-primary: rgba(229, 229, 229, 0.92);
+  --text-secondary: rgba(229, 229, 229, 0.6);
+
+  --text-dim: rgba(150, 150, 150, 0.55);
+  --text-hover: rgba(255, 255, 255, 1);
+
+  --radius-panel: 20px;
+  --radius-widget: 10px;
+  --radius-tile: 12px;
+  --radius-btn: 8px;
+
+  --t-fast: 150ms ease;
+  --t-mid: 220ms ease;
+}

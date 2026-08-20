@@ -1,10 +1,9 @@
 // Deployed by 5-dotfiles.sh, then kept up to date by theme.sh (one copy
 // per theme under ~/.config/hyde-themes/<name>/eww-colors.scss) -- see
-// the README's theme switching section. This shipped copy is the
-// catppuccin-mocha values (ported from notusknot/dotfiles-nix, see
-// README credits), so a fresh deploy still looks right even before
-// theme.sh ever runs.
-$mantle: #292a37;
-$mauve: #b072d1;
-$text: #d9e0ee;
-$light-gray: #9699b7;
+// the README's theme switching section. This shipped copy is the default
+// theme's values (Tokyo Night), so a fresh deploy still looks right even
+// before theme.sh ever runs.
+$mantle: #1a1b26;
+$mauve: #bb9af7;
+$text: #c0caf5;
+$light-gray: #737aa2;

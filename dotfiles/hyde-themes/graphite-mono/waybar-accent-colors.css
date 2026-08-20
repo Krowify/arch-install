@@ -1,0 +1,15 @@
+/* Deployed by theme.sh into ~/.config/waybar/colors.css. Imported by
+ * style.css. Graphite Mono palette -- pure grayscale, no hue (see
+ * theme.conf in this same directory). Not touched by Matugen; see
+ * hypr-colors.conf for why. "yellow"/"red" role names are kept for
+ * structural consistency with the other themes' files but are desaturated
+ * to stay within the mono palette -- this repo's own choice, not part of
+ * the verified upstream grayscale.
+ */
+@define-color mantle rgba(26, 26, 26, 0.9);
+@define-color text #e5e5e5;
+@define-color overlay0 #6e6e6e;
+@define-color mauve #cfcfcf;
+@define-color base #232323;
+@define-color yellow #c2b280;
+@define-color red #c47a7a;

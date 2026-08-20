@@ -3,8 +3,8 @@
 # kitty.theme (itself credited there to davidmathers/tokyo-night-kitty-
 # theme and enkia/tokyo-night-vscode-theme -- see the README's Credits
 # section) -- not touched by Matugen; see hypr-colors.conf for why. ANSI
-# palette in alacritty.toml stays static, same reasoning as
-# catppuccin-mocha's copy of this file.
+# palette in alacritty.toml itself stays static regardless of theme -- see
+# the README's color theming section.
 
 [colors.primary]
 background = "#24283b"

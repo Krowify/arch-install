@@ -1,11 +1,8 @@
 /* Deployed by theme.sh into ~/.config/swaync/tokens/variables.css.
- * Curated Tokyo Night palette -- structural values (radii/timing) kept
- * identical to catppuccin-mocha's copy of this file, only colors
- * changed. The panel/widget glass flips from a light frosted look to a
- * dark navy one (rgba(255,255,255,...) -> rgba(26,27,38,...)) since a
- * light glass reads as washed-out against Tokyo Night's cool dark
- * palette; text-primary/secondary flip from dark-on-light to
- * light-on-dark to match. See the README's Credits section.
+ * Curated Tokyo Night palette -- structural values (radii/timing) match
+ * the repo's other themes, only colors changed. The panel/widget glass is
+ * a dark navy tint (rgba(26,27,38,...)) to match Tokyo Night's cool dark
+ * palette, with light-on-dark text. See the README's Credits section.
  */
 * {
   --bg-panel: rgba(26, 27, 38, 0.55);

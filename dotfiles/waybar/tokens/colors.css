@@ -1,56 +1,57 @@
-/* Deployed by 5-dotfiles.sh. Static fallback palette -- Athena's own
- * shipped default (see README credits), itself a matugen-generated
- * Material You dark scheme. Overwritten in-place by this repo's own
- * Matugen setup once you pick a wallpaper via waypaper (see the README's
- * color theming section).
+/* Deployed by 5-dotfiles.sh. Static fallback palette -- a Material-You-
+ * shaped role set mapped onto the default theme's palette (Tokyo Night,
+ * see README credits), matching theme.sh's own copy of this file.
+ * Overwritten in-place by this repo's own Matugen setup once you pick a
+ * wallpaper via waypaper (see the README's color theming section), and
+ * by theme.sh if you switch themes.
  */
-@define-color background #0f1416;
-@define-color error #ffb4ab;
-@define-color error_container #93000a;
-@define-color inverse_on_surface #2c3134;
-@define-color inverse_primary #08677f;
-@define-color inverse_surface #dee3e6;
-@define-color on_background #dee3e6;
-@define-color on_error #690005;
-@define-color on_error_container #ffdad6;
-@define-color on_primary #003544;
-@define-color on_primary_container #b8eaff;
-@define-color on_primary_fixed #001f28;
-@define-color on_primary_fixed_variant #004d61;
-@define-color on_secondary #1e333b;
-@define-color on_secondary_container #cfe6f1;
-@define-color on_secondary_fixed #071e26;
-@define-color on_secondary_fixed_variant #344a52;
-@define-color on_surface #dee3e6;
-@define-color on_surface_variant #bfc8cc;
-@define-color on_tertiary #2c2e4d;
-@define-color on_tertiary_container #e1e0ff;
-@define-color on_tertiary_fixed #171837;
-@define-color on_tertiary_fixed_variant #434465;
-@define-color outline #8a9296;
-@define-color outline_variant #40484c;
-@define-color primary #88d1ec;
-@define-color primary_container #004d61;
-@define-color primary_fixed #b8eaff;
-@define-color primary_fixed_dim #88d1ec;
+@define-color background #1a1b26;
+@define-color error #f7768e;
+@define-color error_container #703440;
+@define-color inverse_on_surface #1a1b26;
+@define-color inverse_primary #34548a;
+@define-color inverse_surface #c0caf5;
+@define-color on_background #c0caf5;
+@define-color on_error #1a1b26;
+@define-color on_error_container #f7768e;
+@define-color on_primary #1a1b26;
+@define-color on_primary_container #c0caf5;
+@define-color on_primary_fixed #1a1b26;
+@define-color on_primary_fixed_variant #24283b;
+@define-color on_secondary #1a1b26;
+@define-color on_secondary_container #c0caf5;
+@define-color on_secondary_fixed #1a1b26;
+@define-color on_secondary_fixed_variant #24283b;
+@define-color on_surface #c0caf5;
+@define-color on_surface_variant #a9b1d6;
+@define-color on_tertiary #1a1b26;
+@define-color on_tertiary_container #c0caf5;
+@define-color on_tertiary_fixed #1a1b26;
+@define-color on_tertiary_fixed_variant #24283b;
+@define-color outline #565f89;
+@define-color outline_variant #414868;
+@define-color primary #bb9af7;
+@define-color primary_container #3b3552;
+@define-color primary_fixed #d9c9fa;
+@define-color primary_fixed_dim #bb9af7;
 @define-color scrim #000000;
-@define-color secondary #b3cad4;
-@define-color secondary_container #344a52;
-@define-color secondary_fixed #cfe6f1;
-@define-color secondary_fixed_dim #b3cad4;
+@define-color secondary #7aa2f7;
+@define-color secondary_container #1f3556;
+@define-color secondary_fixed #cfe0ff;
+@define-color secondary_fixed_dim #7aa2f7;
 @define-color shadow #000000;
-@define-color source_color #25738b;
-@define-color surface #0f1416;
-@define-color surface_bright #353a3d;
-@define-color surface_container #1b2023;
-@define-color surface_container_high #252b2d;
-@define-color surface_container_highest #303638;
-@define-color surface_container_low #171c1f;
-@define-color surface_container_lowest #0a0f11;
-@define-color surface_dim #0f1416;
-@define-color surface_tint #88d1ec;
-@define-color surface_variant #40484c;
-@define-color tertiary #c3c3eb;
-@define-color tertiary_container #434465;
-@define-color tertiary_fixed #e1e0ff;
-@define-color tertiary_fixed_dim #c3c3eb;
+@define-color source_color #7aa2f7;
+@define-color surface #24283b;
+@define-color surface_bright #3b4261;
+@define-color surface_container #1f2335;
+@define-color surface_container_high #292e42;
+@define-color surface_container_highest #343b58;
+@define-color surface_container_low #1a1b26;
+@define-color surface_container_lowest #16161e;
+@define-color surface_dim #16161e;
+@define-color surface_tint #bb9af7;
+@define-color surface_variant #414868;
+@define-color tertiary #7dcfff;
+@define-color tertiary_container #1c3a4a;
+@define-color tertiary_fixed #c7ecff;
+@define-color tertiary_fixed_dim #7dcfff;

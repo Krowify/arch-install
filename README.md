@@ -19,8 +19,8 @@ applications.
 | Logout menu | Wlogout |
 | Widgets | Eww |
 | Settings GUI | hyprmod |
-| Theme | Catppuccin Mocha (default) or Tokyo Night, switchable with `theme.sh` (`Super+Shift+T`) -- see [Theme switching](#theme-switching) and [Credits](#credits) |
-| Icon theme | Papirus (Catppuccin Mocha) / Tela-circle-purple (Tokyo Night) |
+| Theme | Tokyo Night (default), Decay Green, or Graphite Mono, switchable with `theme.sh` (`Super+Shift+T`) -- see [Theme switching](#theme-switching) and [Credits](#credits) |
+| Icon theme | Tela-circle-purple (Tokyo Night) / Tela-circle-green (Decay Green) / Tela-circle-grey (Graphite Mono) |
 | Fonts | Noto Fonts + Nerd Fonts |
 | Wallpaper | Waypaper (GUI picker) + awww (renderer, renamed from swww) |
 | Cursor theme | Bibata |
@@ -117,7 +117,7 @@ from SDDM's session dropdown with nothing further to configure -- pick
 Package installed alone don't produce a working desktop -- Hyprland,
 waybar, swaync, etc. all need a config to autostart and behave. Stage 5
 deploys `dotfiles/` (source templates in this repo) into `~/.config`,
-then runs `theme.sh set catppuccin-mocha` to apply the default theme
+then runs `theme.sh set tokyo-night` to apply the default theme
 (see [Theme switching](#theme-switching) below for what that actually
 does):
 
@@ -195,16 +195,22 @@ rclone config
 systemctl --user enable --now protondrive-mount.service
 ```
 
+The unit passes `--protondrive-enable-caching=false`: rclone's protondrive
+backend docs warn its own caching (on by default) isn't invalidated by
+changes made outside the mount (e.g. the Proton web app or another
+device) yet, and to disable it for VFS mounts specifically -- otherwise
+`~/ProtonDrive` can silently show stale directory listings.
+
 After that, `~/ProtonDrive` mounts automatically on login (`After=
 network-online.target`) and shows up in Thunar's sidebar. To unmount:
 `systemctl --user stop protondrive-mount.service`.
 
 ## Theme switching
 
-This repo ships two themes -- Catppuccin Mocha (the default) and Tokyo
-Night -- and a small switcher, `theme.sh`, deployed by stage 5 to
-`~/.config/hyde-themes/`. Run it directly, or press `Super+Shift+T` for a
-Rofi picker:
+This repo ships three themes -- Tokyo Night (the default), Decay Green,
+and Graphite Mono -- and a small switcher, `theme.sh`, deployed by stage 5
+to `~/.config/hyde-themes/`. Run it directly, or press `Super+Shift+T` for
+a Rofi picker:
 
 ```sh
 ~/.config/hyde-themes/theme.sh set tokyo-night   # apply a theme
@@ -231,23 +237,33 @@ Each theme lives in its own directory under `~/.config/hyde-themes/`
   needs (as case-insensitive glob patterns, same idea as stage 5's old
   folder detection) and, optionally, a URL to fetch them from if they
   aren't installed anywhere `theme.sh` looks (`/usr/share/{themes,icons}`,
-  then `~/.local/share/{themes,icons}`). Catppuccin Mocha's GTK/icon
-  themes come from stage 3's AUR packages, so it needs no URL. Tokyo
-  Night's don't exist as official-repo or known-good AUR packages, so
-  `theme.sh` downloads them straight from
+  then `~/.local/share/{themes,icons}`). None of the three themes here
+  have official-repo or known-good AUR packages for their GTK/icon
+  themes, so `theme.sh` downloads all of them straight from
   [HyDE-Project/hyde-themes](https://github.com/HyDE-Project/hyde-themes)
-  (the same assets HyDE itself ships) the first time you switch to it,
-  and extracts them into `~/.local/share/{themes,icons}` -- no `sudo`,
-  no AUR package name to guess. **This means switching to Tokyo Night
+  (the same assets HyDE itself ships) the first time you switch to each
+  one, and extracts them into `~/.local/share/{themes,icons}` -- no
+  `sudo`, no AUR package name to guess. **This means switching to a theme
   for the first time needs a network connection.**
 - Optionally a bundled `wallpaper.*`, set directly via `awww img` when
-  you switch to that theme (Tokyo Night has one; Catppuccin Mocha
-  doesn't, since it's meant to be re-themed dynamically from whatever
-  wallpaper you pick -- see below).
+  you switch to that theme. Tokyo Night has one; Decay Green and
+  Graphite Mono don't (no verified wallpaper asset was found for either
+  while adding them -- see the disclaimer in each one's `theme.conf`),
+  so switching to them leaves whatever wallpaper was already set.
 
 `~/.config/hyde-themes/global.conf` (not per-theme) covers the two bits
 of chrome that stay the same across every theme: the cursor theme and the
 SDDM login theme.
+
+**Palette fidelity:** Tokyo Night's color files were ported from HyDE's
+actual published theme source (see [Credits](#credits)). Decay Green and
+Graphite Mono's GTK/icon *theme assets* are likewise the real ones HyDE
+ships, but their *color files* in this repo are this repo's own
+construction -- HyDE's exact source hex values for those two wouldn't
+reliably fetch while adding them here, so they're coherent, same-shape
+palettes built to match each theme's name/intent, not pixel-matched to
+HyDE's live rendering. Each one's `theme.conf` says so and links to where
+to pull the real values from if you want an exact match.
 
 **No file manager swap needed.** Thunar is a GTK app and already reads
 its icons/colors from the GTK theme `theme.sh` sets in
@@ -255,31 +271,29 @@ its icons/colors from the GTK theme `theme.sh` sets in
 that reads theme names that way instead) -- switching themes re-themes
 Thunar for free, the same way it re-themes every other GTK app.
 
-**How this interacts with Matugen:** Catppuccin Mocha is designed to be
-re-themed dynamically by Matugen as you change wallpapers (see below) --
-`theme.sh set catppuccin-mocha` just applies its own static fallback
-colors, same as always. Tokyo Night is a *curated* palette, not one
-derived from its wallpaper, so `theme.sh` sets its colors directly and
-sets its wallpaper via `awww` directly too, bypassing `waypaper`'s
-Matugen hook on purpose. If you then open `waypaper` and pick a (new or
-even the same) wallpaper yourself, that **will** re-run Matugen and
-overwrite Tokyo Night's curated colors with a wallpaper-derived
-palette -- that's expected, not a bug: picking a wallpaper through
-`waypaper` is itself an opt-in "go dynamic" action, orthogonal to which
-theme you last switched to. Re-run `theme.sh set tokyo-night` to restore
-the curated palette.
+**How this interacts with Matugen:** all three themes here are *curated*
+palettes, not ones derived from a wallpaper -- `theme.sh` sets each
+one's colors directly and sets its wallpaper via `awww` directly too (if
+it has one bundled), bypassing `waypaper`'s Matugen hook on purpose. If
+you then open `waypaper` and pick a wallpaper yourself, that **will**
+re-run Matugen and overwrite the active theme's curated colors with a
+wallpaper-derived palette -- that's expected, not a bug: picking a
+wallpaper through `waypaper` is itself an opt-in "go dynamic" action,
+orthogonal to which theme you last switched to. Re-run
+`theme.sh set <name>` to restore the curated palette.
 
-**Adding another theme:** copy `dotfiles/hyde-themes/tokyo-night/` (or
-`catppuccin-mocha/`, if you don't want a bundled wallpaper) to a new
-`dotfiles/hyde-themes/<name>/`, edit its color files and `theme.conf`,
-re-run stage 5 (or just `cp -r` it into `~/.config/hyde-themes/<name>/`
-directly) -- it'll show up in `theme.sh list`/`menu` immediately, no
-other wiring needed.
+**Adding another theme:** copy `dotfiles/hyde-themes/tokyo-night/` (drop
+`wallpaper.png` and its `WALLPAPER=` line in `theme.conf` if you don't
+have one to bundle -- see `decay-green/`/`graphite-mono/` for that
+pattern) to a new `dotfiles/hyde-themes/<name>/`, edit its color files
+and `theme.conf`, re-run stage 5 (or just `cp -r` it into
+`~/.config/hyde-themes/<name>/` directly) -- it'll show up in
+`theme.sh list`/`menu` immediately, no other wiring needed.
 
 Not covered by any of this: Qt/Kvantum theming for `kate`/`pavucontrol`
-(neither theme configures Kvantum, so Qt apps keep using your system Qt
+(no theme configures Kvantum, so Qt apps keep using your system Qt
 style regardless of which theme is active), and the SDDM login theme
-(shared across both themes on purpose -- see `global.conf` above).
+(shared across every theme on purpose -- see `global.conf` above).
 
 ## Color theming (Matugen)
 
@@ -297,13 +311,12 @@ Alacritty's background/foreground/cursor, and Wlogout from it:
 | Alacritty | `~/.config/alacritty/colors.toml` | live-reloads on file change by itself |
 | Wlogout | `~/.config/wlogout/colors.css` | none needed -- launched fresh each time (Super+Escape), not a running daemon |
 
-Each of those files ships with a static fallback (the same Catppuccin
-Mocha + custom accent palette used everywhere else in this repo -- see
-[Credits](#credits)) so things look right before you've ever picked a
-wallpaper. Matugen overwrites them in place once you do. This whole
-pipeline is specific to Catppuccin Mocha -- Tokyo Night's version of
-these same files is a fixed palette `theme.sh` applies directly instead;
-see [Theme switching](#theme-switching) above.
+Each of those files ships with a static fallback matching the default
+theme (Tokyo Night -- see [Credits](#credits)) so things look right
+before you've ever picked a wallpaper. Matugen overwrites them in place
+once you do, for whichever theme happens to be active -- see [How this
+interacts with Matugen](#theme-switching) above; `theme.sh set <name>`
+restores the curated palette afterward.
 
 Alacritty's ANSI 16-color palette (`[colors.normal]`/`[colors.bright]` in
 `alacritty.toml` itself) is deliberately **not** Matugen-templated --
@@ -414,13 +427,13 @@ accordingly.
   with `sudo systemctl enable --now sshd.service` and
   `sudo ufw limit 22/tcp comment 'SSH (rate-limited)'`.
 - **SDDM/GTK/icon/cursor theme didn't apply after stage 5** -- stage 5
-  ends by running `theme.sh set catppuccin-mocha`, which detects the
+  ends by running `theme.sh set tokyo-night`, which detects the
   installed theme folder under `/usr/share/...` (or `~/.local/share/...`)
   and prints what it found (falling back to `Adwaita` if nothing
   matched) before applying anything. If it printed `Adwaita` for
   something that should be installed, its stage 2/3 package install
   likely failed or was skipped -- re-run that stage, then
-  `~/.config/hyde-themes/theme.sh set catppuccin-mocha` (no need to
+  `~/.config/hyde-themes/theme.sh set tokyo-night` (no need to
   re-run all of stage 5). Stage 5 now runs before stage 6 enables
   `sddm.service`, so on a normal `0-install.sh` run the login screen
   already picks up the theme on its first start; you'd only need to
@@ -475,7 +488,20 @@ Arch Linux Installation Guide: https://wiki.archlinux.org/title/Installation_gui
   actually installs -- see the comments in
   `dotfiles/waybar/modules/distro.jsonc`,
   `dotfiles/waybar/modules/workspace.jsonc`, and
-  `dotfiles/waybar/modules/tray-notif.jsonc` for what changed.
+  `dotfiles/waybar/modules/tray-notif.jsonc` for what changed. The
+  `modules-left`/`-center`/`-right` layout was further restructured to
+  match [Hyde-project/hyde](https://github.com/Hyde-project/hyde)'s own
+  waybar (workspaces isolated in their own pill on the far left) -- see
+  the comment at the top of `dotfiles/waybar/config.jsonc` for why HyDE's
+  own script-backed custom modules (weather, gpuinfo/cpuinfo/sensorsinfo,
+  hyde-menu, etc.) weren't also ported.
+- Tokyo Night's, Decay Green's, and Graphite Mono's GTK/icon theme
+  archives, and Tokyo Night's color palette and bundled wallpaper
+  ("Illustration by Sayybils", credited in-image), are from
+  [HyDE-Project/hyde-themes](https://github.com/HyDE-Project/hyde-themes)
+  -- see [Theme switching](#theme-switching) for how `theme.sh` fetches
+  them, and [Palette fidelity](#theme-switching) above for what is and
+  isn't a verified port of that repo for Decay Green/Graphite Mono.
 - SwayNC's `config.json`, `style.css`, and `tokens/` (button grid,
   slider, MPRIS, notification, title/DND styling) are also from
   [haikal-hakim/athena](https://github.com/haikal-hakim/athena), with

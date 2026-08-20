@@ -1,16 +1,17 @@
-# Deployed by 5-dotfiles.sh. Static fallback (Catppuccin Mocha + custom
-# accents, see README credits) -- overwritten in-place by Matugen once you
-# pick a wallpaper via waypaper (see the README's color theming section).
-# Imported by alacritty.toml. Only background/foreground/cursor are
-# templated -- the ANSI 16-color palette in alacritty.toml stays static on
-# purpose, since Material You doesn't define semantic roles for "ANSI
-# green"/"ANSI cyan" etc., and a wallpaper-driven remap would make
-# ls/diff/etc. output unpredictable.
+# Deployed by 5-dotfiles.sh. Static fallback matching the default theme
+# (Tokyo Night, see README credits) -- overwritten in-place by Matugen
+# once you pick a wallpaper via waypaper (see the README's color theming
+# section), and by theme.sh if you switch themes. Imported by
+# alacritty.toml. Only background/foreground/cursor are templated -- the
+# ANSI 16-color palette in alacritty.toml stays static on purpose, since
+# Material You doesn't define semantic roles for "ANSI green"/"ANSI cyan"
+# etc., and a wallpaper-driven remap would make ls/diff/etc. output
+# unpredictable.
 
 [colors.primary]
-background = "#292a37"
-foreground = "#d9e0ee"
+background = "#24283b"
+foreground = "#a9b1d6"
 
 [colors.cursor]
-text = "#292a37"
-cursor = "#efb993"
+text = "#1a1b26"
+cursor = "#c0caf5"
