@@ -127,7 +127,8 @@ does):
   `zsh-syntax-highlighting`, `autojump`) to `~/.zshrc`, guarded by a
   marker comment so re-running the stage doesn't duplicate it.
 
-Default keybinds (`$mod` = Super). Keyed to match
+Default keybinds (`$mod` = Super) -- see [`KEYBINDINGS.md`](KEYBINDINGS.md)
+for the exact copy-pasteable `bind` lines. Keyed to match
 [HyDE-Project/HyDE's own KEYBINDINGS.md](https://github.com/HyDE-Project/HyDE/blob/master/KEYBINDINGS.md)
 wherever this repo has an equivalent app or Hyprland dispatcher for it --
 see the comment above the keybinds section in `dotfiles/hypr/hyprland.conf`
