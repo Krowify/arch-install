@@ -348,6 +348,15 @@ accordingly.
 
 ## Troubleshooting
 
+- **`chsh: PAM: Authentication failure` at the end of stage 3** -- fixed
+  as of this repo's current version (stage 3 now runs `chsh` through
+  `sudo`, with `0-install.sh` granting it a scoped NOPASSWD rule so it
+  doesn't need a password when running non-interactively). If you're
+  still seeing it, you're likely on an older checkout -- `git pull` and
+  re-run. The root cause: running the whole installer via `0-install.sh`
+  as root executes stage 3 as `su - <user> -c ...`, which doesn't
+  reliably keep a controlling terminal attached, so plain `chsh`'s PAM
+  password prompt has nowhere to go and fails immediately.
 - **SwayNC/waypaper don't behave as documented** -- these two (plus the
   whole Matugen pipeline) were wired up from documentation and community
   examples, not verified against a live install, unlike the rest of this

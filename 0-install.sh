@@ -74,10 +74,12 @@ if [[ ${EUID} -eq 0 ]]; then
     # -U` (when it installs a just-built AUR package) needs to prompt for a
     # password, it fails immediately with "a terminal is required to read
     # the password" -- even though the rest of this flow is interactive.
-    # Grant NOPASSWD for pacman only, just for this user, just for stage 3,
-    # so that install step never needs to prompt at all.
+    # Same problem hits 3-user-software.sh's `sudo chsh` at the end (chsh
+    # itself would fail with a PAM "Authentication failure" -- see that
+    # script). Grant NOPASSWD for pacman and chsh only, just for this user,
+    # just for stage 3, so neither ever needs to prompt.
     AUR_SUDOERS_DROPIN="/etc/sudoers.d/99-linux-installation-aur-build"
-    echo "${AUR_USER} ALL=(ALL) NOPASSWD: /usr/bin/pacman" > "${AUR_SUDOERS_DROPIN}"
+    echo "${AUR_USER} ALL=(ALL) NOPASSWD: /usr/bin/pacman, /usr/bin/chsh" > "${AUR_SUDOERS_DROPIN}"
     chmod 0440 "${AUR_SUDOERS_DROPIN}"
     if ! visudo -cf "${AUR_SUDOERS_DROPIN}"; then
         echo "Generated sudoers drop-in failed validation, aborting."
