@@ -127,24 +127,62 @@ does):
   `zsh-syntax-highlighting`, `autojump`) to `~/.zshrc`, guarded by a
   marker comment so re-running the stage doesn't duplicate it.
 
-Default keybinds (`$mod` = Super):
+Default keybinds (`$mod` = Super). Keyed to match
+[HyDE-Project/HyDE's own KEYBINDINGS.md](https://github.com/HyDE-Project/HyDE/blob/master/KEYBINDINGS.md)
+wherever this repo has an equivalent app or Hyprland dispatcher for it --
+see the comment above the keybinds section in `dotfiles/hypr/hyprland.conf`
+for what wasn't ported (HyDE features that call into its own
+`~/.local/lib/hyde/` helper scripts, which this repo doesn't install) and
+why. A couple of this repo's own pre-existing binds (`Super+Return`,
+`Super+F`) are kept as extra aliases alongside HyDE's key for the same
+action.
 
 | Keybind | Action |
 |---------|--------|
-| `Super+Return` | Terminal (Alacritty) |
-| `Super+D` | App launcher (Rofi) |
-| `Super+Q` | Close focused window |
+| `Super+Return` / `Super+T` | Terminal (Alacritty) |
+| `Super+Alt+T` | Dropdown terminal (own special workspace) |
+| `Super+D` / `Super+A` | App launcher (Rofi) |
+| `Super+Tab` | Window switcher (Rofi) |
+| `Super+Q` / `Alt+F4` | Close focused window |
+| `Super+Alt+F4` | Force-kill focused window |
+| `Super+Delete` | Exit Hyprland session |
 | `Super+E` | File manager (Thunar) |
-| `Super+V` | Clipboard history (cliphist + Rofi) |
+| `Super+Shift+E` | File finder (Rofi) |
+| `Super+C` | Text editor (VS Code) |
+| `Super+B` | Web browser (Brave) |
+| `Ctrl+Shift+Escape` | System monitor (`top` in Alacritty) |
+| `Super+V` / `Super+Shift+V` | Clipboard history (cliphist + Rofi) |
+| `Super+Shift+/` | Web search (Rofi prompt) |
 | `Super+L` | Lock screen (Hyprlock) |
-| `Super+Escape` | Logout menu (Wlogout) |
-| `Super+W` | Toggle Eww widget panel |
+| `Super+Escape` / `Alt+Ctrl+Delete` | Logout menu (Wlogout) |
+| `Super+W` / `Super+F` | Toggle floating |
+| `Super+M` | Toggle Eww widget panel |
+| `Super+G` | Toggle group |
+| `Alt+P` | Toggle pseudotile |
+| `Shift+F11` | Toggle fullscreen |
+| `Super+Shift+F` | Toggle pin on focused window |
+| `Super+Ctrl+B` | Toggle waybar |
+| `Super+J` | Toggle split |
 | `Super+N` | Toggle notification center (SwayNC) |
 | `Super+Shift+W` | Open wallpaper picker (waypaper) |
 | `Super+Shift+T` | Open theme picker (`theme.sh menu`) |
 | `Alt+Shift+H` | Toggle the dock (nwg-dock-hyprland) |
-| `Alt+Tab` | Cycle windows |
-| `Print` | Screenshot region to clipboard |
+| `Alt+Tab` / `Alt+Shift+Tab` | Cycle windows forward/backward |
+| `Super+Ctrl+H` / `Super+Ctrl+L` | Cycle window group backward/forward |
+| `Super+Left/Right/Up/Down` | Focus window in direction |
+| `Super+Shift+Left/Right/Up/Down` | Resize active window |
+| `Super+Ctrl+Shift+Left/Right/Up/Down` | Move active window between tiles |
+| `Super+Z` / `Super+X` | Hold to move / resize window (no mouse) |
+| `Print` | Screenshot all monitors to clipboard |
+| `Super+P` | Screenshot region to clipboard |
+| `Super+Alt+P` | Screenshot focused monitor to clipboard |
+| `Super+1` .. `Super+0` | Switch to workspace 1-10 |
+| `Super+Shift+1` .. `Super+Shift+0` | Move window to workspace 1-10 |
+| `Super+Alt+1` .. `Super+Alt+0` | Move window to workspace 1-10 (silent) |
+| `Super+Ctrl+Right/Left` | Next/previous workspace (relative) |
+| `Super+Ctrl+Down` | Go to nearest empty workspace |
+| `Super+S` | Toggle scratchpad |
+| `Super+Shift+S` / `Super+Alt+S` | Move window to scratchpad / silently |
 
 No wallpaper image ships with the default theme -- pick one with `waypaper`
 (`Super+Shift+W`), which sets it via `awww` and re-themes the desktop via
@@ -489,12 +527,22 @@ Arch Linux Installation Guide: https://wiki.archlinux.org/title/Installation_gui
   `dotfiles/waybar/modules/distro.jsonc`,
   `dotfiles/waybar/modules/workspace.jsonc`, and
   `dotfiles/waybar/modules/tray-notif.jsonc` for what changed. The
-  `modules-left`/`-center`/`-right` layout was further restructured to
-  match [Hyde-project/hyde](https://github.com/Hyde-project/hyde)'s own
-  waybar (workspaces isolated in their own pill on the far left) -- see
-  the comment at the top of `dotfiles/waybar/config.jsonc` for why HyDE's
-  own script-backed custom modules (weather, gpuinfo/cpuinfo/sensorsinfo,
-  hyde-menu, etc.) weren't also ported.
+  `modules-left`/`-center`/`-right` layout was restructured a second time
+  to match [00Darxk/dotfiles](https://github.com/00Darxk/dotfiles)'s own
+  waybar (clock/network/bluetooth/window-title on the left, launcher +
+  workspaces + a lock/power group in the center, media/hardware/audio/tray
+  on the right) -- see the comment at the top of
+  `dotfiles/waybar/config.jsonc`. Colors are untouched by this repo's own
+  theme.sh/Matugen pipeline regardless of which layout is in use. An
+  earlier revision instead matched
+  [Hyde-project/hyde](https://github.com/Hyde-project/hyde)'s own waybar
+  (workspaces isolated on the far left); see that same comment for why
+  HyDE's script-backed custom modules (weather, gpuinfo/cpuinfo/
+  sensorsinfo, hyde-menu, etc.) weren't ported either time.
+- The keybind scheme in `dotfiles/hypr/hyprland.conf` is keyed to match
+  [HyDE-Project/HyDE's KEYBINDINGS.md](https://github.com/HyDE-Project/HyDE/blob/master/KEYBINDINGS.md)
+  wherever this repo has an equivalent app/dispatcher -- see the comment
+  above the keybinds section for what wasn't ported and why.
 - Tokyo Night's, Decay Green's, and Graphite Mono's GTK/icon theme
   archives, and Tokyo Night's color palette and bundled wallpaper
   ("Illustration by Sayybils", credited in-image), are from

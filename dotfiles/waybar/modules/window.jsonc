@@ -1,0 +1,10 @@
+{
+  // Focused window title -- ported in for the left-side layout (see
+  // https://github.com/00Darxk/dotfiles's waybar). Native waybar module,
+  // no extra package needed.
+  "hyprland/window": {
+    "format": "{title}",
+    "max-length": 40,
+    "separate-outputs": true
+  }
+}

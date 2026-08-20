@@ -130,6 +130,9 @@ PKGS=(
     'pamixer'                     # CLI volume control (pipewire-pulse aware)
     'pavucontrol'                 # GUI volume mixer, invoked directly rather
                                    # than via a tray icon
+    'playerctl'                   # CLI media player control (play/pause/next/
+                                   # prev) -- backs the XF86Audio* media keys
+                                   # and waybar's mpris module
     'alacritty'                   # Terminal emulator, replaces 'kitty'/'xterm'
     'blueman'                     # Bluetooth GUI manager + tray applet --
                                    # Plasma no longer supplies one

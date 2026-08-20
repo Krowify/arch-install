@@ -1,0 +1,16 @@
+{
+  // Lock/power buttons for the center "exit group" (see
+  // https://github.com/00Darxk/dotfiles's waybar) -- just thin wrappers
+  // around apps this repo already installs (hyprlock, wlogout), same as
+  // the Super+L / Super+Escape keybinds.
+  "custom/lock": {
+    "format": "󰌾",
+    "on-click": "hyprlock",
+    "tooltip": false
+  },
+  "custom/power": {
+    "format": "⏻",
+    "on-click": "wlogout",
+    "tooltip": false
+  }
+}

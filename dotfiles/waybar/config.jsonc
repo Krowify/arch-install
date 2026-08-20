@@ -1,19 +1,27 @@
 /*
- * Deployed by 5-dotfiles.sh. Ported from Muhammad Haikal Hakim's Athena
- * (see README credits): https://github.com/haikal-hakim/athena
+ * Deployed by 5-dotfiles.sh. Modules themselves ported from Muhammad
+ * Haikal Hakim's Athena (see README credits):
+ * https://github.com/haikal-hakim/athena
  *
- * modules-left/-center/-right layout restructured to match HyDE's own
- * waybar (Hyde-project/hyde's Configs/.config/waybar/config.jsonc):
- * workspaces isolated in their own pill on the far left, everything else
- * grouped into pills to the right, rather than workspaces sitting in the
- * center. HyDE's own custom, script-backed modules (weather, hyprsunset
- * toggle, gpuinfo/cpuinfo/sensorsinfo, hyde-menu, keybindhint, gamemode,
- * updates checker) were intentionally NOT ported -- they depend on
- * HyDE's own ~/.local/lib/hyde/ helper script library, which this repo
- * doesn't install, so copying those module definitions verbatim would
- * just show broken/empty widgets. This repo's own modules (Athena's
- * app-launcher pill, storage/system, audio, connections, tray) are kept
- * as-is, just regrouped into HyDE's left/center/right topology.
+ * modules-left/-center/-right topology restructured a second time, now
+ * to match https://github.com/00Darxk/dotfiles's waybar: clock/network/
+ * bluetooth/focused-window-title on the left, the app launcher +
+ * workspaces + a lock/power "exit group" in the center, and media/
+ * hardware/audio/tray on the right -- replacing the previous
+ * Hyde-project/hyde-style layout (workspaces isolated on the far left).
+ * Colors are untouched by this -- theme.sh and tokens/colors.css still
+ * drive every color regardless of which pill a module sits in. Two
+ * modules were added to support the new positions: hyprland/window
+ * (native waybar module, modules/window.jsonc) and mpris (native waybar
+ * module, modules/media.jsonc) -- neither needs a new package. The
+ * exit-group buttons (modules/exit.jsonc) are thin wrappers around
+ * hyprlock/wlogout, both already installed.
+ *
+ * HyDE's own custom, script-backed modules (weather, hyprsunset toggle,
+ * gpuinfo/cpuinfo/sensorsinfo, hyde-menu, keybindhint, gamemode, updates
+ * checker) still aren't ported -- they depend on HyDE's own
+ * ~/.local/lib/hyde/ helper script library, which this repo doesn't
+ * install.
  */
 {
   "layer": "top",
@@ -26,28 +34,33 @@
     "./modules/system.jsonc",
     "./modules/power-profiles-daemon.jsonc",
     "./modules/workspace.jsonc",
+    "./modules/window.jsonc",
     "./modules/idle-inhibitor.jsonc",
     "./modules/audio.jsonc",
     "./modules/connections.jsonc",
     "./modules/battery.jsonc",
     "./modules/clock.jsonc",
+    "./modules/media.jsonc",
+    "./modules/exit.jsonc",
     "./modules/tray-notif.jsonc"
   ],
   "modules-left": [
-    "hyprland/workspaces",
-    "group/distro-group",
+    "clock",
+    "group/connections",
+    "hyprland/window",
     "group/storage",
     "group/system"
   ],
   "modules-center": [
-    "power-profiles-daemon",
-    "idle_inhibitor"
+    "group/distro-group",
+    "hyprland/workspaces",
+    "idle_inhibitor",
+    "group/exit"
   ],
   "modules-right": [
+    "mpris",
+    "group/hardware",
     "group/audio",
-    "group/connections",
-    "battery",
-    "clock",
     "group/tray-group"
   ]
 }
