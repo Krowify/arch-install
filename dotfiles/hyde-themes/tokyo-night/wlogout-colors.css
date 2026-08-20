@@ -1,0 +1,9 @@
+/* Deployed by theme.sh into ~/.config/wlogout/colors.css. Curated Tokyo
+ * Night palette (see the README's Credits section) -- not touched by
+ * Matugen; see hypr-colors.conf for why.
+ */
+@define-color surface #1a1b26;
+@define-color on_surface #c0caf5;
+@define-color surface_container_high #292e42;
+@define-color outline #565f89;
+@define-color primary #bb9af7;
