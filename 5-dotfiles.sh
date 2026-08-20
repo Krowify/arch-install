@@ -48,26 +48,10 @@ deploy_dir() {
     echo "Deployed ~/.config/${name}"
 }
 
-# --- Preserve any live monitor layout (written by hypr-monitor-layout.sh)
-# across a hypr/ redeploy. deploy_dir backs up the whole existing
-# directory to hypr.bak and replaces it with the repo's template -- fine
-# for everything else in hypr/, but a saved multi-monitor layout
-# shouldn't quietly revert to the single-monitor default just because you
-# re-ran this script. See the README's "Multi-monitor layout" section.
-EXISTING_MONITORS_CONF=""
-if [[ -f "${HOME}/.config/hypr/monitors.conf" ]]; then
-    EXISTING_MONITORS_CONF="$(cat "${HOME}/.config/hypr/monitors.conf")"
-fi
-
 for dir in hypr waybar alacritty wlogout eww nwg-dock-hyprland swaync matugen waypaper fastfetch rofi hyde-themes; do
     deploy_dir "${dir}"
 done
 chmod +x "${HOME}/.config/hyde-themes/theme.sh"
-
-if [[ -n "${EXISTING_MONITORS_CONF}" ]]; then
-    echo "Restoring your existing monitor layout (~/.config/hypr/monitors.conf)"
-    echo "${EXISTING_MONITORS_CONF}" > "${HOME}/.config/hypr/monitors.conf"
-fi
 
 # --- waypaper's `folder` setting (dotfiles/waypaper/config.ini) points
 # here, and theme.sh drops each theme's own bundled wallpaper (e.g. Tokyo
@@ -166,10 +150,10 @@ echo "theme's static palette."
 echo "Want a different look? Super+Shift+T (or"
 echo "'~/.config/hyde-themes/theme.sh menu') opens a theme picker -- see"
 echo "the README's theme switching section."
-echo "Got more than one monitor? Once you're logged into Hyprland, run"
-echo "'./hypr-monitor-layout.sh' from this repo to lay them out interactively --"
-echo "it's saved to ~/.config/hypr/monitors.conf and survives future re-runs"
-echo "of this script."
+echo "Got more than one monitor? Use hyprmod's GUI (in your app launcher)"
+echo "to arrange them -- it writes to its own config independently of"
+echo "this repo's dotfiles, so it isn't affected by future re-runs of"
+echo "this script."
 echo "Want Proton Drive? Run 'rclone config' once to add a 'protondrive'"
 echo "remote, then 'systemctl --user enable --now protondrive-mount.service' --"
 echo "see the README's Proton Drive section."

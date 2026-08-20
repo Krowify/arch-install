@@ -165,34 +165,14 @@ can never wipe out your current wallpaper.
 
 ## Multi-monitor layout (optional)
 
-`hypr-monitor-layout.sh` is a standalone helper for arranging multiple
-monitors -- e.g. a portrait monitor beside a normal one, or one mounted
-upside down -- without hand-computing pixel offsets. It's not wired into
-`0-install.sh` or any numbered stage on purpose: it drives `hyprctl`, which
-only works from inside an already-running Hyprland session, so there's no
-point in the install pipeline where it could run. Use it once you've
-finished the install and logged in, from inside a terminal running under
-Hyprland (e.g. Alacritty), from wherever you cloned/extracted this repo:
-
-```sh
-cd linux-installation
-chmod +x hypr-monitor-layout.sh
-./hypr-monitor-layout.sh
-```
-
-(`chmod +x` is only needed once -- git already tracks the file as
-executable, but a zip download can lose that bit. If you'd rather skip it,
-`bash hypr-monitor-layout.sh` works without it.)
-
-It reads your connected monitors from `hyprctl monitors`, asks which one
-plays which role, applies the layout immediately via `hyprctl keyword
-monitor`, and saves it to `~/.config/hypr/monitors.conf`, which
-`hyprland.conf` already sources by default -- it sticks across restarts
-with no manual wiring, and survives a future re-run of `5-dotfiles.sh` too
-(that script preserves an existing `monitors.conf` instead of overwriting
-it). Currently supports one layout shape: a vertical monitor on the left,
-a normal monitor as the main/bottom one, and an upside-down monitor above
-it.
+`dotfiles/hypr/hyprland.conf` ships a single default `monitor =
+,preferred,auto,auto` line (auto-detect, preferred mode, for every
+monitor). For anything beyond that -- e.g. a portrait monitor beside a
+normal one, or one mounted upside down -- use hyprmod's GUI (in your app
+launcher) instead of hand-editing `hyprland.conf`: it live-previews monitor
+position/rotation/mode changes via `hyprctl` and persists them to its own
+config, independently of this repo's dotfiles, so a future re-run of
+`5-dotfiles.sh` never reverts your layout.
 
 ## Proton Drive
 
