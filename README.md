@@ -34,6 +34,7 @@ applications.
 | Package manager | pacman + yay + paru |
 | VPN | ProtonVPN |
 | Privacy browser | Tor Browser |
+| Cloud storage | Proton Drive (via rclone's `protondrive` backend -- see [Proton Drive](#proton-drive)) |
 
 ## Arch Linux First Boot
 
@@ -153,6 +154,15 @@ baked into the active theme's dotfiles. (Tokyo Night is the exception --
 it ships its own wallpaper, set automatically when you switch to it; see
 [Theme switching](#theme-switching).)
 
+waypaper's `folder` setting points at `~/Pictures/wallpapers` (created by
+stage 5), and `use_xdg_state = true` moves your actual wallpaper/folder/
+monitor picks out of `~/.config/waypaper/config.ini` and into
+`~/.local/state/waypaper/state.ini`. That split matters because stage 5
+redeploys `~/.config/waypaper/config.ini` from this repo's template on
+every run (like most of this repo's dotfiles) -- with state kept
+separately, re-running `5-dotfiles.sh` (e.g. after pulling a repo update)
+can never wipe out your current wallpaper.
+
 ## Multi-monitor layout (optional)
 
 `hypr-monitor-layout.sh` is a standalone helper for arranging multiple
@@ -176,12 +186,38 @@ executable, but a zip download can lose that bit. If you'd rather skip it,
 
 It reads your connected monitors from `hyprctl monitors`, asks which one
 plays which role, applies the layout immediately via `hyprctl keyword
-monitor`, and saves it to `~/.config/hypr/monitors.conf`. Add
-`source = ~/.config/hypr/monitors.conf` to `~/.config/hypr/hyprland.conf`
-(and remove/comment out the `monitor = , preferred, auto, auto` line) to
-make it stick across restarts. Currently supports one layout shape: a
-vertical monitor on the left, a normal monitor as the main/bottom one, and
-an upside-down monitor above it.
+monitor`, and saves it to `~/.config/hypr/monitors.conf`, which
+`hyprland.conf` already sources by default -- it sticks across restarts
+with no manual wiring, and survives a future re-run of `5-dotfiles.sh` too
+(that script preserves an existing `monitors.conf` instead of overwriting
+it). Currently supports one layout shape: a vertical monitor on the left,
+a normal monitor as the main/bottom one, and an upside-down monitor above
+it.
+
+## Proton Drive
+
+There's no official Proton Drive client for Linux, so this repo uses
+[rclone](https://rclone.org/protondrive/)'s built-in `protondrive`
+backend, via a systemd `--user` unit (`protondrive-mount.service`,
+deployed by stage 5 but left **disabled**) that mounts it at
+`~/ProtonDrive` with `rclone mount`. A Thunar sidebar bookmark for
+`~/ProtonDrive` is deployed too (`~/.config/gtk-3.0/bookmarks`).
+
+Setup is a one-time, interactive step this repo deliberately doesn't
+script -- rclone needs your Proton credentials and a 2FA code, which
+can't be handled non-interactively/safely:
+
+```sh
+rclone config
+# n) New remote -> name it "protondrive" -> type "protondrive"
+# follow the prompts for your Proton username/password and 2FA code
+
+systemctl --user enable --now protondrive-mount.service
+```
+
+After that, `~/ProtonDrive` mounts automatically on login (`After=
+network-online.target`) and shows up in Thunar's sidebar. To unmount:
+`systemctl --user stop protondrive-mount.service`.
 
 ## Theme switching
 

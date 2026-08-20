@@ -48,10 +48,32 @@ deploy_dir() {
     echo "Deployed ~/.config/${name}"
 }
 
+# --- Preserve any live monitor layout (written by hypr-monitor-layout.sh)
+# across a hypr/ redeploy. deploy_dir backs up the whole existing
+# directory to hypr.bak and replaces it with the repo's template -- fine
+# for everything else in hypr/, but a saved multi-monitor layout
+# shouldn't quietly revert to the single-monitor default just because you
+# re-ran this script. See the README's "Multi-monitor layout" section.
+EXISTING_MONITORS_CONF=""
+if [[ -f "${HOME}/.config/hypr/monitors.conf" ]]; then
+    EXISTING_MONITORS_CONF="$(cat "${HOME}/.config/hypr/monitors.conf")"
+fi
+
 for dir in hypr waybar alacritty wlogout eww nwg-dock-hyprland swaync matugen waypaper fastfetch rofi hyde-themes; do
     deploy_dir "${dir}"
 done
 chmod +x "${HOME}/.config/hyde-themes/theme.sh"
+
+if [[ -n "${EXISTING_MONITORS_CONF}" ]]; then
+    echo "Restoring your existing monitor layout (~/.config/hypr/monitors.conf)"
+    echo "${EXISTING_MONITORS_CONF}" > "${HOME}/.config/hypr/monitors.conf"
+fi
+
+# --- waypaper's `folder` setting (dotfiles/waypaper/config.ini) points
+# here, and theme.sh drops each theme's own bundled wallpaper (e.g. Tokyo
+# Night) into the same place -- create it up front so both have somewhere
+# to land before you ever open waypaper.
+mkdir -p "${HOME}/Pictures/wallpapers"
 
 # --- gtk-3.0/gtk-4.0: only settings.ini is ours (theme.sh fills in the
 # actual theme/icon/cursor names) -- deploy just that file rather than the
@@ -68,6 +90,37 @@ for gtk_dir in gtk-3.0 gtk-4.0; do
     cp "${DOTFILES_DIR}/${gtk_dir}/settings.ini" "${dest}"
     echo "Deployed ~/.config/${gtk_dir}/settings.ini"
 done
+
+# --- Sidebar bookmarks (Thunar, and any other GTK file chooser, all read
+# this one path regardless of gtk-3.0 vs gtk-4.0). Deployed once, not on
+# every redeploy like settings.ini above -- you'll add your own bookmarks
+# through Thunar afterward, and those shouldn't get wiped by a later
+# re-run of this script.
+BOOKMARKS_DEST="${HOME}/.config/gtk-3.0/bookmarks"
+if [[ -e "${BOOKMARKS_DEST}" ]]; then
+    echo "~/.config/gtk-3.0/bookmarks already exists, leaving it alone"
+else
+    mkdir -p "$(dirname "${BOOKMARKS_DEST}")"
+    sed "s|__HOME__|${HOME}|g" "${DOTFILES_DIR}/gtk-3.0/bookmarks" > "${BOOKMARKS_DEST}"
+    echo "Deployed ~/.config/gtk-3.0/bookmarks (adds a Proton Drive shortcut)"
+fi
+
+# --- Proton Drive (via rclone's protondrive backend -- there's no
+# official Linux client). Mount point + systemd --user unit only:
+# rclone's protondrive remote needs one interactive `rclone config` run
+# (username/password + 2FA) that can't be scripted safely, so the unit is
+# deployed but left disabled -- see the README's "Proton Drive" section
+# for the one-time setup.
+mkdir -p "${HOME}/ProtonDrive"
+SYSTEMD_UNIT_DEST="${HOME}/.config/systemd/user/protondrive-mount.service"
+if [[ -e "${SYSTEMD_UNIT_DEST}" ]]; then
+    echo "~/.config/systemd/user/protondrive-mount.service already exists, leaving it alone"
+else
+    mkdir -p "$(dirname "${SYSTEMD_UNIT_DEST}")"
+    cp "${DOTFILES_DIR}/systemd/protondrive-mount.service" "${SYSTEMD_UNIT_DEST}"
+    systemctl --user daemon-reload 2>/dev/null || true
+    echo "Deployed ~/.config/systemd/user/protondrive-mount.service (see the README's Proton Drive section)"
+fi
 
 # --- starship.toml is a flat file (starship's own default config path,
 # unlike everything else here which lives in its own ~/.config subdir).
@@ -114,5 +167,10 @@ echo "Want a different look? Super+Shift+T (or"
 echo "'~/.config/hyde-themes/theme.sh menu') opens a theme picker -- see"
 echo "the README's theme switching section."
 echo "Got more than one monitor? Once you're logged into Hyprland, run"
-echo "'./hypr-monitor-layout.sh' from this repo to lay them out interactively."
+echo "'./hypr-monitor-layout.sh' from this repo to lay them out interactively --"
+echo "it's saved to ~/.config/hypr/monitors.conf and survives future re-runs"
+echo "of this script."
+echo "Want Proton Drive? Run 'rclone config' once to add a 'protondrive'"
+echo "remote, then 'systemctl --user enable --now protondrive-mount.service' --"
+echo "see the README's Proton Drive section."
 echo

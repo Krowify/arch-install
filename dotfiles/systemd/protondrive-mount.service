@@ -1,0 +1,22 @@
+# Deployed by 5-dotfiles.sh to ~/.config/systemd/user/. NOT enabled by
+# 5-dotfiles.sh -- rclone's protondrive remote needs one interactive
+# `rclone config` run first (username/password + 2FA), which can't be
+# scripted safely/non-interactively. See the README's "Proton Drive"
+# section for the one-time setup, then:
+#   systemctl --user enable --now protondrive-mount.service
+[Unit]
+Description=Mount Proton Drive (rclone)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=notify
+ExecStart=/usr/bin/rclone mount protondrive: %h/ProtonDrive \
+    --vfs-cache-mode writes \
+    --dir-cache-time 1h
+ExecStop=/bin/fusermount -u %h/ProtonDrive
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=default.target

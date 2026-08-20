@@ -9,9 +9,9 @@ set -euo pipefail
 # Reads currently connected monitors from `hyprctl monitors`, lets you pick
 # which physical monitor is which role, resets those three to their native
 # untransformed mode (see NOTE below for why), applies the layout live via
-# `hyprctl keyword monitor`, and saves it to ~/.config/hypr/monitors.conf
-# so it survives a restart (source it from hyprland.conf -- see the note
-# printed at the end).
+# `hyprctl keyword monitor`, and saves it to ~/.config/hypr/monitors.conf,
+# which hyprland.conf already sources by default -- so it survives both a
+# restart and a future re-run of 5-dotfiles.sh, no manual wiring needed.
 #-------------------------------------------------------------------------
 
 if ! command -v hyprctl >/dev/null 2>&1; then
@@ -158,11 +158,11 @@ mkdir -p "$(dirname "${CONF}")"
 
 echo "Saved to ${CONF}"
 echo
-echo "To make this stick across restarts, add this to ~/.config/hypr/hyprland.conf"
-echo "(and remove/comment out any other 'monitor =' line, e.g. the"
-echo "'monitor = , preferred, auto, auto' one, so they don't conflict):"
-echo
-echo "  source = ~/.config/hypr/monitors.conf"
+echo "hyprland.conf already has 'source = ~/.config/hypr/monitors.conf' in"
+echo "it (deployed that way by stage 5), so this sticks across restarts on"
+echo "its own -- no extra step needed. It also survives re-running"
+echo "5-dotfiles.sh later: that script preserves an existing monitors.conf"
+echo "instead of overwriting it."
 echo
 echo "It's safe to re-run this script any time -- it always resets the"
 echo "monitors you pick back to their native mode before measuring them,"
