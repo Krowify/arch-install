@@ -87,13 +87,25 @@ deploy_dir() {
     echo "Deployed ~/.config/${name}"
 }
 
-for dir in hypr waybar alacritty wlogout eww nwg-dock-hyprland swaync matugen waypaper; do
+for dir in hypr waybar alacritty wlogout eww nwg-dock-hyprland swaync matugen waypaper fastfetch rofi; do
     deploy_dir "${dir}"
 done
+
+# --- starship.toml is a flat file (starship's own default config path,
+# unlike everything else here which lives in its own ~/.config subdir).
+STARSHIP_DEST="${HOME}/.config/starship.toml"
+if [[ -e "${STARSHIP_DEST}" || -L "${STARSHIP_DEST}" ]]; then
+    echo "Backing up existing ~/.config/starship.toml -> ~/.config/starship.toml.bak"
+    rm -f "${STARSHIP_DEST}.bak"
+    mv "${STARSHIP_DEST}" "${STARSHIP_DEST}.bak"
+fi
+cp "${DOTFILES_DIR}/starship.toml" "${STARSHIP_DEST}"
+echo "Deployed ~/.config/starship.toml"
 
 # --- Substitute the detected theme names into the deployed copies (never
 # into the repo's own dotfiles/ source, which stays a clean template).
 sed -i "s/__CURSOR_THEME__/${CURSOR_THEME}/g" "${HOME}/.config/hypr/hyprland.conf"
+sed -i "s/__ICON_THEME__/${ICON_THEME}/g" "${HOME}/.config/rofi/config.rasi"
 
 mkdir -p "${HOME}/.config/gtk-3.0" "${HOME}/.config/gtk-4.0"
 for gtk_dir in gtk-3.0 gtk-4.0; do

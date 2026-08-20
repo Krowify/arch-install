@@ -27,10 +27,17 @@ output_path = "~/.config/waybar/tokens/colors.css"
 post_hook = "killall -SIGUSR2 waybar"
 
 [templates.swaync]
-input_path = "~/.config/matugen/templates/swaync-colors.css"
-output_path = "~/.config/swaync/colors.css"
+input_path = "~/.config/matugen/templates/swaync-variables.css"
+output_path = "~/.config/swaync/tokens/variables.css"
 post_hook = "swaync-client -rs"
 
 [templates.alacritty]
 input_path = "~/.config/matugen/templates/alacritty-colors.toml"
 output_path = "~/.config/alacritty/colors.toml"
+
+# No post_hook -- wlogout is launched fresh each time (Super+Escape), not
+# a running daemon, so there's nothing to signal; it just picks up the
+# regenerated file on its next launch.
+[templates.wlogout]
+input_path = "~/.config/matugen/templates/wlogout-colors.css"
+output_path = "~/.config/wlogout/colors.css"

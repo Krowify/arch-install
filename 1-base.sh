@@ -67,8 +67,8 @@ PKGS=(
     'hypridle'                    # Idle daemon (screen-off / lock / suspend
                                    # on timeout)
     'hyprlock'                    # Screen locker
-    # NOTE: no wallpaper daemon here on purpose -- 'swww' (stage 3, AUR)
-    # plus 'waypaper' (stage 3, AUR) as the GUI picker on top of it handle
+    # NOTE: no wallpaper daemon here on purpose -- 'awww' (stage 2) plus
+    # 'waypaper' (stage 3, AUR) as the GUI picker on top of it handle
     # wallpapers now, including triggering Matugen to re-theme the desktop
     # whenever the wallpaper changes. See the README's color theming section.
 

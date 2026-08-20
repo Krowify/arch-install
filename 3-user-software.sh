@@ -82,22 +82,9 @@ PKGS=(
                                           # Hyprland -- live-previews changes,
                                           # writes to its own config rather
                                           # than touching hyprland.conf
-    'vicinae-bin'                        # Application launcher/extensible
-                                          # command palette (Raycast-like) --
-                                          # replaces wofi. Prebuilt: it's a
-                                          # heavy C++/Qt project, and building
-                                          # the plain 'vicinae' package from
-                                          # source via makepkg fails easily
-                                          # (missing build deps, compiler
-                                          # version, etc.) -- same reasoning
-                                          # as paru-bin/brave-bin/matugen-bin
-                                          # above
-    'swww'                                # Wallpaper daemon with smooth
-                                          # transitions -- the backend
-                                          # 'waypaper' below actually renders
-                                          # through
     'waypaper'                           # GUI wallpaper picker, frontend for
-                                          # swww -- replaces swaybg/hyprpaper;
+                                          # awww (stage 2, official repo) --
+                                          # replaces swaybg/hyprpaper;
                                           # configured to trigger Matugen on
                                           # every wallpaper change (see
                                           # dotfiles/waypaper/config.ini)

@@ -13,18 +13,19 @@ applications.
 | Status bar | Waybar |
 | Dock | nwg-dock-hyprland |
 | Music | Spotify (via spotify-launcher) |
-| App launcher | Vicinae |
-| Terminal | Alacritty + ZSH |
+| App launcher | Rofi |
+| Terminal | Alacritty + ZSH + Starship (prompt) + fzf/zoxide (fuzzy search/smarter cd) |
+| System info banner | fastfetch |
 | Logout menu | Wlogout |
 | Widgets | Eww |
 | Settings GUI | hyprmod |
-| Theme | Catppuccin Mocha (GTK/SDDM) + custom accent palette (Hyprland, Wlogout, Eww, Alacritty) + Athena's Material You palette (Waybar), all dynamically re-themed by Matugen -- see [Credits](#credits) and [Color theming](#color-theming-matugen) |
+| Theme | Catppuccin Mocha (GTK/SDDM) + custom accent palette (Hyprland, Eww, Alacritty) + Athena's Material You palette (Waybar, SwayNC, Wlogout), all dynamically re-themed by Matugen -- see [Credits](#credits) and [Color theming](#color-theming-matugen) |
 | Icon theme | Papirus |
 | Fonts | Noto Fonts + Nerd Fonts |
-| Wallpaper | Waypaper (GUI picker) + swww (renderer) |
+| Wallpaper | Waypaper (GUI picker) + awww (renderer, renamed from swww) |
 | Cursor theme | Bibata |
 | File manager | Thunar |
-| Clipboard | wl-clipboard + cliphist (history), Vicinae (picker UI) |
+| Clipboard | wl-clipboard + cliphist (history), Rofi (picker UI) |
 | Notifications | SwayNC |
 | Network | NetworkManager + nm-applet |
 | Audio | PipeWire + WirePlumber + pamixer |
@@ -134,10 +135,10 @@ Default keybinds (`$mod` = Super):
 | Keybind | Action |
 |---------|--------|
 | `Super+Return` | Terminal (Alacritty) |
-| `Super+D` | App launcher (Vicinae) |
+| `Super+D` | App launcher (Rofi) |
 | `Super+Q` | Close focused window |
 | `Super+E` | File manager (Thunar) |
-| `Super+V` | Clipboard history (Vicinae) |
+| `Super+V` | Clipboard history (cliphist + Rofi) |
 | `Super+L` | Lock screen (Hyprlock) |
 | `Super+Escape` | Logout menu (Wlogout) |
 | `Super+W` | Toggle Eww widget panel |
@@ -148,7 +149,7 @@ Default keybinds (`$mod` = Super):
 | `Print` | Screenshot region to clipboard |
 
 No wallpaper image ships in this repo -- pick one with `waypaper`
-(`Super+Shift+W`), which sets it via `swww` and re-themes the desktop via
+(`Super+Shift+W`), which sets it via `awww` and re-themes the desktop via
 Matugen. See [Color theming](#color-theming-matugen) below. Until you pick
 one, Hyprland/Waybar/SwayNC/Alacritty stay on the static fallback palette
 baked into their dotfiles.
@@ -189,14 +190,15 @@ Picking a wallpaper through `waypaper` doesn't just set the background --
 `waypaper`'s `post_command` (`dotfiles/waypaper/config.ini`) runs
 `matugen image "$wallpaper"`, which generates a Material You color scheme
 from that image and rewrites the color files for Hyprland, Waybar, SwayNC,
-and Alacritty's background/foreground/cursor from it:
+Alacritty's background/foreground/cursor, and Wlogout from it:
 
 | App | Generated file | Picked up via |
 |-----|-----------------|----------------|
 | Hyprland | `~/.config/hypr/colors.conf` | `hyprctl reload` (Matugen's post_hook) |
 | Waybar | `~/.config/waybar/tokens/colors.css` | `killall -SIGUSR2 waybar` (Matugen's post_hook) |
-| SwayNC | `~/.config/swaync/colors.css` | `swaync-client -rs` (Matugen's post_hook) |
+| SwayNC | `~/.config/swaync/tokens/variables.css` | `swaync-client -rs` (Matugen's post_hook) |
 | Alacritty | `~/.config/alacritty/colors.toml` | live-reloads on file change by itself |
+| Wlogout | `~/.config/wlogout/colors.css` | none needed -- launched fresh each time (Super+Escape), not a running daemon |
 
 Each of those files ships with a static fallback (the same Catppuccin
 Mocha + custom accent palette used everywhere else in this repo -- see
@@ -226,16 +228,34 @@ accordingly.
 
 ## Troubleshooting
 
-- **Vicinae/SwayNC/waypaper/swww don't behave as documented** -- these
-  four (plus the whole Matugen pipeline) were wired up from documentation
-  and community examples, not verified against a live install, unlike the
-  rest of this repo's dotfiles (which have all been fixed up against real
-  error messages over a lot of back-and-forth). `vicinae toggle`,
-  `swaync-client -t -sw`, and the `vicinae://launch/clipboard/history`
-  deeplink in particular are the least certain bits -- if a keybind does
+- **SwayNC/waypaper don't behave as documented** -- these two (plus the
+  whole Matugen pipeline) were wired up from documentation and community
+  examples, not verified against a live install, unlike the rest of this
+  repo's dotfiles (which have all been fixed up against real error
+  messages over a lot of back-and-forth). `swaync-client -t -sw` in
+  particular is one of the least certain bits -- if a keybind does
   nothing or errors, run the command directly in a terminal to see what
   it actually says, and check that app's own `--help`/docs for the
   current invocation.
+- **`swww-daemon`/`swww` not found, or waypaper can't set a wallpaper**
+  -- the `swww` project was renamed to `awww` in October 2025 (moved to
+  Codeberg). If you're on an older guide/tutorial that still says
+  `swww`, use `awww`/`awww-daemon` instead -- this repo already does
+  (`2-system-software.sh`, official repo, no AUR needed anymore).
+- **Rofi launches under Xwayland, or `-show drun` errors/does nothing**
+  -- Rofi only merged native Wayland support upstream in 2025; if your
+  mirror still has an older build, either wait for a pacman sync or swap
+  the `rofi` package (2-system-software.sh) for the AUR `rofi-wayland`
+  package instead (same config, no other changes needed).
+- **"Rofi is unsure what to show"** -- this means rofi's `modi` list
+  never got applied, so `-show drun` has no mode to launch. Two things
+  guard against it: `Super+D`'s bind passes `-modi` explicitly on the
+  command line rather than relying only on `config.rasi`'s `modi` line,
+  and `config.rasi` no longer has the `me-select-entry`/`me-accept-entry`
+  lines Athena's original had (they aren't real rofi options -- an
+  unrecognized key can make rofi discard the whole `configuration`
+  block, `modi` included). If you still hit this, run `rofi -show drun`
+  directly in a terminal to see the actual parse error.
 - **Waybar's temperature module shows nothing/wrong, or the CPU
   temperature looks off** -- `dotfiles/waybar/modules/system.jsonc` hard
   codes `"thermal-zone": 8`, copied from Athena's author's own machine
@@ -251,6 +271,14 @@ accordingly.
   `power-profiles-daemon.service` running; stage 6 enables it
   automatically, but if you added the package after the fact, run
   `sudo systemctl enable --now power-profiles-daemon.service` yourself.
+- **SwayNC's backlight slider is missing/broken** -- same class of issue
+  as the Waybar temperature module above: `dotfiles/swaync/config.json`'s
+  `"backlight": {"device": "intel_backlight"}` is hardware-specific
+  (Athena's author's own laptop -- see [Credits](#credits)). Run
+  `ls /sys/class/backlight/` to find your device name, or delete the
+  `"backlight"` entries from `widget-config` and `widgets` in that file
+  if your machine has no backlight-controllable display at all (most
+  desktops).
 - **Stage 3 or 5 exits immediately** (running it manually) -- you're
   running it as root. Switch to a regular user first
   (`su <your-username>`) and re-run it, or just use `0-install.sh`,
@@ -307,8 +335,8 @@ Arch Linux Installation Guide: https://wiki.archlinux.org/title/Installation_gui
 
 ## Credits
 
-- The accent color palette used across Hyprland, Wlogout, Eww, and
-  Alacritty is ported from
+- The accent color palette used across Hyprland, Eww, and Alacritty is
+  ported from
   [notusknot/dotfiles-nix](https://github.com/notusknot/dotfiles-nix)
   (it's also the static fallback/default the Matugen templates for those
   apps in `dotfiles/matugen/` are based on -- see
@@ -325,3 +353,38 @@ Arch Linux Installation Guide: https://wiki.archlinux.org/title/Installation_gui
   `dotfiles/waybar/modules/distro.jsonc`,
   `dotfiles/waybar/modules/workspace.jsonc`, and
   `dotfiles/waybar/modules/tray-notif.jsonc` for what changed.
+- SwayNC's `config.json`, `style.css`, and `tokens/` (button grid,
+  slider, MPRIS, notification, title/DND styling) are also from
+  [haikal-hakim/athena](https://github.com/haikal-hakim/athena), with
+  the `buttons-grid` actions repointed to tools this repo actually
+  installs (grim+slurp screenshot, hyprlock, waypaper) instead of
+  Athena's placeholder scripts and apps (a screen recorder, hyprpicker,
+  galculator) this repo doesn't have. Also fixed a handful of what look
+  like copy-paste bugs in the original CSS while porting it: a missing
+  `--accent-hover` variable referenced but never defined, three spots
+  using a background-role variable as a text color, and a
+  `10px solid` notification-action border that should have been `1px`
+  to match every other border in the file.
+- Wlogout's color scheme (`dotfiles/wlogout/colors.css`) is templated
+  from the same Athena/Matugen palette as Waybar/SwayNC above, for
+  visual consistency -- the layout/button structure itself stays this
+  repo's own (Athena's version needs bundled PNG icon files and an
+  unverified `hyprshutdown` helper tool that didn't fit this repo's
+  text-only, no-binary-assets dotfiles).
+- `dotfiles/fastfetch/config.jsonc` and `dotfiles/starship.toml` are
+  also from [haikal-hakim/athena](https://github.com/haikal-hakim/athena),
+  used as-is (both are visual/prompt configs with no app-specific paths
+  to adapt). Starship's palette is a static Catppuccin Mocha scheme, not
+  Matugen-templated -- same reasoning as Alacritty's ANSI colors (see
+  [Color theming](#color-theming-matugen)): a prompt should stay
+  readable and stable, not shift with every wallpaper. zoxide and fzf
+  aren't from Athena -- they're just common shell quality-of-life tools,
+  wired up directly in the zshrc snippet (no external config to credit).
+- Rofi's `config.rasi` and `clipboard.rasi` are also from
+  [haikal-hakim/athena](https://github.com/haikal-hakim/athena) --
+  `icon-theme` was hardcoded to `"Papirus cirle light"` in the original
+  (a typo'd name, and a light-variant icon theme this repo doesn't
+  install and wouldn't suit the dark theme here anyway), swapped for the
+  `__ICON_THEME__` placeholder this repo already uses elsewhere (GTK
+  settings) so it matches whatever Papirus variant actually got
+  installed.

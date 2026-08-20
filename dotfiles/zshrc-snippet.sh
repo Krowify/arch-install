@@ -11,6 +11,14 @@
 [[ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && \
     source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
+[[ -f /usr/share/fzf/completion.zsh ]] && source /usr/share/fzf/completion.zsh
+[[ -f /usr/share/fzf/key-bindings.zsh ]] && source /usr/share/fzf/key-bindings.zsh
+
+# --cmd cd makes zoxide take over the 'cd' command itself (still does
+# normal exact-path cd, but also learns/fuzzy-matches over time) instead
+# of only adding a separate 'z' command alongside it
+command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init zsh --cmd cd)"
+
 alias ll='ls -lah'
 alias grep='grep --color=auto'
 
@@ -18,4 +26,10 @@ alias grep='grep --color=auto'
 # shell out to $EDITOR (git commit, crontab -e, visudo, ...) require
 export EDITOR="kate -b"
 export TERMINAL=alacritty
+
+command -v fastfetch >/dev/null 2>&1 && fastfetch
+
+# starship replaces the zsh prompt entirely -- keep this last so nothing
+# below it can override $PROMPT/$PS1 out from under it
+command -v starship >/dev/null 2>&1 && eval "$(starship init zsh)"
 # <<< linux-installation dotfiles (stage 5) <<<

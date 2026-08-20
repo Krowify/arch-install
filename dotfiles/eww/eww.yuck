@@ -5,6 +5,10 @@
 (defpoll uptime :interval "60s" "uptime -p")
 
 (defwindow widget-panel
+    ; :monitor is a Hyprland monitor ID (run `hyprctl monitors` and match the
+    ; "(ID N)" next to the one you actually look at -- ID order follows
+    ; detection order, not physical port/left-right position, so on a
+    ; multi-monitor setup 0 is often not your primary/focused display).
     :monitor 0
     :geometry (geometry :x "20px"
                          :y "20px"

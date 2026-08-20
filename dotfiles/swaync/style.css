@@ -1,67 +1,61 @@
-/* Deployed by 5-dotfiles.sh. Best-effort port of the accent palette used
- * across the rest of this repo's dotfiles (see README credits) -- swaync's
- * exact CSS class names weren't verified against a live instance, so some
- * of these selectors may need adjusting once you're actually running it.
- */
-@import "colors.css";
+@import url("./tokens/variables.css");
+@import url("./tokens/title-dnd.css");
+@import url("./tokens/button-grid.css");
+@import url("./tokens/slider.css");
+@import url("./tokens/mpris.css");
+@import url("./tokens/notification.css");
 
 * {
-    font-family: "JetBrainsMono Nerd Font", "Noto Sans", sans-serif;
-    font-size: 12px;
+  outline-width: 0px;
+  outline-style: none;
+  font-size: 16px;
 }
 
+.background,
+.view {
+  background: transparent;
+}
+
+button {
+  outline: none;
+  box-shadow: none;
+}
+
+button:focus {
+  outline-width: 2px;
+  outline-style: solid;
+  outline-offset: 2px;
+}
+
+/* --- MAIN CONTAINER --- */
 .control-center {
-    background-color: @mantle;
-    border: 2px solid @mauve;
-    border-radius: 12px;
+  padding: 20px 14px;
+  background: var(--bg-panel);
+  border: 2px solid var(--border-glass);
+  border-radius: var(--radius-panel);
+}
+
+/* --- SCROLLBAR --- */
+.control-center scrollbar {
+  background: transparent;
+  border: none;
+}
+
+.control-center scrollbar slider {
+  background: var(--accent-dim);
+  transition: background var(--t-fast);
+}
+
+.control-center scrollbar slider:hover {
+  background: var(--accent-hover);
+}
+
+/* --- NOTIFICATION GROUP --- */
+.notification-group.collapsed {
+  background: var(--bg-widget);
+  border-radius: var(--radius-widget);
 }
 
 .notification-row {
-    outline: none;
-}
-
-.notification {
-    background-color: @mantle;
-    border: 2px solid @mauve;
-    border-radius: 8px;
-    padding: 10px;
-    margin: 6px 12px;
-}
-
-.notification-content,
-.notification .body,
-.notification .summary {
-    color: @text;
-}
-
-.notification .summary {
-    font-weight: bold;
-}
-
-.notification.critical {
-    border-color: @red;
-}
-
-.notification.low {
-    border-color: @blue;
-}
-
-.close-button {
-    background-color: @base;
-    color: @text;
-    border-radius: 8px;
-}
-
-.close-button:hover {
-    background-color: @red;
-}
-
-.widget-title {
-    color: @text;
-}
-
-.widget-title > button {
-    background-color: @base;
-    color: @text;
-    border-radius: 8px;
+  padding: 6px 1px;
 }

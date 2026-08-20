@@ -30,7 +30,12 @@ PKGS=(
     'cmatrix'                    # The Matrix screen animation
     'cronie'                     # cron jobs
     'curl'                       # Remote content retrieval
+    'fastfetch'                   # System info banner, shown on every new
+                                   # terminal via the zshrc snippet
     'file-roller'                # Archive utility
+    'fzf'                         # Fuzzy finder -- shell completion/
+                                   # history search, wired up in the
+                                   # zshrc snippet
     'gufw'                       # Firewall manager
     # NOTE: 'hardinfo' used to be listed here but it was pulled from the
     # official repos -- a plain `pacman -S hardinfo` fails with "target
@@ -52,6 +57,15 @@ PKGS=(
     'zsh'                        # Interactive shell
     'zsh-autosuggestions'        # Zsh plugin
     'zsh-syntax-highlighting'    # Zsh plugin
+    'starship'                    # Shell prompt, replaces zsh's default --
+                                   # config deployed to ~/.config/
+                                   # starship.toml (a flat file, unlike
+                                   # most of this repo's other dotfiles),
+                                   # initialized in the zshrc snippet
+    'zoxide'                      # Smarter 'cd' that learns frequently/
+                                   # recently used directories -- takes
+                                   # over the 'cd' command itself, see the
+                                   # zshrc snippet
  
     # GENERAL UTILITIES --------------------------------------------------
     'clamav'                     # Anti-virus
@@ -86,6 +100,22 @@ PKGS=(
     'waybar'                      # Status bar
     'swaync'                      # Notification daemon + control center
                                    # (Wayland-native) -- replaces mako
+    'rofi'                        # Application launcher -- replaces
+                                   # vicinae. Rofi merged native Wayland
+                                   # support upstream in 2025, so the
+                                   # official package needs no separate
+                                   # 'rofi-wayland' fork anymore; if
+                                   # yours predates that, swap this for
+                                   # the AUR 'rofi-wayland' package
+    'awww'                        # Wallpaper daemon with smooth
+                                   # transitions -- renamed from 'swww' in
+                                   # October 2025 (moved to Codeberg); the
+                                   # old 'swww'/'swww-daemon' names no
+                                   # longer exist, this is now 'awww'/
+                                   # 'awww-daemon'. Official repo, not
+                                   # AUR, since the rename. 'waypaper'
+                                   # (stage 3) is the GUI picker that
+                                   # actually renders through this
     'grim'                        # Screenshot utility
     'slurp'                       # Region/window selector, used with grim
     'wl-clipboard'                # Wayland clipboard CLI (wl-copy/wl-paste)
