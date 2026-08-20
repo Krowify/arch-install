@@ -1,4 +1,4 @@
-# linux-installation
+# Arch Installer
 
 This repo installs and configures a fully-functional Arch Linux setup:
 a Hyprland (Wayland) desktop, support packages (network, bluetooth,
