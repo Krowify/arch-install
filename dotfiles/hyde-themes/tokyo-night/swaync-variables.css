@@ -1,0 +1,47 @@
+/* Deployed by theme.sh into ~/.config/swaync/tokens/variables.css.
+ * Curated Tokyo Night palette -- structural values (radii/timing) kept
+ * identical to catppuccin-mocha's copy of this file, only colors
+ * changed. The panel/widget glass flips from a light frosted look to a
+ * dark navy one (rgba(255,255,255,...) -> rgba(26,27,38,...)) since a
+ * light glass reads as washed-out against Tokyo Night's cool dark
+ * palette; text-primary/secondary flip from dark-on-light to
+ * light-on-dark to match. See the README's Credits section.
+ */
+* {
+  --bg-panel: rgba(26, 27, 38, 0.55);
+  --bg-widget: rgba(36, 40, 59, 0.75);
+
+  --bg-tile: rgba(26, 27, 38, 0.70);
+  --bg-tile-hover: rgba(41, 46, 66, 0.88);
+
+  --bg-critical: rgba(55, 8, 18, 0.82);
+  --bg-critical-hover: rgba(80, 12, 25, 0.92);
+
+  --border-critical: rgba(247, 118, 142, 0.55);
+  --shadow-critical: rgba(219, 75, 75, 0.35);
+
+  --btn-on: rgba(122, 162, 247, 1);
+  --btn-off: rgba(255, 255, 255, 0.5);
+
+  --accent: #bb9af7;
+  --accent-dim: rgba(187, 154, 247, 0.18);
+  --accent-hover: rgba(187, 154, 247, 0.4);
+  --hover-dim: rgba(65, 72, 104, 1);
+
+  --border-subtle: rgba(122, 162, 247, 0.12);
+  --border-glass: rgba(187, 154, 247, 0.16);
+
+  --text-primary: rgba(192, 202, 245, 0.92);
+  --text-secondary: rgba(192, 202, 245, 0.6);
+
+  --text-dim: rgba(140, 145, 185, 0.55);
+  --text-hover: rgba(255, 255, 255, 1);
+
+  --radius-panel: 20px;
+  --radius-widget: 10px;
+  --radius-tile: 12px;
+  --radius-btn: 8px;
+
+  --t-fast: 150ms ease;
+  --t-mid: 220ms ease;
+}

@@ -1,0 +1,11 @@
+/* Deployed by theme.sh into ~/.config/wlogout/colors.css. Static -- values
+ * here match Athena's waybar default so a fresh install looks consistent
+ * across bar/dock/logout menu before you ever run Matugen. Overwritten
+ * in-place by Matugen once you pick a wallpaper via waypaper (see the
+ * README's color theming section).
+ */
+@define-color surface #0f1416;
+@define-color on_surface #dee3e6;
+@define-color surface_container_high #252b2d;
+@define-color outline #8a9296;
+@define-color primary #88d1ec;

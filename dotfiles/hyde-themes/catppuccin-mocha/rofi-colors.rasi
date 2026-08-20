@@ -1,0 +1,18 @@
+/* Deployed by theme.sh into ~/.config/rofi/colors.rasi. Imported by
+ * config.rasi. Static -- ported from Muhammad Haikal Hakim's Athena (see
+ * README credits).
+ */
+* {
+    bg:             rgb(30, 32, 48);
+    bg-element:     rgba(255, 255, 255, 0.00);
+    bg-selected:    rgb(138, 173, 244);
+    bg-dock:        rgb(234, 153, 156);
+    bg-btn:         rgba(52, 45, 68, 0.85);
+    bg-btn-active:  rgba(240, 235, 255, 0.95);
+    fg:             #e8e8f0;
+    fg-muted:       #ffffff;
+    fg-btn:         #babbf1;
+    fg-btn-active:  rgba(26, 20, 38, 0.95);
+    border-win:     rgba(137, 220, 235, 1.0);
+    fg-prompt:      rgb(243, 139, 168);
+}

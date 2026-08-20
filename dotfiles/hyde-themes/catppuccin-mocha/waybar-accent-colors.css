@@ -1,0 +1,11 @@
+/* Deployed by theme.sh into ~/.config/waybar/colors.css. Imported by
+ * style.css. Static palette -- overwritten in-place by Matugen once you
+ * pick a wallpaper via waypaper (see the README's color theming section).
+ */
+@define-color mantle rgba(41, 42, 55, 0.9);
+@define-color text #d9e0ee;
+@define-color overlay0 #6e738d;
+@define-color mauve #b072d1;
+@define-color base #44465c;
+@define-color yellow #efb993;
+@define-color red #ec6a88;

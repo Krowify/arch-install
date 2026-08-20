@@ -1,0 +1,20 @@
+/* Deployed by 5-dotfiles.sh, then kept up to date by theme.sh (one copy
+ * per theme under ~/.config/hyde-themes/<name>/rofi-colors.rasi) -- see
+ * the README's theme switching section. This shipped copy is the
+ * catppuccin-mocha values, so a fresh deploy still looks right even
+ * before theme.sh ever runs.
+ */
+* {
+    bg:             rgb(30, 32, 48);
+    bg-element:     rgba(255, 255, 255, 0.00);
+    bg-selected:    rgb(138, 173, 244);
+    bg-dock:        rgb(234, 153, 156);
+    bg-btn:         rgba(52, 45, 68, 0.85);
+    bg-btn-active:  rgba(240, 235, 255, 0.95);
+    fg:             #e8e8f0;
+    fg-muted:       #ffffff;
+    fg-btn:         #babbf1;
+    fg-btn-active:  rgba(26, 20, 38, 0.95);
+    border-win:     rgba(137, 220, 235, 1.0);
+    fg-prompt:      rgb(243, 139, 168);
+}

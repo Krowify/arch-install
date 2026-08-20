@@ -1,0 +1,10 @@
+/* Deployed by theme.sh into ~/.config/swaync/colors.css. Imported by
+ * style.css. Curated Tokyo Night palette (see the README's Credits
+ * section) -- not touched by Matugen; see hypr-colors.conf for why.
+ */
+@define-color mantle rgba(26, 27, 38, 0.933);
+@define-color text #c0caf5;
+@define-color mauve #bb9af7;
+@define-color blue #7aa2f7;
+@define-color base #24283b;
+@define-color red #f7768e;

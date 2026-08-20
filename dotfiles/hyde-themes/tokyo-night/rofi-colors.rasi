@@ -1,0 +1,19 @@
+/* Deployed by theme.sh into ~/.config/rofi/colors.rasi. Imported by
+ * config.rasi. Curated Tokyo Night palette (base hexes ported from
+ * HyDE-Project/hyde-themes' rofi.theme, see the README's Credits
+ * section) -- not touched by Matugen; see hypr-colors.conf for why.
+ */
+* {
+    bg:             rgb(26, 27, 38);
+    bg-element:     rgba(255, 255, 255, 0.00);
+    bg-selected:    rgb(122, 162, 247);
+    bg-dock:        rgb(187, 154, 247);
+    bg-btn:         rgba(41, 46, 66, 0.85);
+    bg-btn-active:  rgba(192, 202, 245, 0.95);
+    fg:             #c0caf5;
+    fg-muted:       #ffffff;
+    fg-btn:         #a9b1d6;
+    fg-btn-active:  rgba(26, 27, 38, 0.95);
+    border-win:     rgba(125, 207, 255, 1.0);
+    fg-prompt:      rgb(187, 154, 247);
+}

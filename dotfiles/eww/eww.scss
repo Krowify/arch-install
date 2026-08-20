@@ -1,8 +1,7 @@
-// Palette ported from notusknot/dotfiles-nix (see README credits)
-$mantle: #292a37;
-$mauve: #b072d1;
-$text: #d9e0ee;
-$light-gray: #9699b7;
+// Colors live in colors.scss (deployed by theme.sh, one copy per theme
+// under ~/.config/hyde-themes/<name>/eww-colors.scss) -- see the
+// README's theme switching section.
+@import "colors";
 
 .panel {
     background-color: rgba(41, 42, 55, 0.9); // mantle
