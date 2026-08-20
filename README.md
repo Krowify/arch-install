@@ -42,7 +42,7 @@ Run as **root**, right after a base Arch install:
 
 ```sh
 pacman -S --noconfirm pacman-contrib curl git
-git clone https://github.com/Krowify/linux-installation
+git clone https://github.com/Krowify/arch-install
 cd linux-installation
 bash 0-install.sh
 ```
