@@ -10,10 +10,14 @@ set -uo pipefail
 # then on, run it yourself (or use `theme.sh menu`, bound to Super+Shift+T)
 # to switch. See the README's theme switching section.
 #
-# Not `set -e`: reload commands (hyprctl/killall/swaync-client/eww) are
+# Not `set -e`: reload commands (hyprctl/killall/swaync-client/eww/awww) are
 # expected to fail harmlessly if that app isn't running yet -- e.g. right
 # after a fresh install, before you've ever logged into Hyprland -- and a
-# single failed reload shouldn't abort applying the rest of the theme.
+# single failed reload shouldn't abort applying the rest of the theme. Each
+# is also wrapped in `timeout` -- these are IPC calls with no built-in
+# timeout of their own, and a stale/unresponsive socket makes them hang
+# instead of failing, which `|| true` can't rescue from since the command
+# never returns.
 #-------------------------------------------------------------------------
 
 THEMES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -62,7 +66,7 @@ fetch_asset() {
     fi
     echo "Fetching ${url} -> ${dest}"
     mkdir -p "${dest}"
-    if ! curl -fsSL "${url}" | tar xz -C "${dest}"; then
+    if ! curl --connect-timeout 5 --max-time 30 -fsSL "${url}" | tar xz -C "${dest}"; then
         echo "WARNING: failed to fetch/extract ${url}" >&2
         return 1
     fi
@@ -141,17 +145,17 @@ deploy_colors() {
     local dir="$1"
 
     cp "${dir}/hypr-colors.conf" "${HOME}/.config/hypr/colors.conf"
-    hyprctl reload >/dev/null 2>&1 || true
+    timeout 5 hyprctl reload >/dev/null 2>&1 || true
 
     mkdir -p "${HOME}/.config/waybar/tokens"
     cp "${dir}/waybar-accent-colors.css" "${HOME}/.config/waybar/colors.css"
     cp "${dir}/waybar-colors.css" "${HOME}/.config/waybar/tokens/colors.css"
-    killall -SIGUSR2 waybar >/dev/null 2>&1 || true
+    timeout 5 killall -SIGUSR2 waybar >/dev/null 2>&1 || true
 
     mkdir -p "${HOME}/.config/swaync/tokens"
     cp "${dir}/swaync-accent-colors.css" "${HOME}/.config/swaync/colors.css"
     cp "${dir}/swaync-variables.css" "${HOME}/.config/swaync/tokens/variables.css"
-    swaync-client -rs >/dev/null 2>&1 || true
+    timeout 5 swaync-client -rs >/dev/null 2>&1 || true
 
     cp "${dir}/wlogout-colors.css" "${HOME}/.config/wlogout/colors.css"
 
@@ -160,7 +164,7 @@ deploy_colors() {
     cp "${dir}/rofi-colors.rasi" "${HOME}/.config/rofi/colors.rasi"
 
     cp "${dir}/eww-colors.scss" "${HOME}/.config/eww/colors.scss"
-    eww reload >/dev/null 2>&1 || true
+    timeout 5 eww reload >/dev/null 2>&1 || true
 }
 
 apply_wallpaper() {
@@ -182,7 +186,7 @@ apply_wallpaper() {
     # through waypaper afterward still re-themes dynamically as normal;
     # see the README's theme switching section.
     if command -v awww >/dev/null 2>&1; then
-        awww img "${dest}" >/dev/null 2>&1 || true
+        timeout 5 awww img "${dest}" >/dev/null 2>&1 || true
     fi
 }
 
