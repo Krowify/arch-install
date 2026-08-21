@@ -18,7 +18,7 @@ applications.
 | Logout menu | Wlogout |
 | Widgets | Eww |
 | Settings GUI | hyprmod |
-| Theme | Tokyo Night (default), Decay Green, or Graphite Mono, switchable with `theme.sh` (`Super+Shift+T`) -- see [Theme switching](#theme-switching) and [Credits](#credits) |
+| Theme | Tokyo Night (default), Decay Green, or Graphite Mono, switchable with `theme.sh` (`Super+Shift+T`) -- see [Theme switching](#theme-switching) and [Credits](CREDITS.txt) |
 | Icon theme | Tela-circle-purple (Tokyo Night) / Tela-circle-green (Decay Green) / Tela-circle-grey (Graphite Mono) |
 | Fonts | Noto Fonts + Nerd Fonts |
 | Wallpaper | Waypaper (GUI picker) + awww (renderer, renamed from swww) |
@@ -296,7 +296,7 @@ exactly that command -- so switching themes (`theme.sh set`/`menu`) never
 prompts for your password, on the first switch or any after it.
 
 **Palette fidelity:** Tokyo Night's color files were ported from HyDE's
-actual published theme source (see [Credits](#credits)). Decay Green and
+actual published theme source (see [Credits](CREDITS.txt)). Decay Green and
 Graphite Mono's GTK/icon *theme assets* are likewise the real ones HyDE
 ships, but their *color files* in this repo are this repo's own
 construction -- HyDE's exact source hex values for those two wouldn't
@@ -368,7 +368,7 @@ were pure dead weight that both Matugen and `theme.sh` wrote to for no
 reason.
 
 Each of those files ships with a static fallback matching the default
-theme (Tokyo Night -- see [Credits](#credits)) so things look right
+theme (Tokyo Night -- see [Credits](CREDITS.txt)) so things look right
 before you've ever picked a wallpaper. Matugen overwrites them in place
 once you do, for whichever theme happens to be active -- see [How this
 interacts with Matugen](#theme-switching) above; `theme.sh set <name>`
@@ -395,230 +395,7 @@ it actually generates and adjust the role names in
 `dotfiles/matugen/templates/*` and `dotfiles/matugen/config.toml`
 accordingly.
 
-## Troubleshooting
+## More
 
-- **`chsh: PAM: Authentication failure` at the end of stage 3** -- fixed
-  as of this repo's current version (stage 3 now runs `chsh` through
-  `sudo`, with `install.sh` granting it a scoped NOPASSWD rule so it
-  doesn't need a password when running non-interactively). If you're
-  still seeing it, you're likely on an older checkout -- `git pull` and
-  re-run. The root cause: running the whole installer via `install.sh`
-  as root executes stage 3 as `su - <user> -c ...`, which doesn't
-  reliably keep a controlling terminal attached, so plain `chsh`'s PAM
-  password prompt has nowhere to go and fails immediately.
-- **SwayNC/waypaper don't behave as documented** -- these two (plus the
-  whole Matugen pipeline) were wired up from documentation and community
-  examples, not verified against a live install, unlike the rest of this
-  repo's dotfiles (which have all been fixed up against real error
-  messages over a lot of back-and-forth). `swaync-client -t -sw` in
-  particular is one of the least certain bits -- if a keybind does
-  nothing or errors, run the command directly in a terminal to see what
-  it actually says, and check that app's own `--help`/docs for the
-  current invocation.
-- **`swww-daemon`/`swww` not found, or waypaper can't set a wallpaper**
-  -- the `swww` project was renamed to `awww` in October 2025 (moved to
-  Codeberg). If you're on an older guide/tutorial that still says
-  `swww`, use `awww`/`awww-daemon` instead -- this repo already does
-  (`scripts/2-system-software.sh`, official repo, no AUR needed anymore).
-- **Rofi launches under Xwayland, or `-show drun` errors/does nothing**
-  -- Rofi only merged native Wayland support upstream in 2025; if your
-  mirror still has an older build, either wait for a pacman sync or swap
-  the `rofi` package (scripts/2-system-software.sh) for the AUR `rofi-wayland`
-  package instead (same config, no other changes needed).
-- **"Rofi is unsure what to show"** -- this means rofi's `modi` list
-  never got applied, so `-show drun` has no mode to launch. Two things
-  guard against it: `Super+D`'s bind passes `-modi` explicitly on the
-  command line rather than relying only on `config.rasi`'s `modi` line,
-  and `config.rasi` no longer has the `me-select-entry`/`me-accept-entry`
-  lines Athena's original had (they aren't real rofi options -- an
-  unrecognized key can make rofi discard the whole `configuration`
-  block, `modi` included). If you still hit this, run `rofi -show drun`
-  directly in a terminal to see the actual parse error.
-- **Waybar's temperature module shows nothing/wrong, or the CPU
-  temperature looks off** -- `dotfiles/waybar/modules/system.jsonc` hard
-  codes `"thermal-zone": 8`, copied from Athena's author's own machine
-  (see [Credits](#credits)). Run `for z in /sys/class/thermal/thermal_zone*;
-  do echo "$z: $(cat $z/type)"; done` and find the zone whose type looks
-  like your CPU package (e.g. `x86_pkg_temp`, `k10temp`), then use that
-  number instead.
-- **Waybar's clock is in the wrong timezone** -- it uses your system
-  timezone by default now (the upstream config hardcoded Jakarta). Add a
-  `"timezone": "..."` key to `dotfiles/waybar/modules/clock.jsonc` if you
-  want the bar to show something other than your system clock.
-- **Waybar's power-profile icon/tooltip does nothing** -- it needs
-  `power-profiles-daemon.service` running; stage 6 enables it
-  automatically, but if you added the package after the fact, run
-  `sudo systemctl enable --now power-profiles-daemon.service` yourself.
-- **SwayNC's backlight slider is missing/broken** -- same class of issue
-  as the Waybar temperature module above: `dotfiles/swaync/config.json`'s
-  `"backlight": {"device": "intel_backlight"}` is hardware-specific
-  (Athena's author's own laptop -- see [Credits](#credits)). Run
-  `ls /sys/class/backlight/` to find your device name, or delete the
-  `"backlight"` entries from `widget-config` and `widgets` in that file
-  if your machine has no backlight-controllable display at all (most
-  desktops).
-- **Stage 3 or 5 exits immediately** (running it manually) -- you're
-  running it as root. Switch to a regular user first
-  (`su <your-username>`) and re-run it, or just use `install.sh`,
-  which handles this automatically.
-- **`sudo: command not found` in stage 1 or 2** -- shouldn't happen;
-  stage 1 installs `sudo` itself before using it. If you still hit
-  this, make sure stage 1 runs first, as root.
-- **A package fails to install** -- the script stops at that line
-  instead of skipping past it. Check the package name is still
-  current for your mirrors, then re-run; already-installed packages
-  are skipped via `--needed`.
-- **Plymouth splash doesn't show, or GRUB config wasn't touched** --
-  stage 6 (not stage 1 -- it runs last, after every package install, so
-  it always sees the final kernel/package set) wires up the `splash`
-  kernel parameter and the mkinitcpio hook automatically for GRUB, since
-  that's what this repo assumes as the bootloader. If you booted with
-  something else (systemd-boot, rEFInd, etc.), add `splash` (and
-  optionally `quiet`) to its kernel parameters yourself -- see the Arch
-  Wiki's Plymouth page.
-- **SSH isn't reachable after install** -- that's by design. Stage 4
-  asks whether to enable it and defaults to no if you just hit enter;
-  it installs the `openssh` package either way but only starts/enables
-  `sshd.service` and opens port 22 in ufw if you opt in. Enable it later
-  with `sudo systemctl enable --now sshd.service` and
-  `sudo ufw limit 22/tcp comment 'SSH (rate-limited)'`.
-- **SDDM/GTK/icon/cursor theme didn't apply after stage 5** -- stage 5
-  ends by running `theme.sh set tokyo-night`, which detects the
-  installed theme folder under `/usr/share/...` (or `~/.local/share/...`)
-  and prints what it found (falling back to `Adwaita` if nothing
-  matched) before applying anything. If it printed `Adwaita` for
-  something that should be installed, its stage 2/3 package install
-  likely failed or was skipped -- re-run that stage, then
-  `~/.config/hyde-themes/theme.sh set tokyo-night` (no need to
-  re-run all of stage 5). Stage 5 now runs before stage 6 enables
-  `sddm.service`, so on a normal `install.sh` run the login screen
-  already picks up the theme on its first start; you'd only need to
-  restart it by hand (`sudo systemctl restart sddm` -- this kills your
-  current graphical session, so only do it from a TTY or before logging
-  in) if you re-ran stage 5 (or `theme.sh`) after SDDM was already
-  running.
-- **Switching to Tokyo Night does nothing to the GTK theme/icons, or
-  `theme.sh` prints a `curl`/`tar` warning** -- the first switch to
-  Tokyo Night needs to download its GTK theme + icon theme (no
-  official-repo/AUR package for either exists -- see
-  [Theme switching](#theme-switching)); that needs a working network
-  connection and `curl`. If it fails, `theme.sh` falls back to `Adwaita`
-  and prints a `WARNING`, but still applies everything else (colors,
-  wallpaper) -- fix your network and re-run
-  `~/.config/hyde-themes/theme.sh set tokyo-night` to pick up the actual
-  GTK/icon theme.
-- **GPU driver** -- stage 1 asks which GPU you have (pre-filling its
-  guess from `lspci` if it can tell). AMD and Intel need nothing beyond
-  the `mesa` already installed. Nvidia gets `nvidia-open` (swap for
-  `nvidia` yourself if you're on a pre-Turing card and it fails to boot
-  into Hyprland), `nvidia-utils`, and `egl-wayland` installed there and
-  then; stage 6 detects the installed driver and adds
-  `nvidia_drm.modeset=1` to the GRUB kernel command line automatically
-  -- see the Arch Wiki's Hyprland and NVIDIA pages for anything beyond
-  that.
-- **Hyprland session doesn't appear in SDDM, or crashes back to the
-  login screen** -- launching Hyprland from a display manager isn't
-  officially supported upstream, though SDDM works for most people.
-  Check `journalctl -u sddm -b` and confirm
-  `/usr/share/wayland-sessions/hyprland.desktop` exists; if not,
-  reinstall the `hyprland` package.
-
-Arch Linux Installation Guide: https://wiki.archlinux.org/title/Installation_guide
-
-## Credits
-
-- The accent color palette used across Hyprland, Eww, and Alacritty is
-  ported from
-  [notusknot/dotfiles-nix](https://github.com/notusknot/dotfiles-nix)
-  (it's also the static fallback/default the Matugen templates for those
-  apps in `dotfiles/matugen/` are based on -- see
-  [Color theming](#color-theming-matugen)).
-- Waybar's whole config (`dotfiles/waybar/`: `config.jsonc`, the
-  `modules/` and `tokens/` directories, and their default Material You
-  color scheme) is ported from Muhammad Haikal Hakim's
-  [haikal-hakim/athena](https://github.com/haikal-hakim/athena) (MIT
-  licensed), trimmed and adjusted to the apps/icon theme this repo
-  actually installs -- see the comments in
-  `dotfiles/waybar/modules/distro.jsonc`,
-  `dotfiles/waybar/modules/workspace.jsonc`, and
-  `dotfiles/waybar/modules/tray-notif.jsonc` for what changed. The
-  `modules-left`/`-center`/`-right` layout is now shaped to match
-  [HyDE-Project/HyDE](https://github.com/HyDE-Project/HyDE)'s own
-  `Configs/.local/share/waybar/layouts/hyprdots/11.jsonc` (left=3 pills,
-  center=1, right=3) -- HyDE's layout files only define pill *counts*,
-  not which widgets fill them, so the module-to-pill mapping (app
-  launcher/window-title/connections left; workspaces center; system
-  monitor/controls/clock right) is this repo's own, picked to roughly
-  match what's in HyDE's module catalog. See the comment at the top of
-  `dotfiles/waybar/config.jsonc` for the full mapping. Colors are
-  untouched by this repo's own theme.sh/Matugen pipeline regardless of
-  which layout is in use. Two earlier revisions instead matched
-  [00Darxk/dotfiles](https://github.com/00Darxk/dotfiles)'s waybar, and
-  before that [Hyde-project/hyde](https://github.com/Hyde-project/hyde)'s
-  own waybar (workspaces isolated on the far left); see that same comment
-  for why HyDE's script-backed custom modules (weather, gpuinfo/cpuinfo/
-  sensorsinfo, hyde-menu, etc.) weren't ported in any of the three.
-- The keybind scheme in `dotfiles/hypr/hyprland.conf` is keyed to match
-  [HyDE-Project/HyDE's KEYBINDINGS.md](https://github.com/HyDE-Project/HyDE/blob/master/KEYBINDINGS.md)
-  wherever this repo has an equivalent app/dispatcher -- see the comment
-  above the keybinds section for what wasn't ported and why.
-- Tokyo Night's, Decay Green's, and Graphite Mono's GTK/icon theme
-  archives, and Tokyo Night's color palette and bundled wallpaper
-  ("Illustration by Sayybils", credited in-image), are from
-  [HyDE-Project/hyde-themes](https://github.com/HyDE-Project/hyde-themes)
-  -- see [Theme switching](#theme-switching) for how `theme.sh` fetches
-  them, and [Palette fidelity](#theme-switching) above for what is and
-  isn't a verified port of that repo for Decay Green/Graphite Mono.
-- SwayNC's `config.json`, `style.css`, and `tokens/` (button grid,
-  slider, MPRIS, notification, title/DND styling) are also from
-  [haikal-hakim/athena](https://github.com/haikal-hakim/athena), with
-  the `buttons-grid` actions repointed to tools this repo actually
-  installs (grim+slurp screenshot, hyprlock, waypaper) instead of
-  Athena's placeholder scripts and apps (a screen recorder, hyprpicker,
-  galculator) this repo doesn't have. Also fixed a handful of what look
-  like copy-paste bugs in the original CSS while porting it: a missing
-  `--accent-hover` variable referenced but never defined, three spots
-  using a background-role variable as a text color, and a
-  `10px solid` notification-action border that should have been `1px`
-  to match every other border in the file.
-- Wlogout's color scheme (`dotfiles/wlogout/colors.css`) is templated
-  from the same Athena/Matugen palette as Waybar/SwayNC above, for
-  visual consistency -- the layout/button structure itself stays this
-  repo's own (Athena's version needs bundled PNG icon files and an
-  unverified `hyprshutdown` helper tool that didn't fit this repo's
-  text-only, no-binary-assets dotfiles).
-- `dotfiles/fastfetch/config.jsonc` and `dotfiles/starship.toml` are
-  also from [haikal-hakim/athena](https://github.com/haikal-hakim/athena),
-  used as-is (both are visual/prompt configs with no app-specific paths
-  to adapt). Starship's palette is a static Catppuccin Mocha scheme, not
-  Matugen-templated -- same reasoning as Alacritty's ANSI colors (see
-  [Color theming](#color-theming-matugen)): a prompt should stay
-  readable and stable, not shift with every wallpaper. zoxide and fzf
-  aren't from Athena -- they're just common shell quality-of-life tools,
-  wired up directly in the zshrc snippet (no external config to credit).
-- Rofi's `config.rasi` and `clipboard.rasi` are also from
-  [haikal-hakim/athena](https://github.com/haikal-hakim/athena) --
-  `icon-theme` was hardcoded to `"Papirus cirle light"` in the original
-  (a typo'd name, and a light-variant icon theme this repo doesn't
-  install and wouldn't suit the dark theme here anyway), swapped for the
-  `__ICON_THEME__` placeholder this repo already uses elsewhere (GTK
-  settings) so it matches whatever Papirus variant actually got
-  installed.
-- The Tokyo Night theme (`dotfiles/hyde-themes/tokyo-night/`) is ported
-  from [HyDE-Project/hyde-themes](https://github.com/HyDE-Project/hyde-themes)
-  (Tokyo-Night branch): the base accent/surface hexes (Hyprland border
-  colors, Waybar/Rofi accents) come from that branch's `hypr.theme`,
-  `waybar.theme`, and `rofi.theme`; Alacritty's colors are lifted from
-  its `kitty.theme`, itself credited there to
-  [davidmathers/tokyo-night-kitty-theme](https://github.com/davidmathers/tokyo-night-kitty-theme)
-  and [enkia/tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme);
-  and the GTK theme + Tela-circle-purple icon theme `theme.sh` downloads
-  on first use are the exact `Source/Gtk_TokyoNight.tar.gz` and
-  `Source/Icon_TelaPurple.tar.gz` archives that repo ships. The extended
-  Material-You-shaped token set in `waybar-colors.css` (surface/container
-  scale, on-* roles, etc. -- HyDE's theme files only give a handful of
-  base colors, not this repo's full Waybar token set) is this repo's own
-  derivation from the same Tokyo Night Storm palette. The bundled
-  wallpaper (`dotfiles/hyde-themes/tokyo-night/wallpaper.png`) is also
-  from that branch's `wallpapers/lowpoly_street.png` -- "Illustration by
-  Sayybils" per the credit baked into the image itself.
+- [Troubleshooting](TROUBLESHOOTING.txt)
+- [Credits](CREDITS.txt)
