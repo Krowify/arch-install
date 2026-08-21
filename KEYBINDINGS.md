@@ -113,7 +113,7 @@ windowrule = match:class ^(dropterm)$, float on, size 60% 60%, center on, worksp
 ```
 bind = $mod, D, exec, rofi -show drun -modi drun,filebrowser,window,run
 bind = $mod, A, exec, rofi -show drun -modi drun,filebrowser,window,run
-bind = $mod, TAB, exec, rofi -show window
+bind = $mod, TAB, exec, rofi -show drun -modi drun,filebrowser,window,run
 bind = $mod SHIFT, E, exec, rofi -show filebrowser
 bind = $mod, V, exec, sh -c 'cliphist list | rofi -dmenu -theme ~/.config/rofi/clipboard.rasi | cliphist decode | wl-copy'
 bind = $mod SHIFT, V, exec, sh -c 'cliphist list | rofi -dmenu -theme ~/.config/rofi/clipboard.rasi | cliphist decode | wl-copy'

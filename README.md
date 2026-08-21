@@ -138,43 +138,38 @@ why. A couple of this repo's own pre-existing binds (`Super+Return`,
 `Super+F`) are kept as extra aliases alongside HyDE's key for the same
 action.
 
+Grouped into Super binds, Alt binds, window-movement binds (focus/resize/
+move/group-cycle -- these all happen to use Super too, but get their own
+table since they're a distinct category), and everything else (hardware,
+media, and the handful of binds with neither modifier).
+
+### Super
+
 | Keybind | Action |
 |---------|--------|
 | `Super+Return` / `Super+T` | Terminal (Alacritty) |
 | `Super+Alt+T` | Dropdown terminal (own special workspace) |
-| `Super+D` / `Super+A` | App launcher (Rofi) |
-| `Super+Tab` | Window switcher (Rofi) |
-| `Super+Q` / `Alt+F4` | Close focused window |
+| `Super+D` / `Super+A` / `Super+Tab` | App launcher (Rofi) |
+| `Super+Q` | Close focused window |
 | `Super+Alt+F4` | Force-kill focused window |
 | `Super+Delete` | Exit Hyprland session |
 | `Super+E` | File manager (Thunar) |
 | `Super+Shift+E` | File finder (Rofi) |
 | `Super+C` | Text editor (VS Code) |
 | `Super+B` | Web browser (Brave) |
-| `Ctrl+Shift+Escape` | System monitor (`top` in Alacritty) |
 | `Super+V` / `Super+Shift+V` | Clipboard history (cliphist + Rofi) |
 | `Super+Shift+/` | Web search (Rofi prompt) |
 | `Super+L` | Lock screen (Hyprlock) |
-| `Super+Escape` / `Alt+Ctrl+Delete` | Logout menu (Wlogout) |
+| `Super+Escape` | Logout menu (Wlogout) |
 | `Super+W` / `Super+F` | Toggle floating |
 | `Super+M` | Toggle Eww widget panel |
 | `Super+G` | Toggle group |
-| `Alt+P` | Toggle pseudotile |
-| `Shift+F11` | Toggle fullscreen |
 | `Super+Shift+F` | Toggle pin on focused window |
 | `Super+Ctrl+B` | Toggle waybar |
 | `Super+J` | Toggle split |
 | `Super+N` | Toggle notification center (SwayNC) |
 | `Super+Shift+W` | Open wallpaper picker (waypaper) |
 | `Super+Shift+T` | Open theme picker (`theme.sh menu`) |
-| `Alt+Shift+H` | Toggle the dock (nwg-dock-hyprland) |
-| `Alt+Tab` / `Alt+Shift+Tab` | Cycle windows forward/backward |
-| `Super+Ctrl+H` / `Super+Ctrl+L` | Cycle window group backward/forward |
-| `Super+Left/Right/Up/Down` | Focus window in direction |
-| `Super+Shift+Left/Right/Up/Down` | Resize active window |
-| `Super+Ctrl+Shift+Left/Right/Up/Down` | Move active window between tiles |
-| `Super+Z` / `Super+X` | Hold to move / resize window (no mouse) |
-| `Print` | Screenshot all monitors to clipboard |
 | `Super+P` | Screenshot region to clipboard |
 | `Super+Alt+P` | Screenshot focused monitor to clipboard |
 | `Super+1` .. `Super+0` | Switch to workspace 1-10 |
@@ -184,6 +179,36 @@ action.
 | `Super+Ctrl+Down` | Go to nearest empty workspace |
 | `Super+S` | Toggle scratchpad |
 | `Super+Shift+S` / `Super+Alt+S` | Move window to scratchpad / silently |
+
+### Alt
+
+| Keybind | Action |
+|---------|--------|
+| `Alt+F4` | Close focused window |
+| `Alt+P` | Toggle pseudotile |
+| `Alt+Ctrl+Delete` | Logout menu (Wlogout) |
+| `Alt+Tab` / `Alt+Shift+Tab` | Cycle windows forward/backward |
+| `Alt+Shift+H` | Toggle the dock (nwg-dock-hyprland) |
+
+### Window movement
+
+| Keybind | Action |
+|---------|--------|
+| `Super+Ctrl+H` / `Super+Ctrl+L` | Cycle window group backward/forward |
+| `Super+Left/Right/Up/Down` | Focus window in direction |
+| `Super+Shift+Left/Right/Up/Down` | Resize active window |
+| `Super+Ctrl+Shift+Left/Right/Up/Down` | Move active window between tiles |
+| `Super+Z` / `Super+X` | Hold to move / resize window (no mouse) |
+
+### Other (hardware, media, no modifier)
+
+| Keybind | Action |
+|---------|--------|
+| `Ctrl+Shift+Escape` | System monitor (`top` in Alacritty) |
+| `Shift+F11` | Toggle fullscreen |
+| `Print` | Screenshot all monitors to clipboard |
+| `F10` / `F11` / `F12` | Mute / lower / raise volume |
+| `XF86Audio*`, `XF86MonBrightness*` | Media, mic mute, and brightness keys |
 
 No wallpaper image ships with the default theme -- pick one with `waypaper`
 (`Super+Shift+W`), which sets it via `awww` and re-themes the desktop via
