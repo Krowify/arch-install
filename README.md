@@ -282,11 +282,14 @@ Each theme lives in its own directory under `~/.config/hyde-themes/`
   one, and extracts them into `~/.local/share/{themes,icons}` -- no
   `sudo`, no AUR package name to guess. **This means switching to a theme
   for the first time needs a network connection.**
-- Optionally a bundled `wallpaper.*`, set directly via `awww img` when
-  you switch to that theme. Tokyo Night has one; Decay Green and
-  Graphite Mono don't (no verified wallpaper asset was found for either
-  while adding them -- see the disclaimer in each one's `theme.conf`),
-  so switching to them leaves whatever wallpaper was already set.
+- Optionally a bundled wallpaper, set directly via `awww img` when you
+  switch to that theme. All three now have one: Tokyo Night's lives in
+  its own directory (`tokyo-night/wallpaper.png`, from HyDE's repo); Decay
+  Green's and Graphite Mono's are `DecayGreen.png`/`monochrome.jpg` in the
+  shared `dotfiles/hyde-themes/wallpapers/` pool (referenced via
+  `WALLPAPER=` in each theme's `theme.conf`) rather than HyDE ports, since
+  neither has a verified wallpaper asset upstream for this repo to pull
+  from.
 
 `~/.config/hyde-themes/global.conf` (not per-theme) covers the two bits
 of chrome that stay the same across every theme: the cursor theme and the
