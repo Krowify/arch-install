@@ -9,7 +9,14 @@ if [[ ${EUID} -eq 0 ]]; then
 else
     SUDO=(sudo)
 fi
- 
+
+# --- The desktop user theme.sh needs a passwordless sudo grant for (see
+# below) -- an optional first argument (0-install.sh passes AUR_USER),
+# falling back to $SUDO_USER (this script invoked via sudo) or $USER (run
+# directly as the desktop user, using the SUDO=(sudo) wrapper above for
+# individual commands instead).
+TARGET_USER="${1:-${SUDO_USER:-${USER}}}"
+
 echo
 echo "FINAL SETUP AND CONFIGURATION"
  
@@ -55,6 +62,25 @@ fi
 echo
 echo "Enabling power-profiles-daemon (backs the waybar power-profile module)"
 "${SUDO[@]}" systemctl enable --now power-profiles-daemon.service
+
+# ------------------------------------------------------------------------
+# Permanent (unlike the install-time drop-ins in 0-install.sh, this one is
+# never removed) NOPASSWD grant for the exact SDDM theme-write commands
+# theme.sh runs on every theme switch (see dotfiles/hyde-themes/theme.sh)
+# -- without it, every future `theme.sh set`/`theme.sh menu` prompts for
+# your password. Scoped to just those two commands, not sudo as a whole.
+echo
+echo "Granting ${TARGET_USER} passwordless sudo for the SDDM theme write"
+echo "(so future theme switches via theme.sh don't prompt for a password)"
+SDDM_SUDOERS_DROPIN="/etc/sudoers.d/99-linux-installation-theme-sddm"
+echo "${TARGET_USER} ALL=(ALL) NOPASSWD: /usr/bin/mkdir -p /etc/sddm.conf.d, /usr/bin/tee /etc/sddm.conf.d/10-theme.conf" | "${SUDO[@]}" tee "${SDDM_SUDOERS_DROPIN}" > /dev/null
+"${SUDO[@]}" chmod 0440 "${SDDM_SUDOERS_DROPIN}"
+if ! "${SUDO[@]}" visudo -cf "${SDDM_SUDOERS_DROPIN}"; then
+    echo "WARNING: generated sudoers drop-in failed validation -- removing" >&2
+    echo "it. Theme switches will keep prompting for your password; fix" >&2
+    echo "${SDDM_SUDOERS_DROPIN} by hand if you want this passwordless." >&2
+    "${SUDO[@]}" rm -f "${SDDM_SUDOERS_DROPIN}"
+fi
 
 # ------------------------------------------------------------------------
 # Plymouth boot splash wiring (mkinitcpio hook + GRUB kernel param). This

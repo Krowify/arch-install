@@ -147,7 +147,7 @@ fi
 
 echo
 echo ">>> Stage 6: Post setup"
-bash "${SCRIPT_DIR}/6-post-setup.sh"
+bash "${SCRIPT_DIR}/6-post-setup.sh" "${AUR_USER}"
 
 echo
 echo "=== All stages complete ==="

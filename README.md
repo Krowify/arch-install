@@ -11,7 +11,6 @@ applications.
 | Display Manager | SDDM (Plasma Login Manager) |
 | Compositor | Hyprland |
 | Status bar | Waybar |
-| Dock | nwg-dock-hyprland |
 | Music | Spotify (via spotify-launcher) |
 | App launcher | Rofi |
 | Terminal | Alacritty + ZSH + Starship (prompt) + fzf/zoxide (fuzzy search/smarter cd) |
@@ -34,7 +33,6 @@ applications.
 | Package manager | pacman + yay + paru |
 | VPN | ProtonVPN |
 | Privacy browser | Tor Browser |
-| Cloud storage | Proton Drive (via rclone's `protondrive` backend -- see [Proton Drive](#proton-drive)) |
 
 ## Arch Linux First Boot
 
@@ -170,11 +168,6 @@ media, and the handful of binds with neither modifier).
 | `Super+N` | Toggle notification center (SwayNC) |
 | `Super+Shift+W` | Open wallpaper picker (waypaper) |
 | `Super+Shift+T` | Open theme picker (`theme.sh menu`) |
-| `Super+P` | Screenshot region to clipboard |
-| `Super+Alt+P` | Screenshot focused monitor to clipboard |
-| `Super+1` .. `Super+0` | Switch to workspace 1-10 |
-| `Super+Shift+1` .. `Super+Shift+0` | Move window to workspace 1-10 |
-| `Super+Alt+1` .. `Super+Alt+0` | Move window to workspace 1-10 (silent) |
 | `Super+Ctrl+Right/Left` | Next/previous workspace (relative) |
 | `Super+Ctrl+Down` | Go to nearest empty workspace |
 | `Super+S` | Toggle scratchpad |
@@ -188,7 +181,6 @@ media, and the handful of binds with neither modifier).
 | `Alt+P` | Toggle pseudotile |
 | `Alt+Ctrl+Delete` | Logout menu (Wlogout) |
 | `Alt+Tab` / `Alt+Shift+Tab` | Cycle windows forward/backward |
-| `Alt+Shift+H` | Toggle the dock (nwg-dock-hyprland) |
 
 ### Window movement
 
@@ -199,6 +191,17 @@ media, and the handful of binds with neither modifier).
 | `Super+Shift+Left/Right/Up/Down` | Resize active window |
 | `Super+Ctrl+Shift+Left/Right/Up/Down` | Move active window between tiles |
 | `Super+Z` / `Super+X` | Hold to move / resize window (no mouse) |
+| `Super+1` .. `Super+0` | Switch to workspace 1-10 |
+| `Super+Shift+1` .. `Super+Shift+0` | Move window to workspace 1-10 |
+| `Super+Alt+1` .. `Super+Alt+0` | Move window to workspace 1-10 (silent) |
+
+### Screenshot
+
+| Keybind | Action |
+|---------|--------|
+| `Print` | Screenshot all monitors to clipboard |
+| `Super+P` | Screenshot region to clipboard |
+| `Super+Alt+P` | Screenshot focused monitor to clipboard |
 
 ### Other (hardware, media, no modifier)
 
@@ -206,7 +209,6 @@ media, and the handful of binds with neither modifier).
 |---------|--------|
 | `Ctrl+Shift+Escape` | System monitor (`top` in Alacritty) |
 | `Shift+F11` | Toggle fullscreen |
-| `Print` | Screenshot all monitors to clipboard |
 | `F10` / `F11` / `F12` | Mute / lower / raise volume |
 | `XF86Audio*`, `XF86MonBrightness*` | Media, mic mute, and brightness keys |
 
@@ -237,37 +239,6 @@ launcher) instead of hand-editing `hyprland.conf`: it live-previews monitor
 position/rotation/mode changes via `hyprctl` and persists them to its own
 config, independently of this repo's dotfiles, so a future re-run of
 `5-dotfiles.sh` never reverts your layout.
-
-## Proton Drive
-
-There's no official Proton Drive client for Linux, so this repo uses
-[rclone](https://rclone.org/protondrive/)'s built-in `protondrive`
-backend, via a systemd `--user` unit (`protondrive-mount.service`,
-deployed by stage 5 but left **disabled**) that mounts it at
-`~/ProtonDrive` with `rclone mount`. A Thunar sidebar bookmark for
-`~/ProtonDrive` is deployed too (`~/.config/gtk-3.0/bookmarks`).
-
-Setup is a one-time, interactive step this repo deliberately doesn't
-script -- rclone needs your Proton credentials and a 2FA code, which
-can't be handled non-interactively/safely:
-
-```sh
-rclone config
-# n) New remote -> name it "protondrive" -> type "protondrive"
-# follow the prompts for your Proton username/password and 2FA code
-
-systemctl --user enable --now protondrive-mount.service
-```
-
-The unit passes `--protondrive-enable-caching=false`: rclone's protondrive
-backend docs warn its own caching (on by default) isn't invalidated by
-changes made outside the mount (e.g. the Proton web app or another
-device) yet, and to disable it for VFS mounts specifically -- otherwise
-`~/ProtonDrive` can silently show stale directory listings.
-
-After that, `~/ProtonDrive` mounts automatically on login (`After=
-network-online.target`) and shows up in Thunar's sidebar. To unmount:
-`systemctl --user stop protondrive-mount.service`.
 
 ## Theme switching
 
@@ -317,7 +288,10 @@ Each theme lives in its own directory under `~/.config/hyde-themes/`
 
 `~/.config/hyde-themes/global.conf` (not per-theme) covers the two bits
 of chrome that stay the same across every theme: the cursor theme and the
-SDDM login theme.
+SDDM login theme. Writing the SDDM theme config needs `sudo`, but stage 6
+(`6-post-setup.sh`) grants a permanent, narrowly-scoped NOPASSWD rule for
+exactly that command -- so switching themes (`theme.sh set`/`menu`) never
+prompts for your password, on the first switch or any after it.
 
 **Palette fidelity:** Tokyo Night's color files were ported from HyDE's
 actual published theme source (see [Credits](#credits)). Decay Green and
@@ -541,9 +515,6 @@ Arch Linux Installation Guide: https://wiki.archlinux.org/title/Installation_gui
   (it's also the static fallback/default the Matugen templates for those
   apps in `dotfiles/matugen/` are based on -- see
   [Color theming](#color-theming-matugen)).
-- The nwg-dock-hyprland style (`dotfiles/nwg-dock-hyprland/style.css`) and
-  its launch flags/layer rules in `hyprland.conf` are from
-  [AnkurAlpha/nwg-dock-hyprland-configs-by-AnkurAlpha](https://github.com/AnkurAlpha/nwg-dock-hyprland-configs-by-AnkurAlpha).
 - Waybar's whole config (`dotfiles/waybar/`: `config.jsonc`, the
   `modules/` and `tokens/` directories, and their default Material You
   color scheme) is ported from Muhammad Haikal Hakim's

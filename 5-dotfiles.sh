@@ -48,7 +48,7 @@ deploy_dir() {
     echo "Deployed ~/.config/${name}"
 }
 
-for dir in hypr waybar alacritty wlogout eww nwg-dock-hyprland swaync matugen waypaper fastfetch rofi hyde-themes; do
+for dir in hypr waybar alacritty wlogout eww swaync matugen waypaper fastfetch rofi hyde-themes; do
     deploy_dir "${dir}"
 done
 chmod +x "${HOME}/.config/hyde-themes/theme.sh"
@@ -74,37 +74,6 @@ for gtk_dir in gtk-3.0 gtk-4.0; do
     cp "${DOTFILES_DIR}/${gtk_dir}/settings.ini" "${dest}"
     echo "Deployed ~/.config/${gtk_dir}/settings.ini"
 done
-
-# --- Sidebar bookmarks (Thunar, and any other GTK file chooser, all read
-# this one path regardless of gtk-3.0 vs gtk-4.0). Deployed once, not on
-# every redeploy like settings.ini above -- you'll add your own bookmarks
-# through Thunar afterward, and those shouldn't get wiped by a later
-# re-run of this script.
-BOOKMARKS_DEST="${HOME}/.config/gtk-3.0/bookmarks"
-if [[ -e "${BOOKMARKS_DEST}" ]]; then
-    echo "~/.config/gtk-3.0/bookmarks already exists, leaving it alone"
-else
-    mkdir -p "$(dirname "${BOOKMARKS_DEST}")"
-    sed "s|__HOME__|${HOME}|g" "${DOTFILES_DIR}/gtk-3.0/bookmarks" > "${BOOKMARKS_DEST}"
-    echo "Deployed ~/.config/gtk-3.0/bookmarks (adds a Proton Drive shortcut)"
-fi
-
-# --- Proton Drive (via rclone's protondrive backend -- there's no
-# official Linux client). Mount point + systemd --user unit only:
-# rclone's protondrive remote needs one interactive `rclone config` run
-# (username/password + 2FA) that can't be scripted safely, so the unit is
-# deployed but left disabled -- see the README's "Proton Drive" section
-# for the one-time setup.
-mkdir -p "${HOME}/ProtonDrive"
-SYSTEMD_UNIT_DEST="${HOME}/.config/systemd/user/protondrive-mount.service"
-if [[ -e "${SYSTEMD_UNIT_DEST}" ]]; then
-    echo "~/.config/systemd/user/protondrive-mount.service already exists, leaving it alone"
-else
-    mkdir -p "$(dirname "${SYSTEMD_UNIT_DEST}")"
-    cp "${DOTFILES_DIR}/systemd/protondrive-mount.service" "${SYSTEMD_UNIT_DEST}"
-    systemctl --user daemon-reload 2>/dev/null || true
-    echo "Deployed ~/.config/systemd/user/protondrive-mount.service (see the README's Proton Drive section)"
-fi
 
 # --- starship.toml is a flat file (starship's own default config path,
 # unlike everything else here which lives in its own ~/.config subdir).
@@ -154,7 +123,4 @@ echo "Got more than one monitor? Use hyprmod's GUI (in your app launcher)"
 echo "to arrange them -- it writes to its own config independently of"
 echo "this repo's dotfiles, so it isn't affected by future re-runs of"
 echo "this script."
-echo "Want Proton Drive? Run 'rclone config' once to add a 'protondrive'"
-echo "remote, then 'systemctl --user enable --now protondrive-mount.service' --"
-echo "see the README's Proton Drive section."
 echo

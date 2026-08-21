@@ -154,25 +154,6 @@ PKGS=(
     'gvfs'                        # Trash, network shares (smb/sftp/mtp) and
                                    # removable-media mounting inside Thunar
 
-    # CLOUD STORAGE -----------------------------------------------------
-    'rclone'                      # No official Proton Drive Linux client
-                                   # exists -- rclone's built-in
-                                   # 'protondrive' backend is the
-                                   # standard way to mount/sync it. See
-                                   # the README's Proton Drive section
-                                   # (one-time 'rclone config', then the
-                                   # protondrive-mount.service unit
-                                   # deployed by stage 5)
-    'fuse3'                       # Needed for 'rclone mount' (FUSE
-                                   # filesystem) -- usually already
-                                   # present, but not guaranteed
-
-    # DOCK ----------------------------------------------------------------
-    'nwg-dock-hyprland'           # Dock -- GTK3, layer-shell based, built
-                                   # specifically for Hyprland (native
-                                   # Wayland, no Xwayland dependency, unlike
-                                   # the X11-only docks like Plank)
-
     # MUSIC -----------------------------------------------------------------
     'spotify-launcher'            # Installs/updates the official Spotify
                                    # client into your own home directory and

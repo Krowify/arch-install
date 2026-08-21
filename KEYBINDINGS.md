@@ -234,5 +234,4 @@ bind = $mod ALT CTRL, left, movetoworkspace, e-1
 ```
 bind = $mod, N, exec, swaync-client -t -sw
 bind = $mod, M, exec, eww open widget-panel || eww close widget-panel
-bind = ALT SHIFT, H, exec, nwg-dock-hyprland -x -p "left" -i 24 -mt 10 -mb 10 -ml 5 -f
 ```
