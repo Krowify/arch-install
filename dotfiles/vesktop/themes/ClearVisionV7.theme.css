@@ -1,0 +1,128 @@
+/**
+ * @name ClearVision V7 for BetterDiscord
+ * @author ClearVision Team
+ * @version 7.0.1
+ * @description Highly customizable theme for BetterDiscord.
+ * @source https://github.com/ClearVision/ClearVision-v7
+ * @website https://clearvision.github.io
+ * @invite dHaSxn3
+ */
+/* IMPORT CSS */
+@import url("https://clearvision.github.io/ClearVision-v7/main.css");
+@import url("https://clearvision.github.io/ClearVision-v7/betterdiscord.css");
+/* SETTINGS */
+:root {
+  /* ACCENT COLORS -- Tokyo Night, matching arch-install's
+     dotfiles/hyde-themes/tokyo-night/ palette (hypr/rofi/waybar all use
+     these same hexes -- see hypr-colors.conf, rofi-colors.rasi,
+     waybar-accent-colors.css in that repo) */
+  --main-color: #bb9af7; /* main accent color -- Tokyo Night's mauve/primary [default: #2780e6] */
+  --hover-color: #7aa2f7; /* hover accent color -- Tokyo Night's blue, same as rofi's bg-selected [default: #1e63b3] */
+  --success-color: #9ece6a; /* positive accent color -- Tokyo Night green [default: #43b581] */
+  --danger-color: #f7768e; /* danger accent color -- Tokyo Night red, matches hypr/waybar's "red" [default: #982929] */
+  /* STATUS COLORS */
+  --online-color: #9ece6a; /* online status color -- Tokyo Night green [default: #43b581] */
+  --idle-color: #e0af68; /* idle status color -- Tokyo Night yellow, matches hypr/waybar's "yellow" [default: #faa61a] */
+  --dnd-color: #f7768e; /* dnd status color -- Tokyo Night red [default: #982929] */
+  --streaming-color: #bb9af7; /* streaming status color -- reuses the mauve accent (no distinct 2nd purple established elsewhere in this repo's theme) [default: #593695] */
+  --offline-color: #565f89; /* offline/invisible status color -- Tokyo Night's muted overlay0, matches hypr/waybar's "overlay0" [default: #808080] */
+  /* APP BACKGROUND */
+  --background-shading-percent: 100%; /* app background shading amount (0 for complete smoothness) [default: 100%] */
+  /* Overrides ClearVision's own imported default (main.css sets its own
+     background-image otherwise) -- "none" instead of a URL, and the
+     --background-shading alpha zeroed out below, so nothing paints over
+     the app background. That alone only makes Discord's *own* background
+     layer transparent -- your actual desktop wallpaper only shows through
+     if the Discord window itself is transparent/blurred too, which is a
+     Hyprland windowrule, not something CSS can do. */
+  --background-image: none; /* app background image (link must be HTTPS) [default: url(https://clearvision.github.io/images/sapphire.jpg)]*/
+  --background-position: center; /* app background position [default: center] */
+  --background-size: cover; /* app background size (px) [default: cover] */
+  --background-attachment: fixed; /* app background attachment [default: fixed] */
+  --background-filter: saturate(calc(var(--saturation-factor, 1) * 1)); /* app background adjustments (ex: blur, saturation, brightness) (more info: https://developer.mozilla.org/en-US/docs/Web/CSS/filter) [default: saturate(calc(var(--saturation-factor, 1) * 1))] */
+  /* USER POPOUT BACKGROUND */
+  --user-popout-image: var(--background-image); /* user popout background image (link must be HTTPS) (not applied to nitro users) [default: var(--background-image)] */
+  --user-popout-position: var(--background-position); /* user popout position [default: var(--background-position)] */
+  --user-popout-size: var(--background-size); /* user popout size (px) [default: var(--background-size)] */
+  --user-popout-attachment: var(--background-attachment); /* user popout background attachment [default: var(--background-attachment)] */
+  --user-popout-filter: var(--background-filter); /* user popout background adjustments (ex: blur, saturation, brightness) (more info: https://developer.mozilla.org/en-US/docs/Web/CSS/filter) [default: var(--background-filter);] */
+  /* USER MODAL BACKGROUND */
+  --user-modal-image: var(--background-image); /* user modal background image (link must be HTTPS) (not applied to nitro users) [default: var(--background-image)] */
+  --user-modal-position: var(--background-position); /* user modal position [default: var(--background-position)] */
+  --user-modal-size: var(--background-size); /* user modal size (px) [default: var(--background-size)] */
+  --user-modal-attachment: var(--background-attachment); /* user modal background attachment [default: var(--background-attachment)] */
+  --user-modal-filter: var(--background-filter); /* user modal background adjustments (ex: blur, saturation, brightness) (more info: https://developer.mozilla.org/en-US/docs/Web/CSS/filter) [default: var(--background-filter);] */
+  /* HOME ICON */
+  --home-icon: url(https://clearvision.github.io/icons/discord.svg); /* home button icon (link must be HTTPS) [default: url(https://clearvision.github.io/icons/discord.svg)]*/
+  --home-size: cover; /* home button icon size (px) [default:cover] */
+  /* FONTS */
+  --main-font: "gg sans", "Helvetica Neue", Helvetica, Arial, sans-serif; /* main font for app (font must be installed) [default: gg sans, Helvetica Neue, Helvetica, Arial, sans-serif] */
+  --code-font: Consolas, "gg mono", "Liberation Mono", Menlo, Courier, monospace; /* font for codeblocks (font must be installed) [default: Consolas, Liberation Mono, Menlo, Courier, monospace] */
+  /* CHANNEL COLORS */
+  --channel-normal: var(--interactive-text-default); /* channel text color [default: var(--interactive-text-default)] */
+  --channel-muted: var(--interactive-muted); /* muted channel text color [default: var(--interactive-muted)] */
+  --channel-hover: var(--interactive-text-hover); /* hovered channel text color [default: var(--interactive-text-hover)] */
+  --channel-selected: var(--interactive-text-active); /* selected channel text color [default: var(--interactive-text-active)] */
+  --channel-selected-bg: var(--main-color); /* selected channel background [default: var(--main-color)] */
+  --channel-unread: var(--main-color); /* unread channel text color [default: var(--main-color)] */
+  --channel-unread-hover: var(--hover-color); /* unread channel hover color [default: var(--hover-color)] */
+  /* ACCESSIBILITY */
+  --focus-color: var(--main-color); /* outline when pressing TAB key [default: var(--main-color)] */
+}
+
+/* THEME SPECIFIC SHADING */
+/* LIGHT THEME */
+:is(.theme-light, .theme-dark .theme-light) {
+  --background-shading: rgba(252, 252, 252, 0); /* app background shading color -- 0 alpha so nothing covers the transparent app background [default: rgba(252, 252, 252, 0.3)] */
+  --card-shading: rgba(252, 252, 252, 0.3); /* cards background shading color [default: rgba(252, 252, 252, 0.3)] */
+  --popout-shading: rgba(252, 252, 252, 0.7); /* popouts background shading color [default: rgba(252, 252, 252, 0.7)] */
+  --modal-shading: rgba(252, 252, 252, 0.5); /* modals background shading color [default: rgba(0, 0, 0, 0.6)] */
+  --input-shading: rgba(0, 0, 0, 0.3); /* inputs background shading color [default: rgba(0, 0, 0, 0.6)] */
+  --normal-text: #36363c; /* text color [default: #36363c] */
+  --muted-text: #75757e; /* muted text color [default: #75757e] */
+}
+
+/* ASH THEME */
+:is(.theme-dark, .theme-light .theme-dark) {
+  --background-shading: rgba(26, 27, 38, 0); /* app background shading color -- 0 alpha so nothing covers the transparent app background [default: rgba(0, 0, 0, 0.4)] */
+  --card-shading: rgba(26, 27, 38, 0.5); /* cards background shading color -- Tokyo Night's background hex instead of pure black [default: rgba(0, 0, 0, 0.2)] */
+  --popout-shading: rgba(26, 27, 38, 0.85); /* popouts background shading color [default: rgba(0, 0, 0, 0.6)] */
+  --modal-shading: rgba(26, 27, 38, 0.7); /* modals background shading color [default: rgba(0, 0, 0, 0.4)] */
+  --input-shading: rgba(255, 255, 255, 0.05); /* inputs background shading color [default: rgba(255, 255, 255, 0.05)] */
+  --normal-text: #c0caf5; /* text color -- Tokyo Night's "text", matches hypr/rofi/waybar [default: #d8d8db] */
+  --muted-text: #565f89; /* muted text color -- Tokyo Night's overlay0 [default: #aeaeb4] */
+}
+
+/* DARK THEME */
+:is(.theme-darker, .theme-light .theme-darker) {
+  --background-shading: rgba(26, 27, 38, 0); /* app background shading color -- 0 alpha so nothing covers the transparent app background [default: rgba(0, 0, 0, 0.6)] */
+  --card-shading: rgba(26, 27, 38, 0.6); /* cards background shading color -- Tokyo Night's background hex instead of pure black [default: rgba(0, 0, 0, 0.3)] */
+  --popout-shading: rgba(26, 27, 38, 0.9); /* popouts background shading color [default: rgba(0, 0, 0, 0.7)] */
+  --modal-shading: rgba(26, 27, 38, 0.75); /* modals background shading color [default: rgba(0, 0, 0, 0.6)] */
+  --input-shading: rgba(255, 255, 255, 0.05); /* inputs background shading color [default: rgba(255, 255, 255, 0.05)] */
+  --normal-text: #c0caf5; /* text color -- Tokyo Night's "text", matches hypr/rofi/waybar [default: #fbfbfb] */
+  --muted-text: #565f89; /* muted text color -- Tokyo Night's overlay0 [default: #94949c] */
+}
+
+/* ONYX THEME */
+:is(.theme-midnight, .theme-light .theme-midnight) {
+  --background-shading: rgba(26, 27, 38, 0); /* app background shading color -- 0 alpha so nothing covers the transparent app background [default: rgba(0, 0, 0, 0.8)] */
+  --card-shading: rgba(26, 27, 38, 0.7); /* cards background shading color -- Tokyo Night's background hex instead of pure black [default: rgba(0, 0, 0, 0.4)] */
+  --popout-shading: rgba(26, 27, 38, 0.95); /* popouts background shading color [default: rgba(0, 0, 0, 0.8)] */
+  --modal-shading: rgba(26, 27, 38, 0.8); /* modals background shading color [default: rgba(0, 0, 0, 0.6)] */
+  --input-shading: rgba(255, 255, 255, 0.05); /* inputs background shading color [default: rgba(255, 255, 255, 0.05)] */
+  --normal-text: #c0caf5; /* text color -- Tokyo Night's "text", matches hypr/rofi/waybar [default: #dcdcde] */
+  --muted-text: #565f89; /* muted text color -- Tokyo Night's overlay0 [default: #86868e] */
+}
+
+/* ADD ADDITIONAL CSS BELOW HERE */
+
+/* If the app background still isn't fully transparent after the
+   --background-image/--background-shading changes above, Discord's own
+   (frequently-changing, randomized) class names are painting over it
+   somewhere main.css's variables don't reach. Don't guess at those
+   class names blindly here -- they change on every Discord update and a
+   broad wildcard selector risks wiping backgrounds off unrelated UI
+   (badges, embeds, message hover states, etc). Instead: open Discord's
+   DevTools (Ctrl+Shift+I), inspect the element that's still opaque, and
+   add a targeted rule for its actual current class right here. */

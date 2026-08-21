@@ -75,6 +75,17 @@ for gtk_dir in gtk-3.0 gtk-4.0; do
     echo "Deployed ~/.config/${gtk_dir}/settings.ini"
 done
 
+# --- Vesktop: only the BetterDiscord-style theme(s) under themes/ are
+# ours -- deploy just that subfolder rather than the whole directory via
+# deploy_dir, so an existing ~/.config/vesktop with Vesktop's own app
+# settings/state doesn't get moved aside wholesale. Pick it up in
+# Vesktop's Settings -> Themes tab. See the windowrule in
+# dotfiles/hypr/hyprland.conf that makes its transparent background
+# actually show your wallpaper.
+mkdir -p "${HOME}/.config/vesktop/themes"
+cp "${DOTFILES_DIR}/vesktop/themes/"*.css "${HOME}/.config/vesktop/themes/"
+echo "Deployed ~/.config/vesktop/themes/ (ClearVision V7, Tokyo Night accents)"
+
 # --- starship.toml is a flat file (starship's own default config path,
 # unlike everything else here which lives in its own ~/.config subdir).
 STARSHIP_DEST="${HOME}/.config/starship.toml"
