@@ -122,10 +122,10 @@ done
 # --- Change default shell to zsh. Via sudo, not plain chsh: chsh
 # authenticates through PAM using your own login password, which fails
 # with "Authentication failure" when this script runs non-interactively
-# under 0-install.sh's `su - <user> -c ...` (no reliable controlling
+# under install.sh's `su - <user> -c ...` (no reliable controlling
 # terminal to read a password from -- same issue as the sudo pacman/mkdir/
 # tee calls elsewhere in this repo). Root doesn't need a password to
-# change a user's shell, so routing through sudo sidesteps it; 0-install.sh
+# change a user's shell, so routing through sudo sidesteps it; install.sh
 # grants NOPASSWD for this exact call during stage 3.
 echo
 echo "Changing default shell to zsh"

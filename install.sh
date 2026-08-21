@@ -43,11 +43,11 @@ fi
 
 echo
 echo ">>> Stage 1: Base system"
-bash "${SCRIPT_DIR}/1-base.sh"
+bash "${SCRIPT_DIR}/scripts/1-base.sh"
 
 echo
 echo ">>> Stage 2: Software (pacman)"
-bash "${SCRIPT_DIR}/2-system-software.sh"
+bash "${SCRIPT_DIR}/scripts/2-system-software.sh"
 
 echo
 echo ">>> Stage 3: AUR software (running as ${AUR_USER})"
@@ -88,21 +88,21 @@ if [[ ${EUID} -eq 0 ]]; then
     fi
     trap 'rm -f "${AUR_SUDOERS_DROPIN}"' EXIT
 
-    su - "${AUR_USER}" -c "bash '${AUR_BUILD_DIR}/3-user-software.sh'"
+    su - "${AUR_USER}" -c "bash '${AUR_BUILD_DIR}/scripts/3-user-software.sh'"
 
     rm -f "${AUR_SUDOERS_DROPIN}"
     trap - EXIT
     rm -rf "${AUR_BUILD_DIR}"
 else
-    bash "${SCRIPT_DIR}/3-user-software.sh"
+    bash "${SCRIPT_DIR}/scripts/3-user-software.sh"
 fi
 
 echo
 echo ">>> Stage 4: Secure system"
 if [[ ${EUID} -eq 0 ]]; then
-    bash "${SCRIPT_DIR}/4-firewall.sh"
+    bash "${SCRIPT_DIR}/scripts/4-firewall.sh"
 else
-    sudo bash "${SCRIPT_DIR}/4-firewall.sh"
+    sudo bash "${SCRIPT_DIR}/scripts/4-firewall.sh"
 fi
 
 echo
@@ -122,7 +122,7 @@ if [[ ${EUID} -eq 0 ]]; then
     chown -R "${AUR_USER}:" "${DOTFILES_BUILD_DIR}"
 
     # Same "su -c doesn't reliably keep a controlling terminal attached"
-    # problem as stage 3 above -- 5-dotfiles.sh's SDDM theme activation
+    # problem as stage 3 above -- scripts/5-dotfiles.sh's SDDM theme activation
     # shells out to `sudo mkdir` and `sudo tee`, which fail immediately
     # ("a terminal is required to read the password") without a NOPASSWD
     # grant for exactly those two calls.
@@ -136,18 +136,18 @@ if [[ ${EUID} -eq 0 ]]; then
     fi
     trap 'rm -f "${DOTFILES_SUDOERS_DROPIN}"' EXIT
 
-    su - "${AUR_USER}" -c "bash '${DOTFILES_BUILD_DIR}/5-dotfiles.sh'"
+    su - "${AUR_USER}" -c "bash '${DOTFILES_BUILD_DIR}/scripts/5-dotfiles.sh'"
 
     rm -f "${DOTFILES_SUDOERS_DROPIN}"
     trap - EXIT
     rm -rf "${DOTFILES_BUILD_DIR}"
 else
-    bash "${SCRIPT_DIR}/5-dotfiles.sh"
+    bash "${SCRIPT_DIR}/scripts/5-dotfiles.sh"
 fi
 
 echo
 echo ">>> Stage 6: Post setup"
-bash "${SCRIPT_DIR}/6-post-setup.sh" "${AUR_USER}"
+bash "${SCRIPT_DIR}/scripts/6-post-setup.sh" "${AUR_USER}"
 
 echo
 echo "=== All stages complete ==="

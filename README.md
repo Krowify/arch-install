@@ -44,10 +44,11 @@ Run as **root**, right after a base Arch install:
 pacman -S --noconfirm pacman-contrib curl git
 git clone https://github.com/Krowify/arch-install
 cd linux-installation
-bash 0-install.sh
+bash install.sh
 ```
 
-`0-install.sh` runs all six stages with a single command. AUR builds
+`install.sh` (repo root) runs all six stages, in `scripts/`, with a
+single command. AUR builds
 (stage 3) can't run as root -- `makepkg` refuses -- and dotfiles (stage
 5) need to land in a real user's `$HOME`, not root's, so the script
 handles both switches for you:
@@ -65,15 +66,15 @@ account creation if applicable, `makepkg` confirmations, whether to
 enable the SSH server in stage 4) -- that's intentional so nothing
 installs, creates accounts, or opens a network port silently.
 
-| Stage | Script                  | Runs as                     | Purpose                                                |
-|-------|--------------------------|------------------------------|----------------------------------------------------------|
-| 0     | `0-install.sh`           | root or sudo user           | Master runner -- executes all stages below in order       |
-| 1     | `1-base.sh`              | root                         | Wayland, Hyprland compositor, networking, audio, bluetooth, GPU driver (asks Intel/Nvidia/AMD) |
-| 2     | `2-system-software.sh`   | root                         | Everyday software + Hyprland desktop utilities (bar, launcher, etc.) from the official repos |
-| 3     | `3-user-software.sh`      | non-root (handled by 0-install.sh) | AUR packages via `yay` (VS Code, Discord, themes, etc.)|
-| 4     | `4-firewall.sh`     | root                         | Firewall, sysctl hardening, fail2ban                       |
-| 5     | `5-dotfiles.sh`          | non-root (handled by 0-install.sh) | Deploys Hyprland/waybar/etc. config, applies the default theme via `theme.sh` |
-| 6     | `6-post-setup.sh`        | root                         | File watcher limit, display manager, bluetooth autostart, Plymouth/GRUB wiring, Nvidia kernel parameter (if applicable) |
+| Stage | Script                          | Runs as                     | Purpose                                                |
+|-------|----------------------------------|------------------------------|----------------------------------------------------------|
+| 0     | `install.sh` (repo root)         | root or sudo user           | Master runner -- executes all stages below in order       |
+| 1     | `scripts/1-base.sh`              | root                         | Wayland, Hyprland compositor, networking, audio, bluetooth, GPU driver (asks Intel/Nvidia/AMD) |
+| 2     | `scripts/2-system-software.sh`   | root                         | Everyday software + Hyprland desktop utilities (bar, launcher, etc.) from the official repos |
+| 3     | `scripts/3-user-software.sh`     | non-root (handled by install.sh) | AUR packages via `yay` (VS Code, Discord, themes, etc.)|
+| 4     | `scripts/4-firewall.sh`          | root                         | Firewall, sysctl hardening, fail2ban                       |
+| 5     | `scripts/5-dotfiles.sh`          | non-root (handled by install.sh) | Deploys Hyprland/waybar/etc. config, applies the default theme via `theme.sh` |
+| 6     | `scripts/6-post-setup.sh`        | root                         | File watcher limit, display manager, bluetooth autostart, Plymouth/GRUB wiring, Nvidia kernel parameter (if applicable) |
 
 All scripts use `set -euo pipefail`, so they stop on the first error
 instead of silently continuing with a partially-configured system.
@@ -81,23 +82,23 @@ instead of silently continuing with a partially-configured system.
 ## Running stages manually (optional)
 
 If you'd rather step through each stage yourself instead of using
-`0-install.sh`, you can still run them individually:
+`install.sh`, you can still run them individually (from the repo root):
 
 ```sh
-sh 1-base.sh
-sh 2-system-software.sh
+sh scripts/1-base.sh
+sh scripts/2-system-software.sh
 
 su <your-username>
-sh 3-user-software.sh
+sh scripts/3-user-software.sh
 
 su
-sh 4-firewall.sh
+sh scripts/4-firewall.sh
 
 su <your-username>
-sh 5-dotfiles.sh
+sh scripts/5-dotfiles.sh
 
 su
-sh 6-post-setup.sh
+sh scripts/6-post-setup.sh
 ```
 
 ## System Description
@@ -229,7 +230,7 @@ monitor picks out of `~/.config/waypaper/config.ini` and into
 `~/.local/state/waypaper/state.ini`. That split matters because stage 5
 redeploys `~/.config/waypaper/config.ini` from this repo's template on
 every run (like most of this repo's dotfiles) -- with state kept
-separately, re-running `5-dotfiles.sh` (e.g. after pulling a repo update)
+separately, re-running `scripts/5-dotfiles.sh` (e.g. after pulling a repo update)
 can never wipe out your current wallpaper.
 
 ## Multi-monitor layout (optional)
@@ -241,7 +242,7 @@ normal one, or one mounted upside down -- use hyprmod's GUI (in your app
 launcher) instead of hand-editing `hyprland.conf`: it live-previews monitor
 position/rotation/mode changes via `hyprctl` and persists them to its own
 config, independently of this repo's dotfiles, so a future re-run of
-`5-dotfiles.sh` never reverts your layout.
+`scripts/5-dotfiles.sh` never reverts your layout.
 
 ## Theme switching
 
@@ -290,7 +291,7 @@ Each theme lives in its own directory under `~/.config/hyde-themes/`
 `~/.config/hyde-themes/global.conf` (not per-theme) covers the two bits
 of chrome that stay the same across every theme: the cursor theme and the
 SDDM login theme. Writing the SDDM theme config needs `sudo`, but stage 6
-(`6-post-setup.sh`) grants a permanent, narrowly-scoped NOPASSWD rule for
+(`scripts/6-post-setup.sh`) grants a permanent, narrowly-scoped NOPASSWD rule for
 exactly that command -- so switching themes (`theme.sh set`/`menu`) never
 prompts for your password, on the first switch or any after it.
 
@@ -398,10 +399,10 @@ accordingly.
 
 - **`chsh: PAM: Authentication failure` at the end of stage 3** -- fixed
   as of this repo's current version (stage 3 now runs `chsh` through
-  `sudo`, with `0-install.sh` granting it a scoped NOPASSWD rule so it
+  `sudo`, with `install.sh` granting it a scoped NOPASSWD rule so it
   doesn't need a password when running non-interactively). If you're
   still seeing it, you're likely on an older checkout -- `git pull` and
-  re-run. The root cause: running the whole installer via `0-install.sh`
+  re-run. The root cause: running the whole installer via `install.sh`
   as root executes stage 3 as `su - <user> -c ...`, which doesn't
   reliably keep a controlling terminal attached, so plain `chsh`'s PAM
   password prompt has nowhere to go and fails immediately.
@@ -418,11 +419,11 @@ accordingly.
   -- the `swww` project was renamed to `awww` in October 2025 (moved to
   Codeberg). If you're on an older guide/tutorial that still says
   `swww`, use `awww`/`awww-daemon` instead -- this repo already does
-  (`2-system-software.sh`, official repo, no AUR needed anymore).
+  (`scripts/2-system-software.sh`, official repo, no AUR needed anymore).
 - **Rofi launches under Xwayland, or `-show drun` errors/does nothing**
   -- Rofi only merged native Wayland support upstream in 2025; if your
   mirror still has an older build, either wait for a pacman sync or swap
-  the `rofi` package (2-system-software.sh) for the AUR `rofi-wayland`
+  the `rofi` package (scripts/2-system-software.sh) for the AUR `rofi-wayland`
   package instead (same config, no other changes needed).
 - **"Rofi is unsure what to show"** -- this means rofi's `modi` list
   never got applied, so `-show drun` has no mode to launch. Two things
@@ -458,7 +459,7 @@ accordingly.
   desktops).
 - **Stage 3 or 5 exits immediately** (running it manually) -- you're
   running it as root. Switch to a regular user first
-  (`su <your-username>`) and re-run it, or just use `0-install.sh`,
+  (`su <your-username>`) and re-run it, or just use `install.sh`,
   which handles this automatically.
 - **`sudo: command not found` in stage 1 or 2** -- shouldn't happen;
   stage 1 installs `sudo` itself before using it. If you still hit
@@ -490,7 +491,7 @@ accordingly.
   likely failed or was skipped -- re-run that stage, then
   `~/.config/hyde-themes/theme.sh set tokyo-night` (no need to
   re-run all of stage 5). Stage 5 now runs before stage 6 enables
-  `sddm.service`, so on a normal `0-install.sh` run the login screen
+  `sddm.service`, so on a normal `install.sh` run the login screen
   already picks up the theme on its first start; you'd only need to
   restart it by hand (`sudo systemctl restart sddm` -- this kills your
   current graphical session, so only do it from a TTY or before logging

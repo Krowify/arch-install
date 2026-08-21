@@ -20,7 +20,9 @@ if [[ ${EUID} -eq 0 ]]; then
 fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DOTFILES_DIR="${SCRIPT_DIR}/dotfiles"
+# This script now lives in scripts/, but dotfiles/ stays at the repo root
+# -- one level up.
+DOTFILES_DIR="${SCRIPT_DIR}/../dotfiles"
 
 if [[ ! -d "${DOTFILES_DIR}" ]]; then
     echo "ERROR: ${DOTFILES_DIR} not found -- can't deploy dotfiles." >&2

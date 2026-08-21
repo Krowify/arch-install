@@ -11,7 +11,7 @@ else
 fi
 
 # --- The desktop user theme.sh needs a passwordless sudo grant for (see
-# below) -- an optional first argument (0-install.sh passes AUR_USER),
+# below) -- an optional first argument (install.sh passes AUR_USER),
 # falling back to $SUDO_USER (this script invoked via sudo) or $USER (run
 # directly as the desktop user, using the SUDO=(sudo) wrapper above for
 # individual commands instead).
@@ -64,7 +64,7 @@ echo "Enabling power-profiles-daemon (backs the waybar power-profile module)"
 "${SUDO[@]}" systemctl enable --now power-profiles-daemon.service
 
 # ------------------------------------------------------------------------
-# Permanent (unlike the install-time drop-ins in 0-install.sh, this one is
+# Permanent (unlike the install-time drop-ins in install.sh, this one is
 # never removed) NOPASSWD grant for the exact SDDM theme-write commands
 # theme.sh runs on every theme switch (see dotfiles/hyde-themes/theme.sh)
 # -- without it, every future `theme.sh set`/`theme.sh menu` prompts for
