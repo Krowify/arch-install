@@ -3,19 +3,33 @@
  * Haikal Hakim's Athena (see README credits):
  * https://github.com/haikal-hakim/athena
  *
- * modules-left/-center/-right topology restructured a second time, now
- * to match https://github.com/00Darxk/dotfiles's waybar: clock/network/
- * bluetooth/focused-window-title on the left, the app launcher +
- * workspaces + a lock/power "exit group" in the center, and media/
- * hardware/audio/tray on the right -- replacing the previous
- * Hyde-project/hyde-style layout (workspaces isolated on the far left).
- * Colors are untouched by this -- theme.sh and tokens/colors.css still
- * drive every color regardless of which pill a module sits in. Two
- * modules were added to support the new positions: hyprland/window
- * (native waybar module, modules/window.jsonc) and mpris (native waybar
- * module, modules/media.jsonc) -- neither needs a new package. The
- * exit-group buttons (modules/exit.jsonc) are thin wrappers around
- * hyprlock/wlogout, both already installed.
+ * modules-left/-center/-right topology restructured a third time, now
+ * shaped to match HyDE-Project/HyDE's own
+ * Configs/.local/share/waybar/layouts/hyprdots/11.jsonc -- left=3 pills,
+ * center=1, right=3. HyDE's own layout files only define pill *counts*
+ * per zone, not which widgets fill them (that's assigned separately by
+ * HyDE's own tooling), so the mapping below is this repo's own, chosen
+ * to roughly match what HyDE's module catalog puts in equivalent slots
+ * (github.com/HyDE-Project/HyDE/tree/master/Configs/.local/share/waybar/modules):
+ *
+ *   left:   group/distro-group (app launcher) | hyprland/window (title) | group/connections (network+bluetooth)
+ *   center: hyprland/workspaces
+ *   right:  group/monitor (cpu/memory/disk/temperature/battery/power-profiles) | group/controls (audio/mpris/idle-inhibitor/tray/lock/power) | clock
+ *
+ * Battery and bluetooth stay wired in even on a machine without that
+ * hardware -- waybar just no-ops those modules, and they're needed on
+ * other machines this repo gets installed on that do have them. Clock is
+ * a bare module (not in a drawer) so it's always visible rather than
+ * needing a click to expand.
+ *
+ * Two earlier revisions instead matched
+ * https://github.com/00Darxk/dotfiles's waybar (clock/network/bluetooth/
+ * window-title left; launcher+workspaces+exit-group center; media/
+ * hardware/audio/tray right), and before that
+ * [Hyde-project/hyde](https://github.com/Hyde-project/hyde)'s own waybar
+ * (workspaces isolated on the far left). Colors are untouched by any of
+ * this -- theme.sh and tokens/colors.css still drive every color
+ * regardless of which pill a module sits in.
  *
  * HyDE's own custom, script-backed modules (weather, hyprsunset toggle,
  * gpuinfo/cpuinfo/sensorsinfo, hyde-menu, keybindhint, gamemode, updates
@@ -45,22 +59,16 @@
     "./modules/tray-notif.jsonc"
   ],
   "modules-left": [
-    "clock",
-    "group/connections",
+    "group/distro-group",
     "hyprland/window",
-    "group/storage",
-    "group/system"
+    "group/connections"
   ],
   "modules-center": [
-    "group/distro-group",
-    "hyprland/workspaces",
-    "idle_inhibitor",
-    "group/exit"
+    "hyprland/workspaces"
   ],
   "modules-right": [
-    "mpris",
-    "group/hardware",
-    "group/audio",
-    "group/tray-group"
+    "group/monitor",
+    "group/controls",
+    "clock"
   ]
 }

@@ -553,18 +553,22 @@ Arch Linux Installation Guide: https://wiki.archlinux.org/title/Installation_gui
   `dotfiles/waybar/modules/distro.jsonc`,
   `dotfiles/waybar/modules/workspace.jsonc`, and
   `dotfiles/waybar/modules/tray-notif.jsonc` for what changed. The
-  `modules-left`/`-center`/`-right` layout was restructured a second time
-  to match [00Darxk/dotfiles](https://github.com/00Darxk/dotfiles)'s own
-  waybar (clock/network/bluetooth/window-title on the left, launcher +
-  workspaces + a lock/power group in the center, media/hardware/audio/tray
-  on the right) -- see the comment at the top of
-  `dotfiles/waybar/config.jsonc`. Colors are untouched by this repo's own
-  theme.sh/Matugen pipeline regardless of which layout is in use. An
-  earlier revision instead matched
-  [Hyde-project/hyde](https://github.com/Hyde-project/hyde)'s own waybar
-  (workspaces isolated on the far left); see that same comment for why
-  HyDE's script-backed custom modules (weather, gpuinfo/cpuinfo/
-  sensorsinfo, hyde-menu, etc.) weren't ported either time.
+  `modules-left`/`-center`/`-right` layout is now shaped to match
+  [HyDE-Project/HyDE](https://github.com/HyDE-Project/HyDE)'s own
+  `Configs/.local/share/waybar/layouts/hyprdots/11.jsonc` (left=3 pills,
+  center=1, right=3) -- HyDE's layout files only define pill *counts*,
+  not which widgets fill them, so the module-to-pill mapping (app
+  launcher/window-title/connections left; workspaces center; system
+  monitor/controls/clock right) is this repo's own, picked to roughly
+  match what's in HyDE's module catalog. See the comment at the top of
+  `dotfiles/waybar/config.jsonc` for the full mapping. Colors are
+  untouched by this repo's own theme.sh/Matugen pipeline regardless of
+  which layout is in use. Two earlier revisions instead matched
+  [00Darxk/dotfiles](https://github.com/00Darxk/dotfiles)'s waybar, and
+  before that [Hyde-project/hyde](https://github.com/Hyde-project/hyde)'s
+  own waybar (workspaces isolated on the far left); see that same comment
+  for why HyDE's script-backed custom modules (weather, gpuinfo/cpuinfo/
+  sensorsinfo, hyde-menu, etc.) weren't ported in any of the three.
 - The keybind scheme in `dotfiles/hypr/hyprland.conf` is keyed to match
   [HyDE-Project/HyDE's KEYBINDINGS.md](https://github.com/HyDE-Project/HyDE/blob/master/KEYBINDINGS.md)
   wherever this repo has an equivalent app/dispatcher -- see the comment
