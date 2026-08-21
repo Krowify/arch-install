@@ -118,6 +118,12 @@ PKGS=(
                                    # actually renders through this
     'grim'                        # Screenshot utility
     'slurp'                       # Region/window selector, used with grim
+    'hyprsunset'                  # Blue light filter, toggled with
+                                   # Super+Shift+N
+    'jq'                          # JSON processing -- used by a couple of
+                                   # hyprland.conf's own keybinds (focused-
+                                   # monitor screenshot, dropdown terminal
+                                   # detection) instead of hand-rolled awk
     'wl-clipboard'                # Wayland clipboard CLI (wl-copy/wl-paste)
     'cliphist'                    # Clipboard history manager, layered on top
                                    # of wl-clipboard -- 'wl-clipboard' alone

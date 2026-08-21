@@ -1,0 +1,21 @@
+/* Matugen template -- input for [templates.rofi] in config.toml.
+ * Generates ~/.config/rofi/colors.rasi from the current wallpaper. Role
+ * names match theme.sh's curated rofi-colors.rasi files so config.rasi
+ * resolves unchanged either way. rasi accepts 8-digit #RRGGBBAA hex
+ * directly, so alpha is baked in here rather than using rgba() (Matugen
+ * doesn't have a decimal-rgb filter this repo has verified).
+ */
+* {
+    bg:             {{colors.background.default.hex}};
+    bg-element:     {{colors.surface.default.hex}}00;
+    bg-selected:    {{colors.secondary.default.hex}};
+    bg-dock:        {{colors.primary.default.hex}};
+    bg-btn:         {{colors.surface_container.default.hex}}d9;
+    bg-btn-active:  {{colors.on_background.default.hex}}f2;
+    fg:             {{colors.on_background.default.hex}};
+    fg-muted:       {{colors.on_surface_variant.default.hex}};
+    fg-btn:         {{colors.outline.default.hex}};
+    fg-btn-active:  {{colors.background.default.hex}}f2;
+    border-win:     {{colors.tertiary.default.hex}};
+    fg-prompt:      {{colors.primary.default.hex}};
+}

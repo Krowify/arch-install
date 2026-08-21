@@ -94,7 +94,7 @@ bind = $mod CTRL SHIFT, down, movewindow, d
 ```
 bind = $mod, Return, exec, alacritty
 bind = $mod, T, exec, alacritty
-bind = $mod ALT, T, exec, hyprctl clients | grep -q dropterm && hyprctl dispatch togglespecialworkspace dropterm || alacritty --class dropterm
+bind = $mod ALT, T, exec, hyprctl clients -j | jq -e '.[] | select(.class=="dropterm")' >/dev/null && hyprctl dispatch togglespecialworkspace dropterm || alacritty --class dropterm
 bind = $mod, E, exec, thunar
 bind = $mod, C, exec, code
 bind = $mod, B, exec, brave
@@ -121,14 +121,18 @@ bind = $mod SHIFT, slash, exec, sh -c 'q="$(rofi -dmenu -p Search)"; [ -n "$q" ]
 
 ## Hardware controls: audio
 
+Routed through `swayosd-client` (needs the `swayosd-git` AUR package and
+its `swayosd-server` daemon, autostarted in `hyprland.conf`) instead of
+`pamixer` directly, so raising/lowering/muting shows an on-screen popup:
+
 ```
-bindel = , XF86AudioRaiseVolume, exec, pamixer -i 5
-bindel = , XF86AudioLowerVolume, exec, pamixer -d 5
-bindel = , XF86AudioMute, exec, pamixer -t
-bind = , F10, exec, pamixer -t
-bind = , F11, exec, pamixer -d 5
-bind = , F12, exec, pamixer -i 5
-bind = , XF86AudioMicMute, exec, pamixer --default-source -t
+bindel = , XF86AudioRaiseVolume, exec, swayosd-client --output-volume raise
+bindel = , XF86AudioLowerVolume, exec, swayosd-client --output-volume lower
+bindel = , XF86AudioMute, exec, swayosd-client --output-volume mute-toggle
+bind = , F10, exec, swayosd-client --output-volume mute-toggle
+bind = , F11, exec, swayosd-client --output-volume lower
+bind = , F12, exec, swayosd-client --output-volume raise
+bind = , XF86AudioMicMute, exec, swayosd-client --input-volume mute-toggle
 ```
 
 ## Hardware controls: media
@@ -144,17 +148,30 @@ bind = , XF86AudioPrev, exec, playerctl previous
 
 ## Hardware controls: brightness
 
+Also routed through `swayosd-client`, same reasoning as audio above:
+
 ```
-bindel = , XF86MonBrightnessUp, exec, brightnessctl set +5%
-bindel = , XF86MonBrightnessDown, exec, brightnessctl set 5%-
+bindel = , XF86MonBrightnessUp, exec, swayosd-client --brightness raise
+bindel = , XF86MonBrightnessDown, exec, swayosd-client --brightness lower
+```
+
+## Blue light filter
+
+Needs `hyprsunset`. Off by default -- toggles on/off (no running process
+= no filter):
+
+```
+bind = $mod SHIFT, N, exec, pkill hyprsunset || hyprsunset -t 4000
 ```
 
 ## Utilities: screen capture
 
+Needs `jq` for the focused-monitor one:
+
 ```
 bind = , Print, exec, grim - | wl-copy
 bind = $mod, P, exec, grim -g "$(slurp)" - | wl-copy
-bind = $mod ALT, P, exec, grim -o "$(hyprctl monitors | awk '/^Monitor/{n=$2} /focused: yes/{print n}')" - | wl-copy
+bind = $mod ALT, P, exec, grim -o "$(hyprctl monitors -j | jq -r '.[] | select(.focused) | .name')" - | wl-copy
 ```
 
 ## Theming and wallpaper

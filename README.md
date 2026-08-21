@@ -29,6 +29,8 @@ applications.
 | Network | NetworkManager + nm-applet |
 | Audio | PipeWire + WirePlumber + pamixer |
 | Power | Brightnessctl |
+| On-screen display | SwayOSD (volume/mic/brightness/caps-lock) |
+| Blue light filter | hyprsunset (`Super+Shift+N` to toggle) |
 | GPU driver | mesa (AMD/Intel) or Nvidia proprietary -- picked interactively in stage 1 |
 | Package manager | pacman + yay + paru |
 | VPN | ProtonVPN |
@@ -168,6 +170,7 @@ media, and the handful of binds with neither modifier).
 | `Super+N` | Toggle notification center (SwayNC) |
 | `Super+Shift+W` | Open wallpaper picker (waypaper) |
 | `Super+Shift+T` | Open theme picker (`theme.sh menu`) |
+| `Super+Shift+N` | Toggle blue light filter (hyprsunset) |
 | `Super+Ctrl+Right/Left` | Next/previous workspace (relative) |
 | `Super+Ctrl+Down` | Go to nearest empty workspace |
 | `Super+S` | Toggle scratchpad |
@@ -257,11 +260,9 @@ a Rofi picker:
 Each theme lives in its own directory under `~/.config/hyde-themes/`
 (sourced from `dotfiles/hyde-themes/<name>/` in this repo) and holds:
 
-- One color file per themed app (`hypr-colors.conf`,
-  `waybar-accent-colors.css` + `waybar-colors.css`,
-  `swaync-accent-colors.css` + `swaync-variables.css`,
-  `wlogout-colors.css`, `alacritty-colors.toml`, `rofi-colors.rasi`,
-  `eww-colors.scss`) -- every app's own config now just `@import`s (or,
+- One color file per themed app (`hypr-colors.conf`, `waybar-colors.css`,
+  `swaync-variables.css`, `wlogout-colors.css`, `alacritty-colors.toml`,
+  `rofi-colors.rasi`, `eww-colors.scss`) -- every app's own config now just `@import`s (or,
   for Hyprland/Alacritty/Wlogout, `source`s) a stable filename in its
   `~/.config/<app>/` directory, and `theme.sh set` is what copies the
   chosen theme's version of each file into place and reloads that app
@@ -339,7 +340,7 @@ Picking a wallpaper through `waypaper` doesn't just set the background --
 `waypaper`'s `post_command` (`dotfiles/waypaper/config.ini`) runs
 `matugen image "$wallpaper"`, which generates a Material You color scheme
 from that image and rewrites the color files for Hyprland, Waybar, SwayNC,
-Alacritty's background/foreground/cursor, and Wlogout from it:
+Alacritty's background/foreground/cursor, Wlogout, Eww, and Rofi from it:
 
 | App | Generated file | Picked up via |
 |-----|-----------------|----------------|
@@ -348,6 +349,22 @@ Alacritty's background/foreground/cursor, and Wlogout from it:
 | SwayNC | `~/.config/swaync/tokens/variables.css` | `swaync-client -rs` (Matugen's post_hook) |
 | Alacritty | `~/.config/alacritty/colors.toml` | live-reloads on file change by itself |
 | Wlogout | `~/.config/wlogout/colors.css` | none needed -- launched fresh each time (Super+Escape), not a running daemon |
+| Eww | `~/.config/eww/colors.scss` | `eww reload` (Matugen's post_hook) |
+| Rofi | `~/.config/rofi/colors.rasi` | none needed -- launched fresh each time, not a running daemon |
+
+Eww and Rofi were added later than the rest -- earlier revisions of this
+repo left them out of Matugen's coverage entirely, so picking a new
+wallpaper would re-theme everything except those two, leaving them stuck
+on whatever `theme.sh` last set. Fixed now; role names match `theme.sh`'s
+curated `eww-colors.scss`/`rofi-colors.rasi` files exactly, so both
+resolve unchanged either way.
+
+Two files that used to exist here, `~/.config/waybar/colors.css` and
+`~/.config/swaync/colors.css` (an "accent" layer separate from the
+`tokens/` one above), were removed along with this change -- neither
+`style.css` ever actually imported them, in Waybar or SwayNC, so they
+were pure dead weight that both Matugen and `theme.sh` wrote to for no
+reason.
 
 Each of those files ships with a static fallback matching the default
 theme (Tokyo Night -- see [Credits](#credits)) so things look right

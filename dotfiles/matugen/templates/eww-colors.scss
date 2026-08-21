@@ -1,0 +1,8 @@
+// Matugen template -- input for [templates.eww] in config.toml.
+// Generates ~/.config/eww/colors.scss from the current wallpaper. Role
+// names match theme.sh's curated eww-colors.scss files so eww.scss
+// resolves unchanged either way.
+$mantle: {{colors.background.default.hex}};
+$mauve: {{colors.primary.default.hex}};
+$text: {{colors.on_background.default.hex}};
+$light-gray: {{colors.outline.default.hex}};

@@ -80,6 +80,12 @@ PKGS=(
     'eww'                                 # Widget system
     'wlogout'                            # Wayland-native logout/power menu --
                                           # AUR-only, not in the official repos
+    'swayosd-git'                        # On-screen volume/brightness/caps-
+                                          # lock display -- hyprland.conf's
+                                          # hardware-control binds route
+                                          # through 'swayosd-client' instead
+                                          # of pamixer/brightnessctl directly
+                                          # so you actually see feedback
     'hyprmod'                            # GTK4/libadwaita settings GUI for
                                           # Hyprland -- live-previews changes,
                                           # writes to its own config rather

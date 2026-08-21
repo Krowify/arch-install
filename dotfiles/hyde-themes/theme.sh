@@ -149,12 +149,10 @@ deploy_colors() {
     timeout 5 hyprctl reload >/dev/null 2>&1 || true
 
     mkdir -p "${HOME}/.config/waybar/tokens"
-    cp "${dir}/waybar-accent-colors.css" "${HOME}/.config/waybar/colors.css"
     cp "${dir}/waybar-colors.css" "${HOME}/.config/waybar/tokens/colors.css"
     timeout 5 killall -SIGUSR2 waybar >/dev/null 2>&1 || true
 
     mkdir -p "${HOME}/.config/swaync/tokens"
-    cp "${dir}/swaync-accent-colors.css" "${HOME}/.config/swaync/colors.css"
     cp "${dir}/swaync-variables.css" "${HOME}/.config/swaync/tokens/variables.css"
     timeout 5 swaync-client -rs >/dev/null 2>&1 || true
 
