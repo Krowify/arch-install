@@ -64,7 +64,10 @@ PKGS=(
     # BROWSERS / COMMUNICATIONS ------------------------------------------
     'brave-bin'                          # Brave browser
     'discord'                            # Chat for gamers
-    'vencord-installer'                  # Discord client mod installer
+    'vencord-installer-bin'              # Discord client mod installer,
+                                          # prebuilt (skips the Go
+                                          # toolchain build the plain
+                                          # 'vencord-installer' needs)
 
     # EDITORS ---------------------------------------------------------------
     'visual-studio-code-bin'             # VS Code (not in official repos)
