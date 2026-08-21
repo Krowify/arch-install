@@ -111,7 +111,6 @@ windowrule = match:class ^(dropterm)$, float on, size 60% 60%, center on, worksp
 ## Launcher: Rofi menus
 
 ```
-bind = $mod, D, exec, rofi -show drun -modi drun,filebrowser,window,run
 bind = $mod, A, exec, rofi -show drun -modi drun,filebrowser,window,run
 bind = $mod, TAB, exec, rofi -show drun -modi drun,filebrowser,window,run
 bind = $mod SHIFT, E, exec, rofi -show filebrowser

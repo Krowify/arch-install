@@ -149,7 +149,7 @@ media, and the handful of binds with neither modifier).
 |---------|--------|
 | `Super+Return` / `Super+T` | Terminal (Alacritty) |
 | `Super+Alt+T` | Dropdown terminal (own special workspace) |
-| `Super+D` / `Super+A` / `Super+Tab` | App launcher (Rofi) |
+| `Super+A` / `Super+Tab` | App launcher (Rofi) |
 | `Super+Q` | Close focused window |
 | `Super+Alt+F4` | Force-kill focused window |
 | `Super+Delete` | Exit Hyprland session |
