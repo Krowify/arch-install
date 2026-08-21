@@ -1,13 +1,13 @@
 # Deployed by theme.sh into ~/.config/alacritty/colors.toml. Graphite
-# Mono palette -- pure grayscale, no hue (see theme.conf in this same
-# directory). Not touched by Matugen; see hypr-colors.conf for why. ANSI
-# palette in alacritty.toml itself stays static regardless of theme -- see
-# the README's color theming section.
+# Mono palette -- ported from HyDE-Project/hyde-themes' own kitty.theme
+# (Graphite-Mono branch). Not touched by Matugen; see hypr-colors.conf
+# for why. ANSI palette in alacritty.toml itself stays static regardless
+# of theme -- see the README's color theming section.
 
 [colors.primary]
-background = "#232323"
-foreground = "#b0b0b0"
+background = "#262626"
+foreground = "#d9d9d9"
 
 [colors.cursor]
-text = "#1a1a1a"
-cursor = "#e5e5e5"
+text = "#d9d9d9"
+cursor = "#a6a6a6"

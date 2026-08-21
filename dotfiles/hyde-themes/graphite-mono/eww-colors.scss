@@ -1,7 +1,9 @@
 // Deployed by theme.sh into ~/.config/eww/colors.scss. Imported by
-// eww.scss. Graphite Mono palette -- pure grayscale, no hue (see
-// theme.conf in this same directory).
-$mantle: #1a1a1a;
-$mauve: #cfcfcf;
-$text: #e5e5e5;
-$light-gray: #8f8f8f;
+// eww.scss. Graphite Mono palette -- background/accent/text ported from
+// HyDE-Project/hyde-themes' own hypr.theme/waybar.theme (Graphite-Mono
+// branch); $light-gray is this repo's own derivation (no equivalent
+// muted role in HyDE's source files).
+$mantle: #262626;
+$mauve: #d9d9d9;
+$text: #d9d9d9;
+$light-gray: #808080;

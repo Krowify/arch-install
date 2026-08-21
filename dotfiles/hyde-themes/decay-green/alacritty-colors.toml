@@ -1,13 +1,13 @@
 # Deployed by theme.sh into ~/.config/alacritty/colors.toml. Decay Green
-# palette -- this repo's own construction, not a verified port (see
-# theme.conf in this same directory). Not touched by Matugen; see
-# hypr-colors.conf for why. ANSI palette in alacritty.toml itself stays
-# static regardless of theme -- see the README's color theming section.
+# palette -- ported from HyDE-Project/hyde-themes' own kitty.theme
+# (Decay-Green branch). Not touched by Matugen; see hypr-colors.conf for
+# why. ANSI palette in alacritty.toml itself stays static regardless of
+# theme -- see the README's color theming section.
 
 [colors.primary]
-background = "#1c2216"
-foreground = "#b7c2a1"
+background = "#0d0f18"
+foreground = "#a5b6cf"
 
 [colors.cursor]
-text = "#14180f"
-cursor = "#d7ddc9"
+text = "#a5b6cf"
+cursor = "#cbced3"

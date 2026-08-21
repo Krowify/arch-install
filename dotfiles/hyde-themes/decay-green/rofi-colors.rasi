@@ -1,19 +1,21 @@
 /* Deployed by theme.sh into ~/.config/rofi/colors.rasi. Imported by
- * config.rasi. Decay Green palette -- this repo's own construction, not
- * a verified port (see theme.conf in this same directory). Not touched
- * by Matugen; see hypr-colors.conf for why.
+ * config.rasi. Decay Green palette -- bg/fg/border/select roles ported
+ * from HyDE-Project/hyde-themes' own rofi.theme (Decay-Green branch);
+ * bg-btn/bg-btn-active/fg-btn-active are this repo's own derivation
+ * (HyDE's rofi.theme doesn't define a distinct "button" role). Not
+ * touched by Matugen; see hypr-colors.conf for why.
  */
 * {
-    bg:             rgb(20, 24, 15);
+    bg:             rgba(21, 23, 32, 0.90);
     bg-element:     rgba(255, 255, 255, 0.00);
-    bg-selected:    rgb(111, 174, 149);
-    bg-dock:        rgb(143, 188, 108);
-    bg-btn:         rgba(41, 51, 29, 0.85);
-    bg-btn-active:  rgba(215, 221, 201, 0.95);
-    fg:             #d7ddc9;
+    bg-selected:    rgb(144, 206, 170);
+    bg-dock:        rgb(149, 211, 175);
+    bg-btn:         rgba(31, 35, 40, 0.85);
+    bg-btn-active:  rgba(203, 206, 211, 0.95);
+    fg:             #cbced3;
     fg-muted:       #ffffff;
-    fg-btn:         #b7c2a1;
-    fg-btn-active:  rgba(20, 24, 15, 0.95);
-    border-win:     rgba(111, 174, 149, 1.0);
-    fg-prompt:      rgb(143, 188, 108);
+    fg-btn:         #98d3ee;
+    fg-btn-active:  rgba(21, 23, 32, 0.95);
+    border-win:     rgba(152, 211, 238, 1.0);
+    fg-prompt:      rgb(144, 206, 170);
 }

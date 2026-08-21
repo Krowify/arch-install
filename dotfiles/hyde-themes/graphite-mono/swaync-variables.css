@@ -1,34 +1,37 @@
 /* Deployed by theme.sh into ~/.config/swaync/tokens/variables.css.
  * Graphite Mono palette -- structural values (radii/timing) kept
- * identical to this repo's other themes, only colors changed (grayscale,
- * see theme.conf in this same directory).
+ * identical to this repo's other themes; colors re-derived from the
+ * same real anchors as waybar-colors.css/hypr-colors.conf
+ * (HyDE-Project/hyde-themes' hypr.theme/waybar.theme, Graphite-Mono
+ * branch) -- no SwayNC-specific source exists upstream, same as this
+ * repo's other themes.
  */
 * {
-  --bg-panel: rgba(26, 26, 26, 0.55);
-  --bg-widget: rgba(35, 35, 35, 0.75);
+  --bg-panel: rgba(38, 38, 38, 0.55);
+  --bg-widget: rgba(46, 46, 46, 0.75);
 
-  --bg-tile: rgba(26, 26, 26, 0.70);
-  --bg-tile-hover: rgba(45, 45, 45, 0.88);
+  --bg-tile: rgba(38, 38, 38, 0.70);
+  --bg-tile-hover: rgba(53, 53, 53, 0.88);
 
-  --bg-critical: rgba(50, 30, 30, 0.82);
-  --bg-critical-hover: rgba(74, 44, 44, 0.92);
+  --bg-critical: rgba(61, 30, 30, 0.82);
+  --bg-critical-hover: rgba(93, 46, 46, 0.92);
 
   --border-critical: rgba(196, 122, 122, 0.55);
   --shadow-critical: rgba(196, 122, 122, 0.35);
 
-  --btn-on: rgba(207, 207, 207, 1);
+  --btn-on: rgba(217, 217, 217, 1);
   --btn-off: rgba(255, 255, 255, 0.5);
 
-  --accent: #cfcfcf;
-  --accent-dim: rgba(207, 207, 207, 0.18);
-  --accent-hover: rgba(207, 207, 207, 0.4);
-  --hover-dim: rgba(61, 61, 61, 1);
+  --accent: #d9d9d9;
+  --accent-dim: rgba(217, 217, 217, 0.18);
+  --accent-hover: rgba(217, 217, 217, 0.4);
+  --hover-dim: rgba(128, 128, 128, 1);
 
-  --border-subtle: rgba(163, 163, 163, 0.12);
-  --border-glass: rgba(207, 207, 207, 0.16);
+  --border-subtle: rgba(217, 217, 217, 0.12);
+  --border-glass: rgba(166, 166, 166, 0.16);
 
-  --text-primary: rgba(229, 229, 229, 0.92);
-  --text-secondary: rgba(229, 229, 229, 0.6);
+  --text-primary: rgba(217, 217, 217, 0.92);
+  --text-secondary: rgba(217, 217, 217, 0.6);
 
   --text-dim: rgba(150, 150, 150, 0.55);
   --text-hover: rgba(255, 255, 255, 1);

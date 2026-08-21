@@ -1,14 +1,16 @@
 /* Deployed by theme.sh into ~/.config/swaync/tokens/variables.css.
  * Decay Green palette -- structural values (radii/timing) kept identical
- * to this repo's other themes, only colors changed (this repo's own
- * construction -- see theme.conf in this same directory).
+ * to this repo's other themes; colors re-derived from the same real
+ * anchors as waybar-colors.css/hypr-colors.conf (HyDE-Project/hyde-themes'
+ * hypr.theme/waybar.theme, Decay-Green branch) -- no SwayNC-specific
+ * source exists upstream, same as this repo's other themes.
  */
 * {
-  --bg-panel: rgba(20, 24, 15, 0.55);
-  --bg-widget: rgba(28, 34, 22, 0.75);
+  --bg-panel: rgba(16, 20, 25, 0.55);
+  --bg-widget: rgba(22, 27, 34, 0.75);
 
-  --bg-tile: rgba(20, 24, 15, 0.70);
-  --bg-tile-hover: rgba(41, 51, 29, 0.88);
+  --bg-tile: rgba(16, 20, 25, 0.70);
+  --bg-tile-hover: rgba(28, 35, 44, 0.88);
 
   --bg-critical: rgba(60, 25, 20, 0.82);
   --bg-critical-hover: rgba(85, 35, 28, 0.92);
@@ -16,21 +18,21 @@
   --border-critical: rgba(224, 138, 122, 0.55);
   --shadow-critical: rgba(224, 138, 122, 0.35);
 
-  --btn-on: rgba(143, 188, 108, 1);
+  --btn-on: rgba(144, 206, 170, 1);
   --btn-off: rgba(255, 255, 255, 0.5);
 
-  --accent: #8fbc6c;
-  --accent-dim: rgba(143, 188, 108, 0.18);
-  --accent-hover: rgba(143, 188, 108, 0.4);
-  --hover-dim: rgba(58, 74, 40, 1);
+  --accent: #93cee9;
+  --accent-dim: rgba(147, 206, 233, 0.18);
+  --accent-hover: rgba(147, 206, 233, 0.4);
+  --hover-dim: rgba(44, 122, 157, 1);
 
-  --border-subtle: rgba(111, 174, 149, 0.12);
-  --border-glass: rgba(143, 188, 108, 0.16);
+  --border-subtle: rgba(147, 206, 233, 0.12);
+  --border-glass: rgba(144, 206, 170, 0.16);
 
-  --text-primary: rgba(215, 221, 201, 0.92);
-  --text-secondary: rgba(215, 221, 201, 0.6);
+  --text-primary: rgba(147, 206, 233, 0.92);
+  --text-secondary: rgba(147, 206, 233, 0.6);
 
-  --text-dim: rgba(150, 160, 130, 0.55);
+  --text-dim: rgba(120, 150, 165, 0.55);
   --text-hover: rgba(255, 255, 255, 1);
 
   --radius-panel: 20px;

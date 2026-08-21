@@ -1,7 +1,9 @@
 // Deployed by theme.sh into ~/.config/eww/colors.scss. Imported by
-// eww.scss. Decay Green palette -- this repo's own construction, not a
-// verified port (see theme.conf in this same directory).
-$mantle: #1c2216;
-$mauve: #8fbc6c;
-$text: #d7ddc9;
-$light-gray: #7a8a63;
+// eww.scss. Decay Green palette -- background/accent/text ported from
+// HyDE-Project/hyde-themes' own hypr.theme/waybar.theme (Decay-Green
+// branch); $light-gray is this repo's own derivation (no equivalent
+// muted role in HyDE's source files).
+$mantle: #101419;
+$mauve: #90ceaa;
+$text: #93cee9;
+$light-gray: #6f7d8a;

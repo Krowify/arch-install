@@ -1,10 +1,10 @@
 /* Deployed by theme.sh into ~/.config/wlogout/colors.css. Decay Green
- * palette -- this repo's own construction, not a verified port (see
- * theme.conf in this same directory). Not touched by Matugen; see
+ * palette -- same real anchors as waybar-colors.css (see that file for
+ * the ported-vs-derived breakdown). Not touched by Matugen; see
  * hypr-colors.conf for why.
  */
-@define-color surface #14180f;
-@define-color on_surface #d7ddc9;
-@define-color surface_container_high #29331d;
-@define-color outline #6d7a55;
-@define-color primary #8fbc6c;
+@define-color surface #101419;
+@define-color on_surface #93cee9;
+@define-color surface_container_high #1c232c;
+@define-color outline #93cee9;
+@define-color primary #93cee9;

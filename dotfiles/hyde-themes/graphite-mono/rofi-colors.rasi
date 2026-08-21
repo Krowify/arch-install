@@ -1,19 +1,21 @@
 /* Deployed by theme.sh into ~/.config/rofi/colors.rasi. Imported by
- * config.rasi. Graphite Mono palette -- pure grayscale, no hue (see
- * theme.conf in this same directory). Not touched by Matugen; see
- * hypr-colors.conf for why.
+ * config.rasi. Graphite Mono palette -- bg/fg/border/select roles ported
+ * from HyDE-Project/hyde-themes' own rofi.theme (Graphite-Mono branch);
+ * bg-btn/bg-btn-active/fg-btn-active are this repo's own derivation
+ * (HyDE's rofi.theme doesn't define a distinct "button" role). Not
+ * touched by Matugen; see hypr-colors.conf for why.
  */
 * {
-    bg:             rgb(26, 26, 26);
+    bg:             rgba(38, 38, 38, 0.90);
     bg-element:     rgba(255, 255, 255, 0.00);
-    bg-selected:    rgb(163, 163, 163);
-    bg-dock:        rgb(207, 207, 207);
+    bg-selected:    rgb(166, 166, 166);
+    bg-dock:        rgb(217, 217, 217);
     bg-btn:         rgba(45, 45, 45, 0.85);
     bg-btn-active:  rgba(229, 229, 229, 0.95);
-    fg:             #e5e5e5;
+    fg:             #d9d9d9;
     fg-muted:       #ffffff;
-    fg-btn:         #b0b0b0;
-    fg-btn-active:  rgba(26, 26, 26, 0.95);
-    border-win:     rgba(207, 207, 207, 1.0);
-    fg-prompt:      rgb(207, 207, 207);
+    fg-btn:         #a6a6a6;
+    fg-btn-active:  rgba(38, 38, 38, 0.95);
+    border-win:     rgba(166, 166, 166, 1.0);
+    fg-prompt:      rgb(217, 217, 217);
 }

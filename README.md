@@ -295,15 +295,18 @@ SDDM login theme. Writing the SDDM theme config needs `sudo`, but stage 6
 exactly that command -- so switching themes (`theme.sh set`/`menu`) never
 prompts for your password, on the first switch or any after it.
 
-**Palette fidelity:** Tokyo Night's color files were ported from HyDE's
-actual published theme source (see [Credits](CREDITS.txt)). Decay Green and
-Graphite Mono's GTK/icon *theme assets* are likewise the real ones HyDE
-ships, but their *color files* in this repo are this repo's own
-construction -- HyDE's exact source hex values for those two wouldn't
-reliably fetch while adding them here, so they're coherent, same-shape
-palettes built to match each theme's name/intent, not pixel-matched to
-HyDE's live rendering. Each one's `theme.conf` says so and links to where
-to pull the real values from if you want an exact match.
+**Palette fidelity:** all three themes' color files (Hyprland border
+colors, Waybar/Rofi accents, Alacritty background/foreground/cursor) are
+now ported from HyDE's actual published `hypr.theme`/`waybar.theme`/
+`rofi.theme`/`kitty.theme` source for each one (see [Credits](CREDITS.txt))
+-- an earlier revision of Decay Green and Graphite Mono looked for that
+source in the wrong place and fell back to a same-shape approximation
+instead; that's fixed now. What's still this repo's own construction for
+all three themes: the *extended* Material-You-shaped role sets (Waybar's
+and Wlogout's full token lists go well beyond the handful of colors HyDE's
+theme files actually define) and SwayNC's/Eww's colors, since neither has
+a HyDE source to port from at all -- both are derived from each theme's
+real anchor colors, not independently pixel-matched.
 
 **No file manager swap needed.** Thunar is a GTK app and already reads
 its icons/colors from the GTK theme `theme.sh` sets in
