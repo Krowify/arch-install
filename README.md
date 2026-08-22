@@ -17,6 +17,9 @@ applications.
 | System info banner | fastfetch |
 | Logout menu | Wlogout |
 | Widgets | Eww |
+| Dock | Quickshell (ported from mylinuxforwork/dotfiles) |
+| Workspace overview | Quickshell (Shanu-Kumawat/quickshell-overview, `Super+O`) |
+| Qt app theming | qt6ct + xsettingsd |
 | Settings GUI | hyprmod |
 | Theme | Tokyo Night (default), Decay Green, or Graphite Mono, switchable with `theme.sh` (`Super+Shift+T`) -- see [Theme switching](#theme-switching) and [Credits](CREDITS.txt) |
 | Icon theme | Tela-circle-purple (Tokyo Night) / Tela-circle-green (Decay Green) / Tela-circle-grey (Graphite Mono) |
@@ -175,6 +178,7 @@ Grouped by what each bind actually does, terminal first.
 | `Super+Shift+F` | Toggle pin on focused window |
 | `Super+J` | Toggle split |
 | `Super+M` | Toggle Eww widget panel |
+| `Super+O` | Toggle workspace overview (Quickshell) |
 | `Super+Ctrl+B` | Toggle waybar |
 | `Super+N` | Toggle notification center (SwayNC) |
 | `Super+Shift+N` | Toggle blue light filter (hyprsunset) |

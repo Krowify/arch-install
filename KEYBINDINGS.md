@@ -126,6 +126,17 @@ bind = $mod SHIFT, G, exec, rofi -show drun -theme ~/.config/rofi/gamelauncher_2
 bind = $mod SHIFT, Q, exec, rofi -show drun -theme ~/.config/rofi/quickapps.rasi
 ```
 
+## Quickshell workspace overview
+
+Needs `quickshell` + `quickshell-overview-git` (stage 3, AUR) -- see
+`dotfiles/quickshell-overview/`. Auto-started (`exec-once = qs -c overview`
+in `hyprland.conf`'s Autostart section), toggled via IPC rather than
+launched fresh per invocation:
+
+```
+bind = $mod, O, exec, qs ipc -c overview call overview toggle
+```
+
 ## Hardware controls: audio
 
 Routed through `swayosd-client` (needs the `swayosd-git` AUR package and

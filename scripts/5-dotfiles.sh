@@ -50,11 +50,29 @@ deploy_dir() {
     echo "Deployed ~/.config/${name}"
 }
 
-for dir in hypr waybar alacritty wlogout eww swaync matugen waypaper fastfetch rofi hyde-themes; do
+for dir in hypr waybar alacritty wlogout eww swaync matugen waypaper fastfetch rofi hyde-themes qt6ct xsettingsd; do
     deploy_dir "${dir}"
 done
 chmod +x "${HOME}/.config/hyde-themes/theme.sh"
 chmod +x "${HOME}/.config/rofi/gen-wallcache.sh"
+
+# --- Quickshell dock and workspace overview: each is its own named config
+# under ~/.config/quickshell/<name>/ (`qs -c <name>`), not a same-named
+# top-level dir the way deploy_dir assumes -- dotfiles/quickshell-dock/
+# becomes ~/.config/quickshell/dock/, dotfiles/quickshell-overview/ becomes
+# ~/.config/quickshell/overview/. See dotfiles/hypr/hyprland.conf's
+# exec-once/keybind lines for how these actually get launched.
+for qs_name in dock overview; do
+    qs_dest="${HOME}/.config/quickshell/${qs_name}"
+    if [[ -e "${qs_dest}" || -L "${qs_dest}" ]]; then
+        echo "Backing up existing ~/.config/quickshell/${qs_name} -> ${qs_name}.bak"
+        rm -rf "${qs_dest}.bak"
+        mv "${qs_dest}" "${qs_dest}.bak"
+    fi
+    mkdir -p "${HOME}/.config/quickshell"
+    cp -r "${DOTFILES_DIR}/quickshell-${qs_name}" "${qs_dest}"
+    echo "Deployed ~/.config/quickshell/${qs_name}"
+done
 
 # --- waypaper's `folder` setting (dotfiles/waypaper/config.ini) points
 # here, and theme.sh drops each theme's own bundled wallpaper (e.g. Tokyo

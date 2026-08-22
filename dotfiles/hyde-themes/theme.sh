@@ -127,6 +127,15 @@ apply_gtk_icon_cursor() {
     set_kv "${HOME}/.config/hypr/hyprland.conf" 'env = XCURSOR_THEME,' "${cursor_theme}"
     set_kv "${HOME}/.config/hypr/hyprland.conf" 'env = HYPRCURSOR_THEME,' "${cursor_theme}"
 
+    # qt6ct/xsettingsd -- see the header comments in dotfiles/qt6ct/qt6ct.conf
+    # and dotfiles/xsettingsd/xsettingsd.conf for why these exist at all.
+    set_kv "${HOME}/.config/qt6ct/qt6ct.conf" 'icon_theme=' "${icon_theme}"
+    set_kv "${HOME}/.config/xsettingsd/xsettingsd.conf" 'Net/ThemeName[[:space:]]*' "\"${gtk_theme}\""
+    set_kv "${HOME}/.config/xsettingsd/xsettingsd.conf" 'Net/IconThemeName[[:space:]]*' "\"${icon_theme}\""
+    set_kv "${HOME}/.config/xsettingsd/xsettingsd.conf" 'Gtk/CursorThemeName[[:space:]]*' "\"${cursor_theme}\""
+    # xsettingsd reloads its config on SIGHUP rather than needing a restart.
+    timeout 5 killall -HUP xsettingsd >/dev/null 2>&1 || true
+
     if command -v gsettings >/dev/null 2>&1; then
         gsettings set org.gnome.desktop.interface gtk-theme "${gtk_theme}" 2>/dev/null || true
         gsettings set org.gnome.desktop.interface icon-theme "${icon_theme}" 2>/dev/null || true
