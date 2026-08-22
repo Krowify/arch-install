@@ -147,37 +147,61 @@ media, and the handful of binds with neither modifier).
 
 ### Super
 
+Grouped by what each bind actually does, terminal first.
+
+**Terminal**
+
 | Keybind | Action |
 |---------|--------|
 | `Super+Return` | Terminal (Alacritty) |
 | `Super+Alt+T` | Dropdown terminal (own special workspace) |
-| `Super+Tab` | App launcher (Rofi) |
-| `Super+A` | Fullscreen app grid (Rofi, "launchpad" style) |
+
+**Close, force-kill, exit**
+
+| Keybind | Action |
+|---------|--------|
 | `Super+Q` | Close focused window |
 | `Super+Alt+F4` | Force-kill focused window |
 | `Super+Delete` | Exit Hyprland session |
-| `Super+E` | File manager (Thunar) |
-| `Super+Shift+E` | File finder (Rofi) |
-| `Super+C` | Text editor (VS Code) |
-| `Super+B` | Web browser (Brave) |
-| `Super+Shift+V` | Clipboard history (cliphist + Rofi) |
-| `Super+Shift+G` | Game-tile app grid (Rofi) |
-| `Super+Shift+Q` | Quick-launch icon strip (Rofi) |
-| `Super+Shift+/` | Web search (Rofi prompt) |
-| `Super+L` | Lock screen (Hyprlock) |
 | `Super+Escape` | Logout menu (Wlogout) |
+| `Super+L` | Lock screen (Hyprlock) |
+
+**Toggle**
+
+| Keybind | Action |
+|---------|--------|
 | `Super+T` | Toggle floating |
-| `Super+M` | Toggle Eww widget panel |
 | `Super+G` | Toggle group |
 | `Super+Shift+F` | Toggle pin on focused window |
-| `Super+Ctrl+B` | Toggle waybar |
 | `Super+J` | Toggle split |
+| `Super+M` | Toggle Eww widget panel |
+| `Super+Ctrl+B` | Toggle waybar |
 | `Super+N` | Toggle notification center (SwayNC) |
-| `Super+Shift+W` | Open wallpaper picker (waypaper) |
-| `Super+Shift+T` | Open theme picker (`theme.sh menu`) |
 | `Super+Shift+N` | Toggle blue light filter (hyprsunset) |
+
+**Launchers and apps**
+
+| Keybind | Action |
+|---------|--------|
+| `Super+Tab` | App launcher (Rofi) |
+| `Super+A` | Fullscreen app grid (Rofi, "launchpad" style) |
+| `Super+Shift+G` | Game-tile app grid (Rofi) |
+| `Super+Shift+Q` | Quick-launch icon strip (Rofi) |
+| `Super+Shift+E` | File finder (Rofi) |
+| `Super+Shift+V` | Clipboard history (cliphist + Rofi) |
+| `Super+Shift+/` | Web search (Rofi prompt) |
+| `Super+E` | File manager (Thunar) |
+| `Super+C` | Text editor (VS Code) |
+| `Super+B` | Web browser (Brave) |
+
+**Workspace and theming**
+
+| Keybind | Action |
+|---------|--------|
 | `Super+Ctrl+Right/Left` | Next/previous workspace (relative) |
 | `Super+Ctrl+Down` | Go to nearest empty workspace |
+| `Super+Shift+W` | Open wallpaper picker (waypaper) |
+| `Super+Shift+T` | Open theme picker (`theme.sh menu`) |
 
 ### Alt
 
