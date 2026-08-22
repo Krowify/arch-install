@@ -135,9 +135,10 @@ wherever this repo has an equivalent app or Hyprland dispatcher for it --
 see the comment above the keybinds section in `dotfiles/hypr/hyprland.conf`
 for what wasn't ported (HyDE features that call into its own
 `~/.local/lib/hyde/` helper scripts, which this repo doesn't install) and
-why. A couple of this repo's own pre-existing binds (`Super+Return`,
-`Super+F`) are kept as extra aliases alongside HyDE's key for the same
-action.
+why. Where this repo's own pre-existing key and HyDE's key both did the
+same thing (`Super+Return`/`Super+T` for terminal, `Super+A`/`Super+Tab`
+for the launcher, `Super+W`/`Super+F` for toggle-floating), the duplicate
+was dropped rather than kept as an alias -- one bind per action.
 
 Grouped into Super binds, Alt binds, window-movement binds (focus/resize/
 move/group-cycle -- these all happen to use Super too, but get their own
@@ -148,9 +149,10 @@ media, and the handful of binds with neither modifier).
 
 | Keybind | Action |
 |---------|--------|
-| `Super+Return` / `Super+T` | Terminal (Alacritty) |
+| `Super+Return` | Terminal (Alacritty) |
 | `Super+Alt+T` | Dropdown terminal (own special workspace) |
-| `Super+A` / `Super+Tab` | App launcher (Rofi) |
+| `Super+Tab` | App launcher (Rofi) |
+| `Super+A` | Fullscreen app grid (Rofi, "launchpad" style) |
 | `Super+Q` | Close focused window |
 | `Super+Alt+F4` | Force-kill focused window |
 | `Super+Delete` | Exit Hyprland session |
@@ -158,11 +160,13 @@ media, and the handful of binds with neither modifier).
 | `Super+Shift+E` | File finder (Rofi) |
 | `Super+C` | Text editor (VS Code) |
 | `Super+B` | Web browser (Brave) |
-| `Super+V` / `Super+Shift+V` | Clipboard history (cliphist + Rofi) |
+| `Super+Shift+V` | Clipboard history (cliphist + Rofi) |
+| `Super+Shift+G` | Game-tile app grid (Rofi) |
+| `Super+Shift+Q` | Quick-launch icon strip (Rofi) |
 | `Super+Shift+/` | Web search (Rofi prompt) |
 | `Super+L` | Lock screen (Hyprlock) |
 | `Super+Escape` | Logout menu (Wlogout) |
-| `Super+W` / `Super+F` | Toggle floating |
+| `Super+T` | Toggle floating |
 | `Super+M` | Toggle Eww widget panel |
 | `Super+G` | Toggle group |
 | `Super+Shift+F` | Toggle pin on focused window |
@@ -174,8 +178,6 @@ media, and the handful of binds with neither modifier).
 | `Super+Shift+N` | Toggle blue light filter (hyprsunset) |
 | `Super+Ctrl+Right/Left` | Next/previous workspace (relative) |
 | `Super+Ctrl+Down` | Go to nearest empty workspace |
-| `Super+S` | Toggle scratchpad |
-| `Super+Shift+S` / `Super+Alt+S` | Move window to scratchpad / silently |
 
 ### Alt
 
