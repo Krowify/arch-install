@@ -78,6 +78,19 @@ for gtk_dir in gtk-3.0 gtk-4.0; do
     echo "Deployed ~/.config/${gtk_dir}/settings.ini"
 done
 
+# --- Hide launcher clutter that isn't ours to fix at the source: Avahi
+# (not installed by this repo, but a common transitive dependency of other
+# packages) ships three .desktop entries that show up in every drun-based
+# launcher regardless of whether you use zeroconf browsing. Overriding them
+# with NoDisplay=true in ~/.local/share/applications/ (higher XDG precedence
+# than /usr/share/applications/) hides them without touching the avahi
+# package itself, so a future update can't silently re-clutter the list.
+# Copied individually (not via deploy_dir) since ~/.local/share/applications
+# holds real installed-app entries this repo shouldn't move aside wholesale.
+mkdir -p "${HOME}/.local/share/applications"
+cp "${DOTFILES_DIR}/local-applications/"*.desktop "${HOME}/.local/share/applications/"
+echo "Deployed ~/.local/share/applications/ overrides (hides Avahi's launcher clutter)"
+
 # --- Vesktop: only the BetterDiscord-style theme(s) under themes/ are
 # ours -- deploy just that subfolder rather than the whole directory via
 # deploy_dir, so an existing ~/.config/vesktop with Vesktop's own app
