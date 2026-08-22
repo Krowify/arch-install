@@ -118,6 +118,10 @@ PKGS=(
                                    # actually renders through this
     'grim'                        # Screenshot utility
     'slurp'                       # Region/window selector, used with grim
+    'imagemagick'                 # Provides 'magick', used by
+                                   # dotfiles/rofi/gen-wallcache.sh to
+                                   # blur/crop the current wallpaper for
+                                   # a couple of rofi layouts
     'hyprsunset'                  # Blue light filter, toggled with
                                    # Super+Shift+N
     'jq'                          # JSON processing -- used by a couple of

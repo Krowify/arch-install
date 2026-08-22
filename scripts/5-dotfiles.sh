@@ -54,6 +54,7 @@ for dir in hypr waybar alacritty wlogout eww swaync matugen waypaper fastfetch r
     deploy_dir "${dir}"
 done
 chmod +x "${HOME}/.config/hyde-themes/theme.sh"
+chmod +x "${HOME}/.config/rofi/gen-wallcache.sh"
 
 # --- waypaper's `folder` setting (dotfiles/waypaper/config.ini) points
 # here, and theme.sh drops each theme's own bundled wallpaper (e.g. Tokyo

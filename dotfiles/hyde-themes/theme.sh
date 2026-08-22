@@ -187,6 +187,11 @@ apply_wallpaper() {
     if command -v awww >/dev/null 2>&1; then
         timeout 5 awww img "${dest}" >/dev/null 2>&1 || true
     fi
+
+    # Refreshes the wallpaper crops a couple of rofi layouts read from
+    # ~/.cache/hyde/ (config.rasi's style_10-based header, clipboard.rasi's
+    # wallbox/wallframe) -- see gen-wallcache.sh.
+    "${HOME}/.config/rofi/gen-wallcache.sh" "${dest}" || true
 }
 
 cmd_set() {
@@ -214,7 +219,7 @@ cmd_menu() {
     fi
     local current chosen
     current="$(cat "${MARKER}" 2>/dev/null || true)"
-    chosen="$(list_themes | sed "s/^${current}\$/${current} (current)/" | rofi -dmenu -p "Theme")"
+    chosen="$(list_themes | sed "s/^${current}\$/${current} (current)/" | rofi -dmenu -p "Theme" -theme "${HOME}/.config/rofi/theme-picker.rasi")"
     [[ -n "${chosen}" ]] || exit 0
     chosen="${chosen% (current)}"
     "${BASH_SOURCE[0]}" set "${chosen}"
