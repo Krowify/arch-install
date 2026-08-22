@@ -105,8 +105,12 @@ listview {
     cycle:             true;
     dynamic:           true;
     scrollbar:         false;
+    layout:            vertical;
+    reverse:           false;
+    expand:            false;
     fixed-height:      true;
     fixed-columns:     true;
+    cursor:            "default";
     background-color:  @bg;
     text-color:        @fg;
 }
@@ -121,6 +125,7 @@ dummybottom {
 }
 
 element {
+    enabled:           true;
     spacing:           1em;
     padding:           0.2em 0.2em 0.2em 1.5em;
     cursor:            pointer;
@@ -129,13 +134,15 @@ element {
     children:          [ element-icon, element-text ];
 }
 
-element selected {
+element selected.normal {
     background-color: @bg-selected;
 }
 
 element-icon {
     background-color: transparent;
     size:             2em;
+    cursor:            inherit;
+    text-color:        inherit;
     horizontal-align: 0.5;
 }
 
@@ -147,7 +154,7 @@ element-text {
     font:             "JetBrainsMono Nerd Font 11";
 }
 
-element selected element-text {
+element selected.normal element-text {
     text-color: @fg;
 }
 
